@@ -6,7 +6,13 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
+#include <TargetConditionals.h>
+
+#if TARGET_OS_OSX
 #import <Cocoa/Cocoa.h>
+#elif TARGET_OS_IPHONE
+@import Foundation;
+#endif
 
 //! Project version number for SwiftBeacon.
 FOUNDATION_EXPORT double SwiftBeaconVersionNumber;
