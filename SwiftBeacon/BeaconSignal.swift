@@ -1,6 +1,6 @@
 //
 //  BeaconSignal.swift
-//  Tweed-iOS
+//  SwiftBeacon
 //
 //  Created by Pasha on 10/20/18.
 //  Copyright © 2018 Grype. All rights reserved.
