@@ -8,17 +8,17 @@
 
 import Foundation
 
-class ContextSignal: BeaconSignal {
+public class ContextSignal: BeaconSignal {
 
-    override class var signalName: String {
+    public override class var signalName: String {
         return "🌀 \(classSignalName)"
     }
     
-    override var description: String {
+    public override var description: String {
         return "\(super.description)"
     }
 }
 
-func emit(userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    ContextSignal().emit(userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+public func emit(on aBeacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    ContextSignal().emit(on: aBeacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }

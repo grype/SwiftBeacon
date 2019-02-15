@@ -8,38 +8,38 @@
 
 import Foundation
 
-class ErrorSignal : BeaconSignal {
-    var error: Error
+public class ErrorSignal : BeaconSignal {
+    public var error: Error
     
-    init(error anError: Error) {
+    public init(error anError: Error) {
         error = anError
         super.init()
     }
     
-    override class var signalName: String {
+    public override class var signalName: String {
         return "⚡ \(classSignalName)"
     }
     
-    override var description: String {
+    public override var description: String {
         let errorDescription = (type(of: error) == NSError.self) ? error.localizedDescription : String(describing: error)
         let result = "\(super.description): \(errorDescription)"
         return result
     }
 }
 
-class StackTraceSignal : ErrorSignal {
-    var stackTrace: [String]
+public class StackTraceSignal : ErrorSignal {
+    public var stackTrace: [String]
     
-    init(error: Error, stackTrace aStackTrace: [String] = Thread.callStackSymbols) {
+    public init(error: Error, stackTrace aStackTrace: [String] = Thread.callStackSymbols) {
         stackTrace = aStackTrace
         super.init(error: error)
     }
     
-    override class var signalName: String {
+    public override class var signalName: String {
         return "💣 \(classSignalName)"
     }
     
-    override var description: String {
+    public override var description: String {
         let errorDescription = (type(of: error) == NSError.self) ? error.localizedDescription : String(describing: error)
         var result = "\(super.description): \(errorDescription)"
         stackTrace.forEach { result.append("\n\($0)") }
@@ -47,10 +47,10 @@ class StackTraceSignal : ErrorSignal {
     }
 }
 
-func emit(error: Error, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    ErrorSignal(error: error).emit(userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+public func emit(on aBeacon: Beacon = Beacon.shared, error: Error, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    ErrorSignal(error: error).emit(on: aBeacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
-func emitStackTrace(error: Error, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    StackTraceSignal(error: error).emit(userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+public func emitStackTrace(on aBeacon: Beacon = Beacon.shared, error: Error, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    StackTraceSignal(error: error).emit(on: aBeacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }

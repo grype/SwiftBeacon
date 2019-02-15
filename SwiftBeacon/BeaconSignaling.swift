@@ -8,10 +8,14 @@
 
 import Foundation
 
-protocol BeaconSignaling {
+public protocol BeaconSignaling {
     var beaconSignal: BeaconSignal { get }
 }
 
-func emit(_ value: BeaconSignaling, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    value.beaconSignal.emit(userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+public func emit(_ value: BeaconSignaling, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    value.beaconSignal.emit(on: beacon,
+                            userInfo: userInfo,
+                            fileName: fileName,
+                            line: line,
+                            functionName: functionName)
 }

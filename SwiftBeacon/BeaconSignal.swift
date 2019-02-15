@@ -8,22 +8,37 @@
 
 import Foundation
 
-class BeaconSignal : CustomStringConvertible {
+/**
+ I am an abstract signal.
+ 
+ There exist a few concrete subclasses of `BeaconSignal`.
+ One of those subclasses is `WrapperSignal`, which can wrap
+ any object and act as its signal.
+ For everything else I am expected to be subclassed.
+ 
+ My instances are signaled to loggers via `emit()`.
+ Calling `emit()` captures the invocation context
+ (using `BeaconSignal.Source` struct) and then announces
+ myself via relevant `Beacon` instance.
+ 
+ */
+public class BeaconSignal : CustomStringConvertible {
     
     // MARK:- Structs
     
-    struct Source : CustomStringConvertible {
+    /// Used to capture `emit()` invocation context
+    public struct Source : CustomStringConvertible {
         var fileName: String
         var line: Int
         var functionName: String?
         
-        init(fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
+        public init(fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
             fileName = aFileName
             line = aLine
             functionName = aFunctionName
         }
         
-        var description: String {
+        public var description: String {
             var functionDescription = ""
             if var functionName = functionName {
                 if !functionName.hasSuffix(")") {
@@ -40,11 +55,11 @@ class BeaconSignal : CustomStringConvertible {
     
     // MARK: Properties
     
-    class var classSignalName: String {
+    public class var classSignalName: String {
         return String(describing: self).replacingOccurrences(of: "Signal", with: "", options: String.CompareOptions.literal, range: nil)
     }
     
-    class var signalName: String {
+    public class var signalName: String {
         return "☀︎ \(classSignalName)"
     }
     
@@ -52,15 +67,16 @@ class BeaconSignal : CustomStringConvertible {
     
     // MARK: Properties
     
-    private(set) var timestamp: Date!
-    var source: Source?
-    var userInfo: [AnyHashable : Any]?
+    public var source: Source?
+    public var userInfo: [AnyHashable : Any]?
     
-    var signalName: String {
+    public var signalName: String {
         return type(of: self).signalName
     }
     
     // MARK: Properties - Private
+    
+    private(set) var timestamp: Date!
     
     private(set) lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -74,16 +90,21 @@ class BeaconSignal : CustomStringConvertible {
     
     // MARK:- Emitting
     
-    func emit(userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    public func emit(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+        let source = BeaconSignal.Source(fileName: fileName, line: line, functionName: functionName)
+        emit(on: beacon, userInfo: userInfo, source: source)
+    }
+    
+    public func emit(on beacon: Beacon = Beacon.shared, userInfo anUserInfo: [AnyHashable : Any]? = nil, source aSource: BeaconSignal.Source) {
         timestamp = Date()
-        self.source = BeaconSignal.Source(fileName: fileName, line: line, functionName: functionName)
-        self.userInfo = userInfo
-        Beacon.shared.announce(self)
+        source = aSource
+        userInfo = anUserInfo
+        beacon.signal(self)
     }
     
     // MARK:- CustomStringConvertible
     
-    var description: String {
+    public var description: String {
         var sourceDescription = ""
         if let source = source {
             sourceDescription = " \(source)"

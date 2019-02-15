@@ -8,13 +8,13 @@
 
 import Foundation
 
-class BeaconMemoryLogger : BeaconSignalLogger {
-    static var shared = BeaconMemoryLogger(name: "BeaconMemoryLogger")
+public class BeaconMemoryLogger : BeaconSignalLogger {
+    public static var shared = BeaconMemoryLogger(name: "BeaconMemoryLogger")
     
     private(set) var recordings = [BeaconSignal]()
     var limit: Int = 100
     
-    override func nextPut(_ aSignal: BeaconSignal) {
+    public override func nextPut(_ aSignal: BeaconSignal) {
         objc_sync_enter(recordings)
         defer { objc_sync_exit(recordings) }
         
@@ -23,7 +23,7 @@ class BeaconMemoryLogger : BeaconSignalLogger {
         recordings.removeFirst(recordings.count - limit)
     }
     
-    func clear() {
+    public func clear() {
         objc_sync_enter(recordings)
         recordings.removeAll()
         objc_sync_exit(recordings)

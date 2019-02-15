@@ -8,11 +8,11 @@
 
 import Foundation
 
-class BeaconConsoleLogger : BeaconSignalLogger {
-    var markedInactvitiyPeriod: TimeInterval = 10
+public class BeaconConsoleLogger : BeaconSignalLogger {
+    public var markedInactvitiyPeriod: TimeInterval = 10
     private var lastPrintDate: Date?
     
-    override func nextPut(_ aSignal: BeaconSignal) {
+    override public func nextPut(_ aSignal: BeaconSignal) {
         if markedInactvitiyPeriod > 0, let lastPrintDate = lastPrintDate, Date().timeIntervalSince(lastPrintDate) > markedInactvitiyPeriod {
             print("⏳")
         }

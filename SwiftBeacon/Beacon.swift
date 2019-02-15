@@ -9,24 +9,60 @@
 import Foundation
 
 extension Notification.Name {
-    static let BeaconSignal = Notification.Name(rawValue: "BeaconSignal")
+    public static let BeaconSignal = Notification.Name(rawValue: "BeaconSignal")
 }
 
-class Beacon {
+
+/**
+ I am the central object around signaling.
+ 
+ I maintain a collection of loggers and provide a method for signaling them.
+ Before I can be used in a meaningful way, add and start instances of BeaconSignalLogger, like this:
+ 
+ ````
+ let logger = BeaconConsoleLogger(name: 'My console logger')
+ logger.start()
+ Beacon.shared.loggers.append(logger)
+ ````
+ 
+ After that, I will announce all signals sent via `signal(_:)` to each logger.
+ Loggers are capable of filtering those signals...
+ 
+ ```
+ Beacon.shared.signal(WrapperSignal("This is only a string"))
+ ```
+ 
+ These are the basic methods of operation, albeit a bit tedious. A simpler approach
+ would be to use `emit()`. Instances of `BeaconSignal` understand `emit()`, and there
+ are several global emit() functions defined by specific signals...
+ 
+ ```
+ emit()     // Emits current context signal
+ emit(aBeaconSignalingObject)   // Emits a signal associated with an object that conforms to BeaconSignaling
+ emit(error: anError)   // Emits an error signal
+ ```
+ 
+ - Note: *I maintain a shared instance, as one instance is generally sufficient, but
+ I can be instantiated in traditional ways.*
+ 
+ */
+public class Beacon {
     
-    static var shared = Beacon()
+    public static var shared = Beacon()
+    public static let SignalUserInfoKey = "signal"
     
-    // MARK:- Accessing
+    // MARK:- Properties
     
-    let announcer = NotificationCenter.default
+    internal let announcer = NotificationCenter.default
     
-    var loggers = [BeaconSignalLogger]()
+    public var loggers = [BeaconSignalLogger]()
     
     // MARK:- Announcements
 
-    func announce(_ signal: BeaconSignal) {
+    public func signal(_ aSignal: BeaconSignal) {
         announcer.post(name: NSNotification.Name.BeaconSignal,
                        object: self,
-                       userInfo: ["signal": signal])
+                       userInfo: [Beacon.SignalUserInfoKey: aSignal])
     }
+    
 }
