@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:SwiftBeacon.xcodeproj">
+      location = "self:/Users/pasha/Source/grype/SwiftBeacon/Beacon.xcodeproj">
    </FileRef>
 </Workspace>

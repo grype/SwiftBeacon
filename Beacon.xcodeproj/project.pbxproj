@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C41842662216233800FC21A0 /* SwiftBeacon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C418425D2216233700FC21A0 /* SwiftBeacon.framework */; };
-		C418426D2216233800FC21A0 /* SwiftBeacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C418425F2216233800FC21A0 /* SwiftBeacon.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C41842902216241600FC21A0 /* SwiftBeacon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C41842872216241400FC21A0 /* SwiftBeacon.framework */; };
+		C41842662216233800FC21A0 /* Beacon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C418425D2216233700FC21A0 /* Beacon.framework */; };
+		C418426D2216233800FC21A0 /* Beacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C418425F2216233800FC21A0 /* Beacon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C41842902216241600FC21A0 /* Beacon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C41842872216241400FC21A0 /* Beacon.framework */; };
 		C418429E2216243800FC21A0 /* Beacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41841F42213F25B00FC21A0 /* Beacon.swift */; };
 		C418429F2216243900FC21A0 /* Beacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41841F42213F25B00FC21A0 /* Beacon.swift */; };
 		C41842A12216243A00FC21A0 /* Beacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41841F42213F25B00FC21A0 /* Beacon.swift */; };
@@ -48,7 +48,7 @@
 		C41842CA2216245400FC21A0 /* WrapperSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41841FE2213F29A00FC21A0 /* WrapperSignal.swift */; };
 		C41842CB2216247300FC21A0 /* BeaconSignalTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41842092213F2E200FC21A0 /* BeaconSignalTest.swift */; };
 		C41842CC2216247400FC21A0 /* BeaconSignalTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41842092213F2E200FC21A0 /* BeaconSignalTest.swift */; };
-		C41842F72216255700FC21A0 /* SwiftBeacon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C41842EE2216255700FC21A0 /* SwiftBeacon.framework */; };
+		C41842F72216255700FC21A0 /* Beacon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C41842EE2216255700FC21A0 /* Beacon.framework */; };
 		C41843122216275600FC21A0 /* BeaconSignalTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41842092213F2E200FC21A0 /* BeaconSignalTest.swift */; };
 		C41843132216277000FC21A0 /* Beacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41841F42213F25B00FC21A0 /* Beacon.swift */; };
 		C41843142216277000FC21A0 /* BeaconSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41841F52213F25F00FC21A0 /* BeaconSignal.swift */; };
@@ -124,16 +124,16 @@
 		C41841FD2213F29600FC21A0 /* ContextSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextSignal.swift; sourceTree = "<group>"; };
 		C41841FE2213F29A00FC21A0 /* WrapperSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapperSignal.swift; sourceTree = "<group>"; };
 		C41842092213F2E200FC21A0 /* BeaconSignalTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconSignalTest.swift; sourceTree = "<group>"; };
-		C418425D2216233700FC21A0 /* SwiftBeacon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftBeacon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C418425F2216233800FC21A0 /* SwiftBeacon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftBeacon.h; sourceTree = "<group>"; };
-		C41842652216233800FC21A0 /* SwiftBeacon-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftBeacon-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C41842872216241400FC21A0 /* SwiftBeacon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftBeacon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C418428F2216241500FC21A0 /* SwiftBeacon-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftBeacon-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C41842EE2216255700FC21A0 /* SwiftBeacon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftBeacon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C418425D2216233700FC21A0 /* Beacon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Beacon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C418425F2216233800FC21A0 /* Beacon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beacon.h; sourceTree = "<group>"; };
+		C41842652216233800FC21A0 /* Beacon-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Beacon-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C41842872216241400FC21A0 /* Beacon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Beacon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C418428F2216241500FC21A0 /* Beacon-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Beacon-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C41842EE2216255700FC21A0 /* Beacon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Beacon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C41842F12216255700FC21A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C41842F62216255700FC21A0 /* SwiftBeacon-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftBeacon-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C41842F62216255700FC21A0 /* Beacon-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Beacon-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C41842FD2216255700FC21A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C418430A2216258000FC21A0 /* SwiftBeacon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftBeacon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C418430A2216258000FC21A0 /* Beacon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Beacon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C418434822167E3500FC21A0 /* BeaconTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconTest.swift; sourceTree = "<group>"; };
 		C418434D22168B0300FC21A0 /* Notification+BeaconSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+BeaconSignal.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -150,7 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C41842662216233800FC21A0 /* SwiftBeacon.framework in Frameworks */,
+				C41842662216233800FC21A0 /* Beacon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,7 +165,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C41842902216241600FC21A0 /* SwiftBeacon.framework in Frameworks */,
+				C41842902216241600FC21A0 /* Beacon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,7 +180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C41842F72216255700FC21A0 /* SwiftBeacon.framework in Frameworks */,
+				C41842F72216255700FC21A0 /* Beacon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,8 +198,8 @@
 			isa = PBXGroup;
 			children = (
 				C418434C22168ADA00FC21A0 /* Extensions */,
-				C418432E2216281600FC21A0 /* SwiftBeacon */,
-				C4184257221622E200FC21A0 /* SwiftBeacon-Tests */,
+				C418432E2216281600FC21A0 /* Beacon */,
+				C4184257221622E200FC21A0 /* Beacon-Tests */,
 				C41841DA2213EC3400FC21A0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -207,13 +207,13 @@
 		C41841DA2213EC3400FC21A0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C418425D2216233700FC21A0 /* SwiftBeacon.framework */,
-				C41842652216233800FC21A0 /* SwiftBeacon-Tests.xctest */,
-				C41842872216241400FC21A0 /* SwiftBeacon.framework */,
-				C418428F2216241500FC21A0 /* SwiftBeacon-Tests.xctest */,
-				C41842EE2216255700FC21A0 /* SwiftBeacon.framework */,
-				C41842F62216255700FC21A0 /* SwiftBeacon-Tests.xctest */,
-				C418430A2216258000FC21A0 /* SwiftBeacon.framework */,
+				C418425D2216233700FC21A0 /* Beacon.framework */,
+				C41842652216233800FC21A0 /* Beacon-Tests.xctest */,
+				C41842872216241400FC21A0 /* Beacon.framework */,
+				C418428F2216241500FC21A0 /* Beacon-Tests.xctest */,
+				C41842EE2216255700FC21A0 /* Beacon.framework */,
+				C41842F62216255700FC21A0 /* Beacon-Tests.xctest */,
+				C418430A2216258000FC21A0 /* Beacon.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -238,17 +238,17 @@
 			path = Signals;
 			sourceTree = "<group>";
 		};
-		C4184257221622E200FC21A0 /* SwiftBeacon-Tests */ = {
+		C4184257221622E200FC21A0 /* Beacon-Tests */ = {
 			isa = PBXGroup;
 			children = (
 				C41842092213F2E200FC21A0 /* BeaconSignalTest.swift */,
 				C418434822167E3500FC21A0 /* BeaconTest.swift */,
 				C41842FD2216255700FC21A0 /* Info.plist */,
 			);
-			path = "SwiftBeacon-Tests";
+			path = "Beacon-Tests";
 			sourceTree = "<group>";
 		};
-		C418432E2216281600FC21A0 /* SwiftBeacon */ = {
+		C418432E2216281600FC21A0 /* Beacon */ = {
 			isa = PBXGroup;
 			children = (
 				C41841F42213F25B00FC21A0 /* Beacon.swift */,
@@ -256,10 +256,10 @@
 				C41841F62213F26300FC21A0 /* BeaconSignaling.swift */,
 				C41841F72213F26C00FC21A0 /* Loggers */,
 				C41841FB2213F28B00FC21A0 /* Signals */,
-				C418425F2216233800FC21A0 /* SwiftBeacon.h */,
+				C418425F2216233800FC21A0 /* Beacon.h */,
 				C41842F12216255700FC21A0 /* Info.plist */,
 			);
-			path = SwiftBeacon;
+			path = Beacon;
 			sourceTree = "<group>";
 		};
 		C418434C22168ADA00FC21A0 /* Extensions */ = {
@@ -277,7 +277,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C418426D2216233800FC21A0 /* SwiftBeacon.h in Headers */,
+				C418426D2216233800FC21A0 /* Beacon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,9 +305,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		C418425C2216233700FC21A0 /* SwiftBeacon-iOS */ = {
+		C418425C2216233700FC21A0 /* Beacon-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C418426E2216233800FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-iOS" */;
+			buildConfigurationList = C418426E2216233800FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-iOS" */;
 			buildPhases = (
 				C41842582216233700FC21A0 /* Headers */,
 				C41842592216233700FC21A0 /* Sources */,
@@ -318,14 +318,14 @@
 			);
 			dependencies = (
 			);
-			name = "SwiftBeacon-iOS";
+			name = "Beacon-iOS";
 			productName = "SwiftBeacon-iOS";
-			productReference = C418425D2216233700FC21A0 /* SwiftBeacon.framework */;
+			productReference = C418425D2216233700FC21A0 /* Beacon.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		C41842642216233800FC21A0 /* SwiftBeacon-iOSTests */ = {
+		C41842642216233800FC21A0 /* Beacon-iOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C41842712216233800FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-iOSTests" */;
+			buildConfigurationList = C41842712216233800FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-iOSTests" */;
 			buildPhases = (
 				C41842612216233800FC21A0 /* Sources */,
 				C41842622216233800FC21A0 /* Frameworks */,
@@ -336,14 +336,14 @@
 			dependencies = (
 				C41842682216233800FC21A0 /* PBXTargetDependency */,
 			);
-			name = "SwiftBeacon-iOSTests";
+			name = "Beacon-iOSTests";
 			productName = "SwiftBeacon-iOSTests";
-			productReference = C41842652216233800FC21A0 /* SwiftBeacon-Tests.xctest */;
+			productReference = C41842652216233800FC21A0 /* Beacon-Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		C41842862216241400FC21A0 /* SwiftBeacon-tvOS */ = {
+		C41842862216241400FC21A0 /* Beacon-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C41842982216241600FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-tvOS" */;
+			buildConfigurationList = C41842982216241600FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-tvOS" */;
 			buildPhases = (
 				C41842822216241400FC21A0 /* Headers */,
 				C41842832216241400FC21A0 /* Sources */,
@@ -354,14 +354,14 @@
 			);
 			dependencies = (
 			);
-			name = "SwiftBeacon-tvOS";
+			name = "Beacon-tvOS";
 			productName = "SwiftBeacon-tvOS";
-			productReference = C41842872216241400FC21A0 /* SwiftBeacon.framework */;
+			productReference = C41842872216241400FC21A0 /* Beacon.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		C418428E2216241500FC21A0 /* SwiftBeacon-tvOSTests */ = {
+		C418428E2216241500FC21A0 /* Beacon-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C418429B2216241600FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-tvOSTests" */;
+			buildConfigurationList = C418429B2216241600FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-tvOSTests" */;
 			buildPhases = (
 				C418428B2216241500FC21A0 /* Sources */,
 				C418428C2216241500FC21A0 /* Frameworks */,
@@ -372,14 +372,14 @@
 			dependencies = (
 				C41842922216241600FC21A0 /* PBXTargetDependency */,
 			);
-			name = "SwiftBeacon-tvOSTests";
+			name = "Beacon-tvOSTests";
 			productName = "SwiftBeacon-tvOSTests";
-			productReference = C418428F2216241500FC21A0 /* SwiftBeacon-Tests.xctest */;
+			productReference = C418428F2216241500FC21A0 /* Beacon-Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		C41842ED2216255700FC21A0 /* SwiftBeacon-Mac */ = {
+		C41842ED2216255700FC21A0 /* Beacon-Mac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C41842FF2216255700FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-Mac" */;
+			buildConfigurationList = C41842FF2216255700FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-Mac" */;
 			buildPhases = (
 				C41842E92216255700FC21A0 /* Headers */,
 				C41842EA2216255700FC21A0 /* Sources */,
@@ -390,14 +390,14 @@
 			);
 			dependencies = (
 			);
-			name = "SwiftBeacon-Mac";
+			name = "Beacon-Mac";
 			productName = "SwiftBeacon-Mac";
-			productReference = C41842EE2216255700FC21A0 /* SwiftBeacon.framework */;
+			productReference = C41842EE2216255700FC21A0 /* Beacon.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		C41842F52216255700FC21A0 /* SwiftBeacon-MacTests */ = {
+		C41842F52216255700FC21A0 /* Beacon-MacTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C41843022216255700FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-MacTests" */;
+			buildConfigurationList = C41843022216255700FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-MacTests" */;
 			buildPhases = (
 				C41842F22216255700FC21A0 /* Sources */,
 				C41842F32216255700FC21A0 /* Frameworks */,
@@ -408,14 +408,14 @@
 			dependencies = (
 				C41842F92216255700FC21A0 /* PBXTargetDependency */,
 			);
-			name = "SwiftBeacon-MacTests";
+			name = "Beacon-MacTests";
 			productName = "SwiftBeacon-MacTests";
-			productReference = C41842F62216255700FC21A0 /* SwiftBeacon-Tests.xctest */;
+			productReference = C41842F62216255700FC21A0 /* Beacon-Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		C41843092216258000FC21A0 /* SwiftBeacon-watchOS */ = {
+		C41843092216258000FC21A0 /* Beacon-watchOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C418430F2216258000FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-watchOS" */;
+			buildConfigurationList = C418430F2216258000FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-watchOS" */;
 			buildPhases = (
 				C41843052216258000FC21A0 /* Headers */,
 				C41843062216258000FC21A0 /* Sources */,
@@ -426,9 +426,9 @@
 			);
 			dependencies = (
 			);
-			name = "SwiftBeacon-watchOS";
+			name = "Beacon-watchOS";
 			productName = "SwiftBeacon-watchOS";
-			productReference = C418430A2216258000FC21A0 /* SwiftBeacon.framework */;
+			productReference = C418430A2216258000FC21A0 /* Beacon.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -464,7 +464,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C41841D32213EC3400FC21A0 /* Build configuration list for PBXProject "SwiftBeacon" */;
+			buildConfigurationList = C41841D32213EC3400FC21A0 /* Build configuration list for PBXProject "Beacon" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -476,13 +476,13 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C418425C2216233700FC21A0 /* SwiftBeacon-iOS */,
-				C41842642216233800FC21A0 /* SwiftBeacon-iOSTests */,
-				C41842862216241400FC21A0 /* SwiftBeacon-tvOS */,
-				C418428E2216241500FC21A0 /* SwiftBeacon-tvOSTests */,
-				C41842ED2216255700FC21A0 /* SwiftBeacon-Mac */,
-				C41842F52216255700FC21A0 /* SwiftBeacon-MacTests */,
-				C41843092216258000FC21A0 /* SwiftBeacon-watchOS */,
+				C418425C2216233700FC21A0 /* Beacon-iOS */,
+				C41842642216233800FC21A0 /* Beacon-iOSTests */,
+				C41842862216241400FC21A0 /* Beacon-tvOS */,
+				C418428E2216241500FC21A0 /* Beacon-tvOSTests */,
+				C41842ED2216255700FC21A0 /* Beacon-Mac */,
+				C41842F52216255700FC21A0 /* Beacon-MacTests */,
+				C41843092216258000FC21A0 /* Beacon-watchOS */,
 			);
 		};
 /* End PBXProject section */
@@ -670,17 +670,17 @@
 /* Begin PBXTargetDependency section */
 		C41842682216233800FC21A0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C418425C2216233700FC21A0 /* SwiftBeacon-iOS */;
+			target = C418425C2216233700FC21A0 /* Beacon-iOS */;
 			targetProxy = C41842672216233800FC21A0 /* PBXContainerItemProxy */;
 		};
 		C41842922216241600FC21A0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C41842862216241400FC21A0 /* SwiftBeacon-tvOS */;
+			target = C41842862216241400FC21A0 /* Beacon-tvOS */;
 			targetProxy = C41842912216241600FC21A0 /* PBXContainerItemProxy */;
 		};
 		C41842F92216255700FC21A0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C41842ED2216255700FC21A0 /* SwiftBeacon-Mac */;
+			target = C41842ED2216255700FC21A0 /* Beacon-Mac */;
 			targetProxy = C41842F82216255700FC21A0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -824,7 +824,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftBeacon/Info.plist;
+				INFOPLIST_FILE = Beacon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -833,7 +833,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.grype.SwiftBeacon;
-				PRODUCT_NAME = SwiftBeacon;
+				PRODUCT_NAME = Beacon;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -853,7 +853,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftBeacon/Info.plist;
+				INFOPLIST_FILE = Beacon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -862,7 +862,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.grype.SwiftBeacon;
-				PRODUCT_NAME = SwiftBeacon;
+				PRODUCT_NAME = Beacon;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -879,7 +879,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "SwiftBeacon-Tests/Info.plist";
+				INFOPLIST_FILE = "Beacon-Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -887,7 +887,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.grype.SwiftBeacon-Tests";
-				PRODUCT_NAME = "SwiftBeacon-Tests";
+				PRODUCT_NAME = "Beacon-Tests";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -901,7 +901,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "SwiftBeacon-Tests/Info.plist";
+				INFOPLIST_FILE = "Beacon-Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -909,7 +909,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.grype.SwiftBeacon-Tests";
-				PRODUCT_NAME = "SwiftBeacon-Tests";
+				PRODUCT_NAME = "Beacon-Tests";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -928,7 +928,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftBeacon/Info.plist;
+				INFOPLIST_FILE = Beacon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -936,7 +936,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.grype.SwiftBeacon;
-				PRODUCT_NAME = SwiftBeacon;
+				PRODUCT_NAME = Beacon;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -957,7 +957,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftBeacon/Info.plist;
+				INFOPLIST_FILE = Beacon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -965,7 +965,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.grype.SwiftBeacon;
-				PRODUCT_NAME = SwiftBeacon;
+				PRODUCT_NAME = Beacon;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -983,14 +983,14 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "SwiftBeacon-Tests/Info.plist";
+				INFOPLIST_FILE = "Beacon-Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.grype.SwiftBeacon-Tests";
-				PRODUCT_NAME = "SwiftBeacon-Tests";
+				PRODUCT_NAME = "Beacon-Tests";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 4.2;
@@ -1006,14 +1006,14 @@
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "SwiftBeacon-Tests/Info.plist";
+				INFOPLIST_FILE = "Beacon-Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.grype.SwiftBeacon-Tests";
-				PRODUCT_NAME = "SwiftBeacon-Tests";
+				PRODUCT_NAME = "Beacon-Tests";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 4.2;
@@ -1036,7 +1036,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = SwiftBeacon/Info.plist;
+				INFOPLIST_FILE = Beacon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1045,7 +1045,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = net.grype.SwiftBeacon;
-				PRODUCT_NAME = SwiftBeacon;
+				PRODUCT_NAME = Beacon;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
 			};
@@ -1064,7 +1064,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = SwiftBeacon/Info.plist;
+				INFOPLIST_FILE = Beacon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1073,7 +1073,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = net.grype.SwiftBeacon;
-				PRODUCT_NAME = SwiftBeacon;
+				PRODUCT_NAME = Beacon;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
 			};
@@ -1087,7 +1087,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "SwiftBeacon-Tests/Info.plist";
+				INFOPLIST_FILE = "Beacon-Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1095,7 +1095,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.grype.SwiftBeacon-Tests";
-				PRODUCT_NAME = "SwiftBeacon-Tests";
+				PRODUCT_NAME = "Beacon-Tests";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
@@ -1108,7 +1108,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "SwiftBeacon-Tests/Info.plist";
+				INFOPLIST_FILE = "Beacon-Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1116,7 +1116,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.grype.SwiftBeacon-Tests";
-				PRODUCT_NAME = "SwiftBeacon-Tests";
+				PRODUCT_NAME = "Beacon-Tests";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
@@ -1132,7 +1132,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftBeacon/Info.plist;
+				INFOPLIST_FILE = Beacon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1140,7 +1140,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.grype.SwiftBeacon;
-				PRODUCT_NAME = SwiftBeacon;
+				PRODUCT_NAME = Beacon;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -1160,7 +1160,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftBeacon/Info.plist;
+				INFOPLIST_FILE = Beacon/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1168,7 +1168,7 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.grype.SwiftBeacon;
-				PRODUCT_NAME = SwiftBeacon;
+				PRODUCT_NAME = Beacon;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -1181,7 +1181,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C41841D32213EC3400FC21A0 /* Build configuration list for PBXProject "SwiftBeacon" */ = {
+		C41841D32213EC3400FC21A0 /* Build configuration list for PBXProject "Beacon" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C41841EB2213EC3400FC21A0 /* Debug */,
@@ -1190,7 +1190,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C418426E2216233800FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-iOS" */ = {
+		C418426E2216233800FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C418426F2216233800FC21A0 /* Debug */,
@@ -1199,7 +1199,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C41842712216233800FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-iOSTests" */ = {
+		C41842712216233800FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-iOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C41842722216233800FC21A0 /* Debug */,
@@ -1208,7 +1208,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C41842982216241600FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-tvOS" */ = {
+		C41842982216241600FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C41842992216241600FC21A0 /* Debug */,
@@ -1217,7 +1217,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C418429B2216241600FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-tvOSTests" */ = {
+		C418429B2216241600FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C418429C2216241600FC21A0 /* Debug */,
@@ -1226,7 +1226,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C41842FF2216255700FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-Mac" */ = {
+		C41842FF2216255700FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C41843002216255700FC21A0 /* Debug */,
@@ -1235,7 +1235,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C41843022216255700FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-MacTests" */ = {
+		C41843022216255700FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-MacTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C41843032216255700FC21A0 /* Debug */,
@@ -1244,7 +1244,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C418430F2216258000FC21A0 /* Build configuration list for PBXNativeTarget "SwiftBeacon-watchOS" */ = {
+		C418430F2216258000FC21A0 /* Build configuration list for PBXNativeTarget "Beacon-watchOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C41843102216258000FC21A0 /* Debug */,

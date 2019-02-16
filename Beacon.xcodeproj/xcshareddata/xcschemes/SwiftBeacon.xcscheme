@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C41843092216258000FC21A0"
-               BuildableName = "SwiftBeacon.framework"
-               BlueprintName = "SwiftBeacon-watchOS"
-               ReferencedContainer = "container:SwiftBeacon.xcodeproj">
+               BlueprintIdentifier = "C41842ED2216255700FC21A0"
+               BuildableName = "Beacon.framework"
+               BlueprintName = "Beacon-Mac"
+               ReferencedContainer = "container:Beacon.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C41842F52216255700FC21A0"
+               BuildableName = "Beacon-Tests.xctest"
+               BlueprintName = "Beacon-MacTests"
+               ReferencedContainer = "container:Beacon.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "C41842ED2216255700FC21A0"
+            BuildableName = "Beacon.framework"
+            BlueprintName = "Beacon-Mac"
+            ReferencedContainer = "container:Beacon.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -45,10 +64,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C41843092216258000FC21A0"
-            BuildableName = "SwiftBeacon.framework"
-            BlueprintName = "SwiftBeacon-watchOS"
-            ReferencedContainer = "container:SwiftBeacon.xcodeproj">
+            BlueprintIdentifier = "C41842ED2216255700FC21A0"
+            BuildableName = "Beacon.framework"
+            BlueprintName = "Beacon-Mac"
+            ReferencedContainer = "container:Beacon.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -63,10 +82,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C41843092216258000FC21A0"
-            BuildableName = "SwiftBeacon.framework"
-            BlueprintName = "SwiftBeacon-watchOS"
-            ReferencedContainer = "container:SwiftBeacon.xcodeproj">
+            BlueprintIdentifier = "C41842ED2216255700FC21A0"
+            BuildableName = "Beacon.framework"
+            BlueprintName = "Beacon-Mac"
+            ReferencedContainer = "container:Beacon.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

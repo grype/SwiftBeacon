@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C41842862216241400FC21A0"
-               BuildableName = "SwiftBeacon.framework"
-               BlueprintName = "SwiftBeacon-tvOS"
-               ReferencedContainer = "container:SwiftBeacon.xcodeproj">
+               BuildableName = "Beacon.framework"
+               BlueprintName = "Beacon-tvOS"
+               ReferencedContainer = "container:Beacon.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C418428E2216241500FC21A0"
-               BuildableName = "SwiftBeacon-Tests.xctest"
-               BlueprintName = "SwiftBeacon-tvOSTests"
-               ReferencedContainer = "container:SwiftBeacon.xcodeproj">
+               BuildableName = "Beacon-Tests.xctest"
+               BlueprintName = "Beacon-tvOSTests"
+               ReferencedContainer = "container:Beacon.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C41842862216241400FC21A0"
-            BuildableName = "SwiftBeacon.framework"
-            BlueprintName = "SwiftBeacon-tvOS"
-            ReferencedContainer = "container:SwiftBeacon.xcodeproj">
+            BuildableName = "Beacon.framework"
+            BlueprintName = "Beacon-tvOS"
+            ReferencedContainer = "container:Beacon.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -65,9 +65,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C41842862216241400FC21A0"
-            BuildableName = "SwiftBeacon.framework"
-            BlueprintName = "SwiftBeacon-tvOS"
-            ReferencedContainer = "container:SwiftBeacon.xcodeproj">
+            BuildableName = "Beacon.framework"
+            BlueprintName = "Beacon-tvOS"
+            ReferencedContainer = "container:Beacon.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -83,9 +83,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C41842862216241400FC21A0"
-            BuildableName = "SwiftBeacon.framework"
-            BlueprintName = "SwiftBeacon-tvOS"
-            ReferencedContainer = "container:SwiftBeacon.xcodeproj">
+            BuildableName = "Beacon.framework"
+            BlueprintName = "Beacon-tvOS"
+            ReferencedContainer = "container:Beacon.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
