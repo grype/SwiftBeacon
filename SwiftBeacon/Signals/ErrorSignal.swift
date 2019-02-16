@@ -2,7 +2,7 @@
 //  BeaconErrorSignal.swift
 //  SwiftBeacon
 //
-//  Created by Pasha on 10/21/18.
+//  Created by Pavel Skaldin on 10/21/18.
 //  Copyright © 2018 Grype. All rights reserved.
 //
 

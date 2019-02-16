@@ -2,7 +2,7 @@
 //  BeaconSignaling.swift
 //  SwiftBeacon
 //
-//  Created by Pasha on 1/29/19.
+//  Created by Pavel Skaldin on 1/29/19.
 //  Copyright © 2019 Grype. All rights reserved.
 //
 

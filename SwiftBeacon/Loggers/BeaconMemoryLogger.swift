@@ -2,7 +2,7 @@
 //  BeaconMemoryLogger.swift
 //  SwiftBeacon
 //
-//  Created by Pasha on 10/20/18.
+//  Created by Pavel Skaldin on 10/20/18.
 //  Copyright © 2018 Grype. All rights reserved.
 //
 
