@@ -8,6 +8,13 @@
 
 import Foundation
 
+/**
+ I am memory-based logger of `BeaconSignal`s.
+ 
+ I manage an array of signals via `recordings` property, and I keep it to at most `limit` number of signals.
+ I am mostly useful for debugging at run time.
+ 
+ */
 public class BeaconMemoryLogger : BeaconSignalLogger {
     public static var shared = BeaconMemoryLogger(name: "BeaconMemoryLogger")
     

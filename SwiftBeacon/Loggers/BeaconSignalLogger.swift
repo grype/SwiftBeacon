@@ -12,11 +12,27 @@ fileprivate func isTypeOf<T>(_ instance: Any, a kind: T.Type) -> Bool{
     return instance is T;
 }
 
+/**
+ I am an abstract logger of `BeaconSignal`s.
+ 
+ There exist a few concrete subclasses of me, like `BeaconConsoleLogger` and `BeaconMemoryLogger`.
+ 
+ I carry a `name` to disinguish myself from other loggers. I also keep a reference to the `Beacon`
+ on which I observe signals, defaulting to `Beacon.shared` instance.
+ 
+ # Subclassing notes
+ 
+ - At the bare minumum, override `nextPut(_:)`. In that method, take care of handling the signal.
+ - Override `nextPutAll(_:)` if special care is needed when handling multiple signals.
+ - Override `description` for customizing my description.
+ 
+ - See Also: `BeaconConsoleLogger`, `BeaconMemoryLogger`
+ */
 public class BeaconSignalLogger : CustomStringConvertible {
     public let beacon: Beacon
     public let name: String
     
-    private var isRunning = false
+    private(set) var isRunning = false
     
     public typealias Filter = (BeaconSignal)->Bool
     private var filter: Filter?

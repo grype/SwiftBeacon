@@ -8,8 +8,13 @@
 
 import Foundation
 
+/**
+ I am a `BeaconSignal` that captures an error.
+ 
+ Simply call `emit(anError)` to emit me, and I'll capture the error.
+ */
 public class ErrorSignal : BeaconSignal {
-    public var error: Error
+    private(set) var error: Error
     
     public init(error anError: Error) {
         error = anError
@@ -27,6 +32,11 @@ public class ErrorSignal : BeaconSignal {
     }
 }
 
+/**
+ I am a `BeaconSignal` that captures the current call stack.
+ 
+ Simply call `emitStackTrace()` to emit me, and I'll capture the current call stack.
+ */
 public class StackTraceSignal : ErrorSignal {
     public var stackTrace: [String]
     
