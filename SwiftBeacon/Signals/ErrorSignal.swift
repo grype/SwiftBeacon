@@ -21,8 +21,8 @@ public class ErrorSignal : BeaconSignal {
         super.init()
     }
     
-    public override class var signalName: String {
-        return "⚡ \(classSignalName)"
+    public override var signalName: String {
+        return "⚡ \(super.signalName)"
     }
     
     public override var description: String {
@@ -45,8 +45,8 @@ public class StackTraceSignal : ErrorSignal {
         super.init(error: error)
     }
     
-    public override class var signalName: String {
-        return "💣 \(classSignalName)"
+    public override var signalName: String {
+        return "💣 \(super.signalName)"
     }
     
     public override var description: String {

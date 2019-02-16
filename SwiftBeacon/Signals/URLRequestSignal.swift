@@ -14,8 +14,8 @@ import Foundation
 class URLRequestSignal : BeaconSignal {
     private(set) var request: URLRequest
     
-    public override class var signalName: String {
-        return "📡 \(classSignalName)"
+    public override var signalName: String {
+        return "📡 \(super.signalName)"
     }
     
     public init(_ aRequest: URLRequest, source: BeaconSignal.Source? = nil, userInfo: [AnyHashable : Any]? = nil) {

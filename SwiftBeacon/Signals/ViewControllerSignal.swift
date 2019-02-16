@@ -17,8 +17,8 @@ import UIKit
 class ViewControllerSignal: BeaconSignal {
     private(set) var controller: UIViewController
     
-    public override class var signalName: String {
-        return "👁 \(classSignalName)"
+    public override var signalName: String {
+        return "👁 \(super.signalName)"
     }
     
     public init(_ aController: UIViewController) {

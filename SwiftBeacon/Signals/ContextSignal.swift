@@ -16,8 +16,8 @@ import Foundation
  */
 public class ContextSignal: BeaconSignal {
 
-    public override class var signalName: String {
-        return "🌀 \(classSignalName)"
+    public override var signalName: String {
+        return "🌀 \(super.signalName)"
     }
     
     public override var description: String {

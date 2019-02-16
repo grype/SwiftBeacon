@@ -51,16 +51,12 @@ public class BeaconSignal : CustomStringConvertible {
     
     // MARK: Properties
     
-    /// Signal name for the class, which is derived from the class name, stripping "Signal" suffix.
-    /// This exists simply for breaking up `signalName` for easier subclassing, where subclasses
-    /// can utilize the same logic for deriving signal name based on the class.
-    public class var classSignalName: String {
-        return String(describing: self).replacingOccurrences(of: "Signal", with: "", options: String.CompareOptions.literal, range: nil)
-    }
-    
-    /// Default signal name. This is used to distinguish signals as they are being logged...
+    /// Default signal name, which is derived from the class name, stripping "Signal" suffix
     public class var signalName: String {
-        return "☀︎ \(classSignalName)"
+        let classString = String(describing: self)
+        let suffix = "Signal"
+        guard classString.hasSuffix(suffix) else { return classString }
+        return String(classString.dropLast(suffix.count))
     }
     
     // MARK:- Instance
@@ -70,7 +66,7 @@ public class BeaconSignal : CustomStringConvertible {
     /// Source where the signal was `emit()`ed from.
     public var source: Source?
     
-    /// User info data passed along by the signaler.
+    /// User info data passed along by the signaler. 
     public var userInfo: [AnyHashable : Any]?
     
     /// Signal name as appropriate for the instance. By default this is the same as class-side `signalName`.
