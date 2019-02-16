@@ -87,15 +87,6 @@
 		C418435222168B0300FC21A0 /* Notification+BeaconSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418434D22168B0300FC21A0 /* Notification+BeaconSignal.swift */; };
 		C418435322168B0300FC21A0 /* Notification+BeaconSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418434D22168B0300FC21A0 /* Notification+BeaconSignal.swift */; };
 		C418435422168B0300FC21A0 /* Notification+BeaconSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418434D22168B0300FC21A0 /* Notification+BeaconSignal.swift */; };
-		C41843682217E71500FC21A0 /* ViewControllerSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41843672217E71500FC21A0 /* ViewControllerSignal.swift */; };
-		C41843692217E71500FC21A0 /* ViewControllerSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41843672217E71500FC21A0 /* ViewControllerSignal.swift */; };
-		C418436C2217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418436B2217E7AD00FC21A0 /* URLRequestSignal.swift */; };
-		C418436D2217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418436B2217E7AD00FC21A0 /* URLRequestSignal.swift */; };
-		C418436E2217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418436B2217E7AD00FC21A0 /* URLRequestSignal.swift */; };
-		C418436F2217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418436B2217E7AD00FC21A0 /* URLRequestSignal.swift */; };
-		C41843702217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418436B2217E7AD00FC21A0 /* URLRequestSignal.swift */; };
-		C41843712217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418436B2217E7AD00FC21A0 /* URLRequestSignal.swift */; };
-		C41843722217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418436B2217E7AD00FC21A0 /* URLRequestSignal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,8 +136,6 @@
 		C418430A2216258000FC21A0 /* SwiftBeacon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftBeacon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C418434822167E3500FC21A0 /* BeaconTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconTest.swift; sourceTree = "<group>"; };
 		C418434D22168B0300FC21A0 /* Notification+BeaconSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+BeaconSignal.swift"; sourceTree = "<group>"; };
-		C41843672217E71500FC21A0 /* ViewControllerSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerSignal.swift; sourceTree = "<group>"; };
-		C418436B2217E7AD00FC21A0 /* URLRequestSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestSignal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,8 +234,6 @@
 				C41841FD2213F29600FC21A0 /* ContextSignal.swift */,
 				C41841FC2213F29200FC21A0 /* ErrorSignal.swift */,
 				C41841FE2213F29A00FC21A0 /* WrapperSignal.swift */,
-				C41843672217E71500FC21A0 /* ViewControllerSignal.swift */,
-				C418436B2217E7AD00FC21A0 /* URLRequestSignal.swift */,
 			);
 			path = Signals;
 			sourceTree = "<group>";
@@ -560,11 +547,9 @@
 				C41842A82216244600FC21A0 /* BeaconSignaling.swift in Sources */,
 				C41842AD2216245100FC21A0 /* BeaconSignalLogger.swift in Sources */,
 				C418429E2216243800FC21A0 /* Beacon.swift in Sources */,
-				C41843682217E71500FC21A0 /* ViewControllerSignal.swift in Sources */,
 				C41842AE2216245100FC21A0 /* BeaconMemoryLogger.swift in Sources */,
 				C41842B12216245100FC21A0 /* ErrorSignal.swift in Sources */,
 				C41842B22216245100FC21A0 /* WrapperSignal.swift in Sources */,
-				C418436C2217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */,
 				C41842B02216245100FC21A0 /* ContextSignal.swift in Sources */,
 				C41842A32216243F00FC21A0 /* BeaconSignal.swift in Sources */,
 				C418434E22168B0300FC21A0 /* Notification+BeaconSignal.swift in Sources */,
@@ -577,12 +562,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C41842A92216244700FC21A0 /* BeaconSignaling.swift in Sources */,
-				C418436D2217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */,
 				C41842B32216245200FC21A0 /* BeaconSignalLogger.swift in Sources */,
 				C418429F2216243900FC21A0 /* Beacon.swift in Sources */,
 				C41842CB2216247300FC21A0 /* BeaconSignalTest.swift in Sources */,
 				C41842B42216245200FC21A0 /* BeaconMemoryLogger.swift in Sources */,
-				C41843692217E71500FC21A0 /* ViewControllerSignal.swift in Sources */,
 				C41842B72216245200FC21A0 /* ErrorSignal.swift in Sources */,
 				C41842B82216245200FC21A0 /* WrapperSignal.swift in Sources */,
 				C41842B62216245200FC21A0 /* ContextSignal.swift in Sources */,
@@ -605,7 +588,6 @@
 				C41842C42216245300FC21A0 /* WrapperSignal.swift in Sources */,
 				C41842C22216245300FC21A0 /* ContextSignal.swift in Sources */,
 				C41842A62216244100FC21A0 /* BeaconSignal.swift in Sources */,
-				C418436E2217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */,
 				C418435022168B0300FC21A0 /* Notification+BeaconSignal.swift in Sources */,
 				C41842C12216245300FC21A0 /* BeaconConsoleLogger.swift in Sources */,
 			);
@@ -620,7 +602,6 @@
 				C41842C82216245400FC21A0 /* ContextSignal.swift in Sources */,
 				C41842CA2216245400FC21A0 /* WrapperSignal.swift in Sources */,
 				C41842AC2216244800FC21A0 /* BeaconSignaling.swift in Sources */,
-				C418436F2217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */,
 				C41842C72216245400FC21A0 /* BeaconConsoleLogger.swift in Sources */,
 				C41842C52216245400FC21A0 /* BeaconSignalLogger.swift in Sources */,
 				C41842A72216244200FC21A0 /* BeaconSignal.swift in Sources */,
@@ -643,7 +624,6 @@
 				C418431B2216277000FC21A0 /* WrapperSignal.swift in Sources */,
 				C41843192216277000FC21A0 /* ContextSignal.swift in Sources */,
 				C41843142216277000FC21A0 /* BeaconSignal.swift in Sources */,
-				C41843702217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */,
 				C418435222168B0300FC21A0 /* Notification+BeaconSignal.swift in Sources */,
 				C41843182216277000FC21A0 /* BeaconConsoleLogger.swift in Sources */,
 			);
@@ -658,7 +638,6 @@
 				C41843122216275600FC21A0 /* BeaconSignalTest.swift in Sources */,
 				C418431E2216277000FC21A0 /* BeaconSignaling.swift in Sources */,
 				C41843202216277000FC21A0 /* BeaconMemoryLogger.swift in Sources */,
-				C41843712217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */,
 				C418431F2216277000FC21A0 /* BeaconSignalLogger.swift in Sources */,
 				C418431C2216277000FC21A0 /* Beacon.swift in Sources */,
 				C418431D2216277000FC21A0 /* BeaconSignal.swift in Sources */,
@@ -681,7 +660,6 @@
 				C418432D2216277100FC21A0 /* WrapperSignal.swift in Sources */,
 				C418432B2216277100FC21A0 /* ContextSignal.swift in Sources */,
 				C41843262216277100FC21A0 /* BeaconSignal.swift in Sources */,
-				C41843722217E7AD00FC21A0 /* URLRequestSignal.swift in Sources */,
 				C418435422168B0300FC21A0 /* Notification+BeaconSignal.swift in Sources */,
 				C418432A2216277100FC21A0 /* BeaconConsoleLogger.swift in Sources */,
 			);
