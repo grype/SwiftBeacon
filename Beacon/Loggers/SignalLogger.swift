@@ -1,9 +1,9 @@
 //
-//  BeaconSignalLogger.swift
-//  SwiftBeacon
+//  SignalLogger.swift
+//  Beacon
 //
 //  Created by Pavel Skaldin on 10/20/18.
-//  Copyright © 2018 Grype. All rights reserved.
+//  Copyright © 2018 Pavel Skaldin. All rights reserved.
 //
 
 import Foundation
@@ -15,7 +15,7 @@ fileprivate func isTypeOf<T>(_ instance: Any, a kind: T.Type) -> Bool{
 /**
  I am an abstract logger of `BeaconSignal`s.
  
- There exist a few concrete subclasses of me, like `BeaconConsoleLogger` and `BeaconMemoryLogger`.
+ There exist a few concrete subclasses of me, like `ConsoleLogger` and `MemoryLogger`.
  
  I carry a `name` to disinguish myself from other loggers. I also keep a reference to the `Beacon`
  on which I observe signals, defaulting to `Beacon.shared` instance.
@@ -26,30 +26,43 @@ fileprivate func isTypeOf<T>(_ instance: Any, a kind: T.Type) -> Bool{
  - Override `nextPutAll(_:)` if special care is needed when handling multiple signals.
  - Override `description` for customizing my description.
  
- - See Also: `BeaconConsoleLogger`, `BeaconMemoryLogger`
+ - See Also: `ConsoleLogger`, `MemoryLogger`
  */
-public class BeaconSignalLogger : CustomStringConvertible {
-    public let beacon: Beacon
-    public let name: String
+public class SignalLogger : CustomStringConvertible, Hashable {
     
-    private(set) var isRunning = false
-    
-    public typealias Filter = (BeaconSignal)->Bool
-    private var filter: Filter?
-    
-    public static func starting(name aName: String, beacon aBeacon: Beacon? = nil, filter: Filter? = nil) -> Self {
-        let instance = self.init(name: aName, beacon: aBeacon)
-        instance.start(filter: filter)
-        return instance
+    /// Beacon instance.
+    /// When the logger is started, it subscribes to notifications posted to this Beacon's announcer.
+    public var beacon: Beacon {
+        willSet {
+            if isRunning { stop() }
+        }
     }
     
-    public required init(name aName: String, beacon aBeacon: Beacon? = nil) {
+    /// Logger name.
+    /// Used to distinguish one logger from another.
+    public var name: String
+    
+    /// Indicates whether the logger is running.
+    /// When running, it will respond to signals posted to its beacon's announcer.
+    private(set) var isRunning = false
+    
+    /// Filtering function takes a signal as an argument and return a boolean value
+    /// indicating whether the signal should be processed
+    public typealias Filter = (BeaconSignal)->Bool
+    
+    /// Filter function.
+    /// When specified, the logger will process only those signals to which this function answers truthfully.
+    private var filter: Filter?
+    
+    public required init(name aName: String, beacon aBeacon: Beacon = Beacon.shared) {
         name = aName
-        beacon = aBeacon ?? Beacon.shared
+        beacon = aBeacon
     }
     
     // MARK:- Starting/Stopping
     
+    /// Starts logging.
+    /// This causes the logger to subscribe to signals posted by the beacon.
     public func start(filter aFilter: Filter? = nil) {
         filter = aFilter
         guard !isRunning else { return }
@@ -57,6 +70,7 @@ public class BeaconSignalLogger : CustomStringConvertible {
         isRunning = true
     }
     
+    /// Stops logging.
     public func stop() {
         guard isRunning else { return }
         unsubscribe()
@@ -65,10 +79,12 @@ public class BeaconSignalLogger : CustomStringConvertible {
     
     // MARK:- Signaling
     
+    /// Processes a signal.
     public func nextPut(_ aSignal: BeaconSignal) {
         fatalError("Subclass must override \(#function)")
     }
     
+    /// Process signals in bulk.
     public func nextPutAll(_ signals: [BeaconSignal]) {
         signals.forEach { (aSignal) in
             nextPut(aSignal)
@@ -108,6 +124,16 @@ public class BeaconSignalLogger : CustomStringConvertible {
     
     private func unsubscribe() {
         beacon.announcer.removeObserver(self)
+    }
+    
+    // MARK:- Hashable
+    
+    public static func == (lhs: SignalLogger, rhs: SignalLogger) -> Bool {
+        return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self).hashValue)
     }
     
     // MARK:- CustomStringConvertible

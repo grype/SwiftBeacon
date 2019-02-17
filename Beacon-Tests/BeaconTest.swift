@@ -1,6 +1,6 @@
 //
 //  BeaconTest.swift
-//  SwiftBeacon
+//  Beacon
 //
 //  Created by Pavel Skaldin on 2/14/19.
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
@@ -10,16 +10,17 @@ import XCTest
 
 class BeaconTest: XCTestCase {
     private var beacon: Beacon!
-    private var logger: BeaconMemoryLogger!
+    private var logger: MemoryLogger!
     
     override func setUp() {
         beacon = Beacon()
-        logger = BeaconMemoryLogger.starting(name: "Test Logger", beacon: beacon)
+        logger = MemoryLogger(name: "Test Logger")
+        beacon.add(logger, start: true)
     }
     
     override func tearDown() {
         logger.stop()
-        beacon.loggers.removeAll()
+        beacon.removeAllLoggers()
         logger = nil
         beacon = nil
     }

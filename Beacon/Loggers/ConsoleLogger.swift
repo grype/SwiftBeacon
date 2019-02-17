@@ -1,9 +1,9 @@
 //
-//  BeaconConsoleLogger.swift
-//  SwiftBeacon
+//  ConsoleLogger.swift
+//  Beacon
 //
 //  Created by Pavel Skaldin on 10/20/18.
-//  Copyright © 2018 Grype. All rights reserved.
+//  Copyright © 2018 Pavel Skaldin. All rights reserved.
 //
 
 import Foundation
@@ -14,7 +14,7 @@ import Foundation
  I mimic traditional loggers by simply printing out descriptions of the signals I receive.
  I can also indicate periods of inactivity via `markedInactivityPeriod`.
  */
-public class BeaconConsoleLogger : BeaconSignalLogger {
+public class ConsoleLogger : SignalLogger {
     /// Period of time since receiving the last signal, after which I am considered idle.
     /// When the value is > 0, I will prefix the next signal with a special `inactivityDelimiter`.
     public var markedInactvitiyPeriod: TimeInterval = 10

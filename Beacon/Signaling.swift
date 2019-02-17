@@ -1,9 +1,9 @@
 //
 //  BeaconSignaling.swift
-//  SwiftBeacon
+//  Beacon
 //
 //  Created by Pavel Skaldin on 1/29/19.
-//  Copyright © 2019 Grype. All rights reserved.
+//  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
 import Foundation
@@ -35,7 +35,7 @@ import Foundation
  - See Also: `WrapperSignal`
  
  */
-public protocol BeaconSignaling {
+public protocol Signaling {
     var beaconSignal: BeaconSignal { get }
 }
 
@@ -43,9 +43,9 @@ public protocol BeaconSignaling {
  Emits a signaling object.
  This is a convenience method to emit a signal associated with a `BeaconSignaling` object.
  To be consistent, it is preferred that all logging is done via various `emit()` methods,
- rather than directly interfacing with instances of `BeaconSignal` and `BeaconSignalLogger`.
+ rather than directly interfacing with instances of `BeaconSignal` and `SignalLogger`.
  */
-public func emit(_ value: BeaconSignaling, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emit(_ value: Signaling, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     value.beaconSignal.emit(on: beacon,
                             userInfo: userInfo,
                             fileName: fileName,

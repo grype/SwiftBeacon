@@ -1,28 +1,26 @@
 //
 //  BeaconSignalTest.swift
-//  SwiftBeacon
+//  Beacon
 //
 //  Created by Pavel Skaldin on 1/29/19.
-//  Copyright © 2019 Grype. All rights reserved.
+//  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
 import XCTest
 
 class BeaconSignalTest : XCTestCase, Error {
     
-    private var logger: BeaconMemoryLogger!
+    private var logger: MemoryLogger!
     
     override func setUp() {
         super.setUp()
-        logger = BeaconMemoryLogger(name: "BeaconTestLogger")
-        logger.start()
-        Beacon.shared.loggers.append(logger)
+        logger = MemoryLogger(name: "BeaconTestLogger")
+        Beacon.shared.add(logger, start: true)
     }
     
     override func tearDown() {
         super.tearDown()
-        logger.stop()
-        Beacon.shared.loggers.removeAll()
+        Beacon.shared.removeAllLoggers()
     }
     
     func throwup() throws {
@@ -72,15 +70,12 @@ class BeaconSignalTest : XCTestCase, Error {
     // MARK:- Scaling
     @inline(__always) private func perform(across count: Int, block: ()->Void) {
         (1...count).forEach {
-            let logger = BeaconMemoryLogger(name: "\($0)")
+            let logger = MemoryLogger(name: "\($0)")
             logger.start()
-            Beacon.shared.loggers.append(logger)
+            Beacon.shared.add(logger)
         }
         block()
-        (1...count).forEach { _ in
-            Beacon.shared.loggers.last!.stop()
-            Beacon.shared.loggers.removeLast()
-        }
+        Beacon.shared.removeAllLoggers()
     }
     
     func testEmitSmallScaling() {

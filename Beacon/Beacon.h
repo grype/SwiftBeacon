@@ -1,6 +1,6 @@
 //
-//  SwiftBeacon.h
-//  SwiftBeacon
+//  Beacon.h
+//  Beacon
 //
 //  Created by Pavel Skaldin on 2/14/19.
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
@@ -14,12 +14,12 @@
 #import <UIKit/UIKit.h>
 #endif
 
-//! Project version number for SwiftBeacon.
-FOUNDATION_EXPORT double SwiftBeacon_VersionNumber;
+//! Project version number for Beacon.
+FOUNDATION_EXPORT double Beacon_VersionNumber;
 
-//! Project version string for SwiftBeacon.
-FOUNDATION_EXPORT const unsigned char SwiftBeacon_VersionString[];
+//! Project version string for Beacon.
+FOUNDATION_EXPORT const unsigned char Beacon_VersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <SwiftBeacon/PublicHeader.h>
+// In this header, you should import all the public headers of your framework using statements like #import <Beacon/PublicHeader.h>
 
 

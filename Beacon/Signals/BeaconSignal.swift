@@ -1,9 +1,9 @@
 //
 //  BeaconSignal.swift
-//  SwiftBeacon
+//  Beacon
 //
 //  Created by Pavel Skaldin on 10/20/18.
-//  Copyright © 2018 Grype. All rights reserved.
+//  Copyright © 2018 Pavel Skaldin. All rights reserved.
 //
 
 import Foundation
@@ -91,14 +91,14 @@ public class BeaconSignal : CustomStringConvertible {
     
     // MARK:- Emitting
     
-    /// Emits signal to all running instances of `BeaconSignalLogger`
+    /// Emits signal to all running instances of `SignalLogger`
     public func emit(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
         let source = BeaconSignal.Source(fileName: fileName, line: line, functionName: functionName)
-        emit(on: beacon, userInfo: userInfo, source: source)
+        emit(on: beacon, source: source, userInfo: userInfo)
     }
     
-    /// Emits signal to all running instances of `BeaconSignalLogger`
-    public func emit(on beacon: Beacon = Beacon.shared, userInfo anUserInfo: [AnyHashable : Any]? = nil, source aSource: BeaconSignal.Source) {
+    /// Emits signal to all running instances of `SignalLogger`
+    public func emit(on beacon: Beacon = Beacon.shared, source aSource: BeaconSignal.Source, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         timestamp = Date()
         source = aSource
         userInfo = anUserInfo

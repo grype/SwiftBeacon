@@ -1,9 +1,9 @@
 //
 //  Beacon.swift
-//  SwiftBeacon
+//  Beacon
 //
 //  Created by Pavel Skaldin on 10/20/18.
-//  Copyright © 2018 Grype. All rights reserved.
+//  Copyright © 2018 Pavel Skaldin. All rights reserved.
 //
 
 import Foundation
@@ -17,33 +17,42 @@ extension Notification.Name {
  I am the central object around signaling.
  
  I maintain a collection of loggers and provide a method for signaling them.
- Before I can be used in a meaningful way, add and start instances of BeaconSignalLogger, like this:
+ Before I can be used in a meaningful way, add and start instances of SignalLogger, like this:
  
  ````
- let logger = BeaconConsoleLogger(name: 'My console logger')
+ let logger = ConsoleLogger(name: 'My console logger')
  logger.start()
  Beacon.shared.loggers.append(logger)
+ 
+ // or in shorter form:
+ Beacon.shared.add(ConsoleLogger(name: 'My console logger', start: true))
  ````
  
  After that, I will announce all signals sent via `signal(_:)` to each logger.
- Loggers are capable of filtering those signals...
  
- ```
+ ````
  Beacon.shared.signal(WrapperSignal("This is only a string"))
- ```
+ ````
+ 
+ It is up to individual loggers to decide whether and how to handle each signal.
  
  These are the basic methods of operation, albeit a bit tedious. A simpler approach
  would be to use `emit()`. Instances of `BeaconSignal` understand `emit()`, and there
  are several global emit() functions defined by specific signals...
  
- ```
+ ````
  emit()     // Emits current context signal
  emit(aBeaconSignalingObject)   // Emits a signal associated with an object that conforms to BeaconSignaling
  emit(error: anError)   // Emits an error signal
- ```
+ ````
  
- - Note: *I maintain a shared instance, as one instance is generally sufficient, but
- I can be instantiated in traditional ways.*
+ - Note: *I maintain a shared instance, as one instance is generally sufficient.
+ If you require multiple beacon objects, be sure to include the appropriate object
+ when calling emit:*
+ 
+ ````
+ emit(something, on: myBeaconObject)
+ ````
  
  */
 public class Beacon {
@@ -55,7 +64,7 @@ public class Beacon {
     
     internal let announcer = NotificationCenter.default
     
-    public var loggers = [BeaconSignalLogger]()
+    private(set) var loggers = Set<SignalLogger>()
     
     // MARK:- Announcements
 
@@ -65,4 +74,36 @@ public class Beacon {
                        userInfo: [Beacon.SignalUserInfoKey: aSignal])
     }
     
+    // MARK:- Adding/Removing loggers
+    
+    /// Adds a logger, optionally starting it.
+    public func add(_ aLogger: SignalLogger, start: Bool = false) {
+        aLogger.beacon = self
+        loggers.insert(aLogger)
+        if start { aLogger.start() }
+    }
+    
+    /// Adds a logger, optionally starting it with a filtering function.
+    public func add(_ aLogger: SignalLogger, start aFilter: @escaping SignalLogger.Filter) {
+        aLogger.beacon = self
+        loggers.insert(aLogger)
+        aLogger.start(filter: aFilter)
+    }
+    
+    /// Removes existing logger.
+    /// The removed logger will be automatically stopped.
+    public func remove(_ aLogger: SignalLogger) {
+        guard let index = loggers.firstIndex(of: aLogger) else { return }
+        aLogger.stop()
+        loggers.remove(at: index)
+    }
+    
+    /// Removes all loggers.
+    /// All removed loggers will be automatically stopped.
+    public func removeAllLoggers() {
+        loggers.forEach { (aLogger) in
+            aLogger.stop()
+        }
+        loggers.removeAll()
+    }
 }

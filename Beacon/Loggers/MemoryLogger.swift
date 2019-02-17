@@ -1,9 +1,9 @@
 //
-//  BeaconMemoryLogger.swift
-//  SwiftBeacon
+//  MemoryLogger.swift
+//  Beacon
 //
 //  Created by Pavel Skaldin on 10/20/18.
-//  Copyright © 2018 Grype. All rights reserved.
+//  Copyright © 2018 Pavel Skaldin. All rights reserved.
 //
 
 import Foundation
@@ -15,8 +15,8 @@ import Foundation
  I am mostly useful for debugging at run time.
  
  */
-public class BeaconMemoryLogger : BeaconSignalLogger {
-    public static var shared = BeaconMemoryLogger(name: "BeaconMemoryLogger")
+public class MemoryLogger : SignalLogger {
+    public static var shared = MemoryLogger(name: "MemoryLogger")
     
     private(set) var recordings = [BeaconSignal]()
     var limit: Int = 100
