@@ -71,10 +71,10 @@ do {
 
 ### Specializing signals
 
-The framework doesn't provide much specialization beyond the already mentioned `WrapperSignal`, `ErrorSignal` and `StackTraceSignal`. To define a custom signal, simply subclass `BeaconSignal`. For example, let's create a specialized signal for emitting `URLRequest`s:
+The framework doesn't provide much specialization beyond the already mentioned `WrapperSignal`, `ErrorSignal` and `StackTraceSignal`. To define a custom signal, simply subclass `Signal`. For example, let's create a specialized signal for emitting `URLRequest`s:
 
 ```swift
-class URLRequestSignal : BeaconSignal {
+class URLRequestSignal : Signal {
     private(set) var request: URLRequest
 
     override class var signalName: String {
@@ -104,11 +104,11 @@ A few things worth noting here:
 2. We override `signalName` to help us visually distinguish this signal from others. The property returns a string identifying the type of signal. Loggers can use that value as appropriate. For example, the `ConsoleLogger` simply prefixes the signal description with its `signalName`, which makes it a lot easier to distinguish different types of signals.
 3. We provide URL request information by overriding `description`. 
 
-Lastly, to actually `emit()` a `URLRequest` object, we need to make it conform to the `BeaconSignaling` protocol:
+Lastly, to actually `emit()` a `URLRequest` object, we need to make it conform to the `Signaling` protocol:
 
 ```swift
-extension URLRequest : BeaconSignaling {
-    var beaconSignal: BeaconSignal {
+extension URLRequest : Signaling {
+    var beaconSignal: Signal {
         return URLRequestSignal(self)
     }
 }

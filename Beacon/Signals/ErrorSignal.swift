@@ -9,11 +9,11 @@
 import Foundation
 
 /**
- I am a `BeaconSignal` that captures an error.
+ I am a `Signal` that captures an error.
  
  Simply call `emit(anError)` to emit me, and I'll capture the error.
  */
-public class ErrorSignal : BeaconSignal {
+public class ErrorSignal : Signal {
     private(set) var error: Error
     
     public init(error anError: Error) {

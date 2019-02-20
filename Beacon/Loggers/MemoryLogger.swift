@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- I am memory-based logger of `BeaconSignal`s.
+ I am memory-based logger of `Signal`s.
  
  I manage an array of signals via `recordings` property, and I keep it to at most `limit` number of signals.
  I am mostly useful for debugging at run time.
@@ -18,10 +18,10 @@ import Foundation
 public class MemoryLogger : SignalLogger {
     public static var shared = MemoryLogger(name: "MemoryLogger")
     
-    private(set) var recordings = [BeaconSignal]()
+    private(set) var recordings = [Signal]()
     var limit: Int = 100
     
-    public override func nextPut(_ aSignal: BeaconSignal) {
+    public override func nextPut(_ aSignal: Signal) {
         objc_sync_enter(recordings)
         defer { objc_sync_exit(recordings) }
         

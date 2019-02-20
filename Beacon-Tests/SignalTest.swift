@@ -1,5 +1,5 @@
 //
-//  BeaconSignalTest.swift
+//  SignalTest.swift
 //  Beacon
 //
 //  Created by Pavel Skaldin on 1/29/19.
@@ -8,7 +8,7 @@
 
 import XCTest
 
-class BeaconSignalTest : XCTestCase, Error {
+class SignalTest : XCTestCase, Error {
     
     private var logger: MemoryLogger!
     
@@ -58,7 +58,7 @@ class BeaconSignalTest : XCTestCase, Error {
         assert(logger.recordings.count == 1, "WrapperSignal did not signal")
         let signal = logger.recordings.first as? WrapperSignal
         assert(signal != nil, "emit() does not produce WrapperSignal")
-        assert(signal?.value as? BeaconSignalTest == self, "WrapperSignal did not capture its target")
+        assert(signal?.value as? SignalTest == self, "WrapperSignal did not capture its target")
     }
     
     func testEmitPerformance() {

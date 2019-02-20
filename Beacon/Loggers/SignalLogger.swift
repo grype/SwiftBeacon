@@ -13,7 +13,7 @@ fileprivate func isTypeOf<T>(_ instance: Any, a kind: T.Type) -> Bool{
 }
 
 /**
- I am an abstract logger of `BeaconSignal`s.
+ I am an abstract logger of `Signal`s.
  
  There exist a few concrete subclasses of me, like `ConsoleLogger` and `MemoryLogger`.
  
@@ -48,7 +48,7 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     
     /// Filtering function takes a signal as an argument and return a boolean value
     /// indicating whether the signal should be processed
-    public typealias Filter = (BeaconSignal)->Bool
+    public typealias Filter = (Signal)->Bool
     
     /// Filter function.
     /// When specified, the logger will process only those signals to which this function answers truthfully.
@@ -80,12 +80,12 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     // MARK:- Signaling
     
     /// Processes a signal.
-    public func nextPut(_ aSignal: BeaconSignal) {
+    public func nextPut(_ aSignal: Signal) {
         fatalError("Subclass must override \(#function)")
     }
     
     /// Process signals in bulk.
-    public func nextPutAll(_ signals: [BeaconSignal]) {
+    public func nextPutAll(_ signals: [Signal]) {
         signals.forEach { (aSignal) in
             nextPut(aSignal)
         }
@@ -93,7 +93,7 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     
     // MARK:- Processing signals
     
-    private func shouldProcess(_ signal: BeaconSignal) -> Bool {
+    private func shouldProcess(_ signal: Signal) -> Bool {
         guard isRunning else { return false }
         guard let filter = filter else {
             return true
@@ -101,7 +101,7 @@ public class SignalLogger : CustomStringConvertible, Hashable {
         return filter(signal)
     }
     
-    private func process(_ signal: BeaconSignal) {
+    private func process(_ signal: Signal) {
         nextPut(signal)
     }
     

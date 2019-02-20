@@ -37,12 +37,12 @@ extension Notification.Name {
  It is up to individual loggers to decide whether and how to handle each signal.
  
  These are the basic methods of operation, albeit a bit tedious. A simpler approach
- would be to use `emit()`. Instances of `BeaconSignal` understand `emit()`, and there
+ would be to use `emit()`. Instances of `Signal` understand `emit()`, and there
  are several global emit() functions defined by specific signals...
  
  ````
  emit()     // Emits current context signal
- emit(aBeaconSignalingObject)   // Emits a signal associated with an object that conforms to BeaconSignaling
+ emit(aSignalingObject)   // Emits a signal associated with an object that conforms to Signaling
  emit(error: anError)   // Emits an error signal
  ````
  
@@ -68,7 +68,7 @@ public class Beacon {
     
     // MARK:- Announcements
 
-    public func signal(_ aSignal: BeaconSignal) {
+    public func signal(_ aSignal: Signal) {
         announcer.post(name: NSNotification.Name.BeaconSignal,
                        object: self,
                        userInfo: [Beacon.SignalUserInfoKey: aSignal])

@@ -1,5 +1,5 @@
 //
-//  BeaconSignaling.swift
+//  Signaling.swift
 //  Beacon
 //
 //  Created by Pavel Skaldin on 1/29/19.
@@ -11,17 +11,17 @@ import Foundation
 /**
  I describe a signaling protocol.
  
- Conforming objects become `emit()`able, by returning an instance of appropriate `BeaconSignal`.
+ Conforming objects become `emit()`able, by returning an instance of appropriate `Signal`.
  
  For example:
  ````
- extension UIViewController : BeaconSignaling {
-    var beaconSignal: BeaconSignal {
+ extension UIViewController : Signaling {
+    var beaconSignal: Signal {
         return ViewControllerSignal(self)
     }
  }
  
- class ViewControllerSignal: BeaconSignal {
+ class ViewControllerSignal: Signal {
     var controller: UIViewController
     init(_ aController: UIViewController) {
         controller = aController
@@ -36,14 +36,14 @@ import Foundation
  
  */
 public protocol Signaling {
-    var beaconSignal: BeaconSignal { get }
+    var beaconSignal: Signal { get }
 }
 
 /**
  Emits a signaling object.
- This is a convenience method to emit a signal associated with a `BeaconSignaling` object.
+ This is a convenience method to emit a signal associated with a `Signaling` object.
  To be consistent, it is preferred that all logging is done via various `emit()` methods,
- rather than directly interfacing with instances of `BeaconSignal` and `SignalLogger`.
+ rather than directly interfacing with instances of `Signal` and `SignalLogger`.
  */
 public func emit(_ value: Signaling, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     value.beaconSignal.emit(on: beacon,

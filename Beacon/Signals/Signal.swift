@@ -1,5 +1,5 @@
 //
-//  BeaconSignal.swift
+//  Signal.swift
 //  Beacon
 //
 //  Created by Pavel Skaldin on 10/20/18.
@@ -15,10 +15,10 @@ import Foundation
  any object and act as its signal. For everything else I am expected to be subclassed.
  
  My instances are signaled to loggers via `emit()`. Calling `emit()` captures the invocation context
- (using `BeaconSignal.Source` struct) and then announces myself via relevant `Beacon` instance.
+ (using `Signal.Source` struct) and then announces myself via relevant `Beacon` instance.
  
  */
-public class BeaconSignal : CustomStringConvertible {
+public class Signal : CustomStringConvertible {
     
     // MARK:- Structs
     
@@ -93,12 +93,12 @@ public class BeaconSignal : CustomStringConvertible {
     
     /// Emits signal to all running instances of `SignalLogger`
     public func emit(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-        let source = BeaconSignal.Source(fileName: fileName, line: line, functionName: functionName)
+        let source = Signal.Source(fileName: fileName, line: line, functionName: functionName)
         emit(on: beacon, source: source, userInfo: userInfo)
     }
     
     /// Emits signal to all running instances of `SignalLogger`
-    public func emit(on beacon: Beacon = Beacon.shared, source aSource: BeaconSignal.Source, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
+    public func emit(on beacon: Beacon = Beacon.shared, source aSource: Signal.Source, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         timestamp = Date()
         source = aSource
         userInfo = anUserInfo

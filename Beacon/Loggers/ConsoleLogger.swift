@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- I am a console logger of `BeaconSignal`s.
+ I am a console logger of `Signal`s.
  
  I mimic traditional loggers by simply printing out descriptions of the signals I receive.
  I can also indicate periods of inactivity via `markedInactivityPeriod`.
@@ -21,7 +21,7 @@ public class ConsoleLogger : SignalLogger {
     public var inactivityDelimiter: String = "⏳"
     private var lastPrintDate: Date?
     
-    override public func nextPut(_ aSignal: BeaconSignal) {
+    override public func nextPut(_ aSignal: Signal) {
         if markedInactvitiyPeriod > 0, let lastPrintDate = lastPrintDate, Date().timeIntervalSince(lastPrintDate) > markedInactvitiyPeriod {
             print(inactivityDelimiter)
         }

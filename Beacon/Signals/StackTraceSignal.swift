@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- I am a `BeaconSignal` that captures the current call stack.
+ I am a `Signal` that captures the current call stack.
  
  Simply call `emitStackTrace()` to emit me, and I'll capture the current call stack.
  */

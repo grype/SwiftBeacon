@@ -1,5 +1,5 @@
 //
-//  Notification+BeaconSignal.swift
+//  Notification+Signal.swift
 //  Beacon
 //
 //  Created by Pavel Skaldin on 2/14/19.
@@ -9,8 +9,8 @@
 import Foundation
 
 extension Notification {
-    public var beaconSignal: BeaconSignal? {
-        guard let userInfo = userInfo as? [String: BeaconSignal] else { return nil }
+    public var beaconSignal: Signal? {
+        guard let userInfo = userInfo as? [String: Signal] else { return nil }
         return userInfo[Beacon.SignalUserInfoKey]
     }
 }

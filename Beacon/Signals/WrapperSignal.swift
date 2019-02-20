@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- I am `BeaconSignal` that wraps any value.
+ I am a `Signal` that wraps any value.
  
  Simply call `emit(anything)` to emit me, and I'll capture the argument in my `value` property.
  
@@ -17,7 +17,7 @@ import Foundation
  to NSCopying, and if so, I'll store a copy of the value. Otherwise I'll capture the value using regular
  Swift mechanism - by value or reference, depending on the type of value.
  */
-public class WrapperSignal: BeaconSignal {
+public class WrapperSignal: Signal {
     /// Wrapped value
     public let value: Any
     

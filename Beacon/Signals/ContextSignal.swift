@@ -9,12 +9,12 @@
 import Foundation
 
 /**
- I am a `BeaconSignal` that captures current context.
+ I am a `Signal` that captures current context.
  
  I am used for announcing a particular point in the code. Simply call `emit()`, without
  any arguments...
  */
-public class ContextSignal: BeaconSignal {
+public class ContextSignal: Signal {
 
     public override var signalName: String {
         return "🌀 \(super.signalName)"
