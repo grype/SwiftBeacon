@@ -143,8 +143,8 @@ debugBeacon.loggers.forEach { $0.start() }
 
 let releaseBeacon = Beacon()
 #if RELEASE
-releaseBeacon.add(ConsoleLogger(name: "console")
-releaseBeacon.add(FileLogger(name: "file")
+releaseBeacon.add(ConsoleLogger(name: "console"))
+releaseBeacon.add(FileLogger(name: "file"))
 releaseBeacon.loggers.forEach { $0.start { return $0 is ErrorSignal } }
 #endif
 
