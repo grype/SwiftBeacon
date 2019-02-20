@@ -9,10 +9,10 @@ At the heart of the logging system is a `Beacon` object. It encapsulates two ess
 Before any of that can be done, however, we need to create and configure a beacon object:
 
 ```swift
-Beacon.shared.add(ConsoleLogger(name: "Console logger"), start: true)
+Beacon.shared.add(ConsoleLogger(name: "Console logger").started())
 ```
 
-Here we're creating a console logger, adding it to the shared beacon object and instructing the beacon object to automatically start the logger. In most cases a single beacon object is sufficient and having a shared instance greatly simplifies our interaction with the system.
+Here we're creating and starting a console logger, and then adding it to the shared beacon object. In most cases a single beacon object is sufficient and having a shared instance greatly simplifies our interaction with the system.
 
 ### The logging mechanism
 

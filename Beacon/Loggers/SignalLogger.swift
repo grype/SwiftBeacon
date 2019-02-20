@@ -30,21 +30,15 @@ fileprivate func isTypeOf<T>(_ instance: Any, a kind: T.Type) -> Bool{
  */
 public class SignalLogger : CustomStringConvertible, Hashable {
     
-    /// Beacon instance.
-    /// When the logger is started, it subscribes to notifications posted to this Beacon's announcer.
-    public var beacon: Beacon {
-        willSet {
-            if isRunning { stop() }
-        }
-    }
-    
     /// Logger name.
     /// Used to distinguish one logger from another.
     public var name: String
     
     /// Indicates whether the logger is running.
     /// When running, it will respond to signals posted to its beacon's announcer.
-    private(set) var isRunning = false
+    var isRunning : Bool {
+        return !observedBeacons.isEmpty
+    }
     
     /// Filtering function takes a signal as an argument and return a boolean value
     /// indicating whether the signal should be processed
@@ -54,27 +48,37 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     /// When specified, the logger will process only those signals to which this function answers truthfully.
     private var filter: Filter?
     
-    public required init(name aName: String, beacon aBeacon: Beacon = Beacon.shared) {
+    /// Array of all observed beacons
+    private var observedBeacons = [Beacon]()
+    
+    @discardableResult
+    public class func starting<T:SignalLogger>(named aName: String, on aBeacon: Beacon = Beacon.shared, filter: Filter? = nil) -> T {
+        let me = T(name: aName)
+        me.start(on: aBeacon, filter: filter)
+        return me
+    }
+    
+    public required init(name aName: String) {
         name = aName
-        beacon = aBeacon
     }
     
     // MARK:- Starting/Stopping
     
     /// Starts logging.
     /// This causes the logger to subscribe to signals posted by the beacon.
-    public func start(filter aFilter: Filter? = nil) {
+    public func start(on aBeacon: Beacon = Beacon.shared, filter aFilter: Filter? = nil) {
         filter = aFilter
-        guard !isRunning else { return }
-        subscribe()
-        isRunning = true
+        subscribe(to: aBeacon)
     }
     
     /// Stops logging.
-    public func stop() {
-        guard isRunning else { return }
-        unsubscribe()
-        isRunning = false
+    public func stop(on aBeacon: Beacon? = nil) {
+        if let beacon = aBeacon {
+            unsubscribe(from: beacon)
+        }
+        else {
+            unsubscribeFromAllBeacons()
+        }
     }
     
     // MARK:- Signaling
@@ -115,15 +119,32 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     
     // MARK:- Un/Subscribing
     
-    private func subscribe() {
-        beacon.announcer.addObserver(self,
+    private func subscribe(to aBeacon: Beacon) {
+        guard !observedBeacons.contains(aBeacon) else { return }
+        objc_sync_enter(observedBeacons)
+        aBeacon.announcer.addObserver(self,
                                      selector: #selector(didReceiveSignalNotification(_:)),
                                      name: .BeaconSignal,
-                                     object: beacon)
+                                     object: aBeacon)
+        observedBeacons.append(aBeacon)
+        objc_sync_exit(observedBeacons)
     }
     
-    private func unsubscribe() {
-        beacon.announcer.removeObserver(self)
+    private func unsubscribe(from aBeacon: Beacon) {
+        guard observedBeacons.contains(aBeacon) else { return }
+        objc_sync_enter(observedBeacons)
+        aBeacon.announcer.removeObserver(self)
+        observedBeacons.removeAll { $0 == aBeacon }
+        objc_sync_exit(observedBeacons)
+    }
+    
+    private func unsubscribeFromAllBeacons() {
+        objc_sync_enter(observedBeacons)
+        observedBeacons.forEach { (aBeacon) in
+            aBeacon.announcer.removeObserver(self)
+        }
+        observedBeacons.removeAll()
+        objc_sync_exit(observedBeacons)
     }
     
     // MARK:- Hashable

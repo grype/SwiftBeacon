@@ -14,13 +14,11 @@ class BeaconTest: XCTestCase {
     
     override func setUp() {
         beacon = Beacon()
-        logger = MemoryLogger(name: "Test Logger")
-        beacon.add(logger, start: true)
+        logger = MemoryLogger.starting(named: "Test Logger", on: beacon)
     }
     
     override func tearDown() {
         logger.stop()
-        beacon.removeAllLoggers()
         logger = nil
         beacon = nil
     }
@@ -38,7 +36,7 @@ class BeaconTest: XCTestCase {
     
     func testSignalingWhileFiltering() {
         logger.stop()
-        logger.start { (aSignal) -> Bool in
+        logger.start(on: beacon) { (aSignal) -> Bool in
             return aSignal is ContextSignal
         }
         beacon.signal(WrapperSignal("Wrapped signal should be ignored"))

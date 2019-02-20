@@ -14,13 +14,12 @@ class SignalTest : XCTestCase, Error {
     
     override func setUp() {
         super.setUp()
-        logger = MemoryLogger(name: "BeaconTestLogger")
-        Beacon.shared.add(logger, start: true)
+        logger = MemoryLogger.starting(named: "BeaconTestLogger")
     }
     
     override func tearDown() {
         super.tearDown()
-        Beacon.shared.removeAllLoggers()
+        logger.stop()
     }
     
     func throwup() throws {
@@ -69,13 +68,11 @@ class SignalTest : XCTestCase, Error {
     
     // MARK:- Scaling
     @inline(__always) private func perform(across count: Int, block: ()->Void) {
-        (1...count).forEach {
-            let logger = MemoryLogger(name: "\($0)")
-            logger.start()
-            Beacon.shared.add(logger)
+        let loggers: [MemoryLogger] = (1...count).map {
+            return MemoryLogger.starting(named: "\($0)")
         }
         block()
-        Beacon.shared.removeAllLoggers()
+        loggers.forEach { $0.stop() }
     }
     
     func testEmitSmallScaling() {

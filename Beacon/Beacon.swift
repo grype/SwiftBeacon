@@ -55,7 +55,7 @@ extension Notification.Name {
  ````
  
  */
-public class Beacon {
+public class Beacon : Hashable {
     
     public static var shared = Beacon()
     public static let SignalUserInfoKey = "signal"
@@ -63,8 +63,6 @@ public class Beacon {
     // MARK:- Properties
     
     internal let announcer = NotificationCenter.default
-    
-    private(set) var loggers = Set<SignalLogger>()
     
     // MARK:- Announcements
 
@@ -74,36 +72,13 @@ public class Beacon {
                        userInfo: [Beacon.SignalUserInfoKey: aSignal])
     }
     
-    // MARK:- Adding/Removing loggers
+    // MARK:- Hashable
     
-    /// Adds a logger, optionally starting it.
-    public func add(_ aLogger: SignalLogger, start: Bool = false) {
-        aLogger.beacon = self
-        loggers.insert(aLogger)
-        if start { aLogger.start() }
+    public static func == (lhs: Beacon, rhs: Beacon) -> Bool {
+        return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
     }
     
-    /// Adds a logger, optionally starting it with a filtering function.
-    public func add(_ aLogger: SignalLogger, start aFilter: @escaping SignalLogger.Filter) {
-        aLogger.beacon = self
-        loggers.insert(aLogger)
-        aLogger.start(filter: aFilter)
-    }
-    
-    /// Removes existing logger.
-    /// The removed logger will be automatically stopped.
-    public func remove(_ aLogger: SignalLogger) {
-        guard let index = loggers.firstIndex(of: aLogger) else { return }
-        aLogger.stop()
-        loggers.remove(at: index)
-    }
-    
-    /// Removes all loggers.
-    /// All removed loggers will be automatically stopped.
-    public func removeAllLoggers() {
-        loggers.forEach { (aLogger) in
-            aLogger.stop()
-        }
-        loggers.removeAll()
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self).hashValue)
     }
 }
