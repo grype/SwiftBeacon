@@ -44,12 +44,20 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     /// indicating whether the signal should be processed
     public typealias Filter = (Signal)->Bool
     
-    /// Filter function.
-    /// When specified, the logger will process only those signals to which this function answers truthfully.
-    private var filter: Filter?
+    private struct BeaconObservationToken : Hashable {
+        static func == (lhs: SignalLogger.BeaconObservationToken, rhs: SignalLogger.BeaconObservationToken) -> Bool {
+            return lhs.data.hash == rhs.data.hash
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(data.hash)
+        }
+        
+        var data : NSObjectProtocol
+    }
     
     /// Array of all observed beacons
-    private var observedBeacons = [Beacon]()
+    private var observedBeacons = [Beacon : NSObjectProtocol]()
     
     @discardableResult
     public class func starting<T:SignalLogger>(named aName: String, on aBeacon: Beacon = Beacon.shared, filter: Filter? = nil) -> T {
@@ -67,8 +75,7 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     /// Starts logging.
     /// This causes the logger to subscribe to signals posted by the beacon.
     public func start(on aBeacon: Beacon = Beacon.shared, filter aFilter: Filter? = nil) {
-        filter = aFilter
-        subscribe(to: aBeacon)
+        subscribe(to: aBeacon, filter: aFilter)
     }
     
     /// Stops logging.
@@ -97,51 +104,48 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     
     // MARK:- Processing signals
     
-    private func shouldProcess(_ signal: Signal) -> Bool {
-        guard isRunning else { return false }
-        guard let filter = filter else {
-            return true
-        }
-        return filter(signal)
-    }
-    
     private func process(_ signal: Signal) {
         nextPut(signal)
     }
     
-    @objc private func didReceiveSignalNotification(_ aNotification: Notification) {
-        guard
-            let signal = aNotification.beaconSignal,
-            shouldProcess(signal)
-            else { return }
-        process(signal)
-    }
-    
     // MARK:- Un/Subscribing
     
-    private func subscribe(to aBeacon: Beacon) {
-        guard !observedBeacons.contains(aBeacon) else { return }
+    private func subscribe(to aBeacon: Beacon, filter: Filter? = nil) {
+        subscribe(to: [aBeacon], filter: filter)
+    }
+    
+    private func subscribe(to beacons: [Beacon], filter: Filter? = nil) {
         objc_sync_enter(observedBeacons)
-        aBeacon.announcer.addObserver(self,
-                                     selector: #selector(didReceiveSignalNotification(_:)),
-                                     name: .BeaconSignal,
-                                     object: aBeacon)
-        observedBeacons.append(aBeacon)
+        beacons.forEach { (aBeacon) in
+            guard !observedBeacons.keys.contains(aBeacon) else { return }
+            let token = aBeacon.announcer.addObserver(forName: .BeaconSignal, object: aBeacon, queue: aBeacon.queue) { (aNotification) in
+                guard let signal = aNotification.beaconSignal else { return }
+                guard filter == nil || filter!(signal) else { return }
+                self.process(signal)
+            }
+            observedBeacons[aBeacon] = token
+        }
         objc_sync_exit(observedBeacons)
     }
     
     private func unsubscribe(from aBeacon: Beacon) {
-        guard observedBeacons.contains(aBeacon) else { return }
+        unsubscribe(from: [aBeacon])
+    }
+    
+    private func unsubscribe(from beacons: [Beacon]) {
         objc_sync_enter(observedBeacons)
-        aBeacon.announcer.removeObserver(self)
-        observedBeacons.removeAll { $0 == aBeacon }
+        beacons.forEach { (aBeacon) in
+            guard let token = observedBeacons[aBeacon] else { return }
+            aBeacon.announcer.removeObserver(token)
+            observedBeacons.removeValue(forKey: aBeacon)
+        }
         objc_sync_exit(observedBeacons)
     }
     
     private func unsubscribeFromAllBeacons() {
         objc_sync_enter(observedBeacons)
-        observedBeacons.forEach { (aBeacon) in
-            aBeacon.announcer.removeObserver(self)
+        observedBeacons.forEach { (aBeacon, token) in
+            aBeacon.announcer.removeObserver(token)
         }
         observedBeacons.removeAll()
         objc_sync_exit(observedBeacons)

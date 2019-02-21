@@ -64,6 +64,12 @@ public class Beacon : Hashable {
     
     internal let announcer = NotificationCenter.default
     
+    private(set) var queue: OperationQueue!
+    
+    init(queue aQueue: OperationQueue? = OperationQueue.current) {
+        queue = aQueue ?? OperationQueue.main
+    }
+    
     // MARK:- Announcements
 
     public func signal(_ aSignal: Signal) {
