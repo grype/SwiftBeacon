@@ -18,8 +18,8 @@ import Foundation
 public class MemoryLogger : SignalLogger {
     public static var shared = MemoryLogger(name: "MemoryLogger")
     
-    private(set) var recordings = [Signal]()
-    var limit: Int = 100
+    public private(set) var recordings = [Signal]()
+    public var limit: Int = 100
     
     public override func nextPut(_ aSignal: Signal) {
         objc_sync_enter(recordings)

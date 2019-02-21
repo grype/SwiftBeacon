@@ -14,7 +14,7 @@ class BeaconTest: XCTestCase {
     
     override func setUp() {
         beacon = Beacon()
-        logger = MemoryLogger.starting(named: "Test Logger", on: beacon)
+        logger = MemoryLogger.starting(name: "Test Logger", on: beacon)
     }
     
     override func tearDown() {

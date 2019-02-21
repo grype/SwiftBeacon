@@ -92,17 +92,17 @@ public class Signal : CustomStringConvertible {
     // MARK:- Emitting
     
     /// Emits signal to all running instances of `SignalLogger`
-    public func emit(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    public func emit(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
         let source = Signal.Source(fileName: fileName, line: line, functionName: functionName)
-        emit(on: beacon, source: source, userInfo: userInfo)
+        emit(on: beacons, source: source, userInfo: userInfo)
     }
     
     /// Emits signal to all running instances of `SignalLogger`
-    public func emit(on beacon: Beacon = Beacon.shared, source aSource: Signal.Source, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
+    private func emit(on beacons: [Beacon], source aSource: Signal.Source, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         timestamp = Date()
         source = aSource
         userInfo = anUserInfo
-        beacon.signal(self)
+        beacons.forEach { $0.signal(self) }
     }
     
     // MARK:- CustomStringConvertible

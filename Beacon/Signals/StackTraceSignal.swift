@@ -32,6 +32,10 @@ public class StackTraceSignal : ErrorSignal {
     }
 }
 
-public func emitStackTrace(error: Error, on aBeacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    StackTraceSignal(error: error).emit(on: aBeacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+public func emitStackTrace(error: Error, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    StackTraceSignal(error: error).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+}
+
+public func emitStackTrace(error: Error, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    StackTraceSignal(error: error).emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }

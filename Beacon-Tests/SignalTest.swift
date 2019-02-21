@@ -14,7 +14,7 @@ class SignalTest : XCTestCase, Error {
     
     override func setUp() {
         super.setUp()
-        logger = MemoryLogger.starting(named: "BeaconTestLogger")
+        logger = MemoryLogger.starting(name: "BeaconTestLogger")
     }
     
     override func tearDown() {
@@ -69,7 +69,7 @@ class SignalTest : XCTestCase, Error {
     // MARK:- Scaling
     @inline(__always) private func perform(across count: Int, block: ()->Void) {
         let loggers: [MemoryLogger] = (1...count).map {
-            return MemoryLogger.starting(named: "\($0)")
+            return MemoryLogger.starting(name: "\($0)")
         }
         block()
         loggers.forEach { $0.stop() }

@@ -59,28 +59,39 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     /// Array of all observed beacons
     private var observedBeacons = [Beacon : NSObjectProtocol]()
     
-    @discardableResult
-    public class func starting<T:SignalLogger>(named aName: String, on aBeacon: Beacon = Beacon.shared, filter: Filter? = nil) -> T {
-        let me = T(name: aName)
-        me.start(on: aBeacon, filter: filter)
-        return me
+    public class func starting<T:SignalLogger>(name aName: String, on beacon: Beacon = Beacon.shared, filter: Filter? = nil) -> T {
+        let me = self.init(name: aName)
+        me.subscribe(to: beacon, filter: filter)
+        return me as! T
     }
+    
+    public class func starting<T:SignalLogger>(name aName: String, on beacons: [Beacon], filter: Filter? = nil) -> T {
+        let me = self.init(name: aName)
+        me.subscribe(to: beacons, filter: filter)
+        return me as! T
+    }
+    
+    // MARK:- Init/Deinit
     
     public required init(name aName: String) {
         name = aName
     }
     
+    deinit {
+        stop()
+    }
+    
     // MARK:- Starting/Stopping
     
     /// Starts logging.
-    /// This causes the logger to subscribe to signals posted by the beacon.
+    /// This causes the logger to subscribe to signals posted by specified beacon.
     public func start(on aBeacon: Beacon = Beacon.shared, filter aFilter: Filter? = nil) {
         subscribe(to: aBeacon, filter: aFilter)
     }
     
     /// Stops logging.
-    public func stop(on aBeacon: Beacon? = nil) {
-        if let beacon = aBeacon {
+    public func stop(on beacon: Beacon? = nil) {
+        if let beacon = beacon {
             unsubscribe(from: beacon)
         }
         else {
@@ -117,9 +128,11 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     private func subscribe(to beacons: [Beacon], filter: Filter? = nil) {
         objc_sync_enter(observedBeacons)
         beacons.forEach { (aBeacon) in
-            guard !observedBeacons.keys.contains(aBeacon) else { return }
-            let token = aBeacon.announcer.addObserver(forName: .BeaconSignal, object: aBeacon, queue: aBeacon.queue) { (aNotification) in
-                guard let signal = aNotification.beaconSignal else { return }
+            if let index = observedBeacons.index(forKey: aBeacon) {
+                aBeacon.announcer.removeObserver(observedBeacons.remove(at: index).value)
+            }
+            let token = aBeacon.announcer.addObserver(forName: .BeaconSignal, object: aBeacon, queue: aBeacon.queue) { [weak self] (aNotification) in
+                guard let self = self, let signal = aNotification.beaconSignal else { return }
                 guard filter == nil || filter!(signal) else { return }
                 self.process(signal)
             }

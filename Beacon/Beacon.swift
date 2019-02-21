@@ -16,29 +16,15 @@ extension Notification.Name {
 /**
  I am the central object around signaling.
  
- I maintain a collection of loggers and provide a method for signaling them.
- Before I can be used in a meaningful way, add and start instances of SignalLogger, like this:
- 
- ````
- let logger = ConsoleLogger(name: 'My console logger')
- logger.start()
- Beacon.shared.loggers.append(logger)
- 
- // or in shorter form:
- Beacon.shared.add(ConsoleLogger(name: 'My console logger', start: true))
- ````
- 
- After that, I will announce all signals sent via `signal(_:)` to each logger.
+ I provide an interface for notifying subscribed loggers with signals:
  
  ````
  Beacon.shared.signal(WrapperSignal("This is only a string"))
  ````
  
- It is up to individual loggers to decide whether and how to handle each signal.
+ It is up to the logger to decide whether and how to handle a signal.
  
- These are the basic methods of operation, albeit a bit tedious. A simpler approach
- would be to use `emit()`. Instances of `Signal` understand `emit()`, and there
- are several global emit() functions defined by specific signals...
+ While this is the most direct way to emit signals, a more succinct way is using `emit()`:
  
  ````
  emit()     // Emits current context signal
@@ -66,7 +52,7 @@ public class Beacon : Hashable {
     
     private(set) var queue: OperationQueue!
     
-    init(queue aQueue: OperationQueue? = OperationQueue.current) {
+    public init(queue aQueue: OperationQueue? = OperationQueue.current) {
         queue = aQueue ?? OperationQueue.main
     }
     
@@ -87,4 +73,29 @@ public class Beacon : Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(self).hashValue)
     }
+}
+
+public func +(lhs: Beacon, rhs: Beacon) -> [Beacon] {
+    return [lhs, rhs]
+}
+
+public func +(lhs: [Beacon], rhs: Beacon) -> [Beacon] {
+    var result = [Beacon]()
+    result.append(contentsOf: lhs)
+    result.append(rhs)
+    return result
+}
+
+public func +(lhs: Beacon, rhs: [Beacon]) -> [Beacon] {
+    var result = [Beacon]()
+    result.append(lhs)
+    result.append(contentsOf: rhs)
+    return result
+}
+
+public func +(lhs: [Beacon], rhs: [Beacon]) -> [Beacon] {
+    var result = [Beacon]()
+    result.append(contentsOf: lhs)
+    result.append(contentsOf: rhs)
+    return result
 }

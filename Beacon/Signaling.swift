@@ -46,7 +46,21 @@ public protocol Signaling {
  rather than directly interfacing with instances of `Signal` and `SignalLogger`.
  */
 public func emit(_ value: Signaling, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    value.beaconSignal.emit(on: beacon,
+    value.beaconSignal.emit(on: [beacon],
+                            userInfo: userInfo,
+                            fileName: fileName,
+                            line: line,
+                            functionName: functionName)
+}
+
+/**
+ Emits a signaling object.
+ This is a convenience method to emit a signal associated with a `Signaling` object.
+ To be consistent, it is preferred that all logging is done via various `emit()` methods,
+ rather than directly interfacing with instances of `Signal` and `SignalLogger`.
+ */
+public func emit(_ value: Signaling, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    value.beaconSignal.emit(on: beacons,
                             userInfo: userInfo,
                             fileName: fileName,
                             line: line,

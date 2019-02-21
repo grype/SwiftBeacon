@@ -145,6 +145,7 @@
 		C418434D22168B0300FC21A0 /* Notification+Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Signal.swift"; sourceTree = "<group>"; };
 		C418437B221911AE00FC21A0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C418437C221931EC00FC21A0 /* StackTraceSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackTraceSignal.swift; sourceTree = "<group>"; };
+		C4B99950221FA7BC00F49D3F /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +207,7 @@
 		C41841CF2213EC3400FC21A0 = {
 			isa = PBXGroup;
 			children = (
+				C4B99950221FA7BC00F49D3F /* MyPlayground.playground */,
 				C418437B221911AE00FC21A0 /* README.md */,
 				C418434C22168ADA00FC21A0 /* Extensions */,
 				C418432E2216281600FC21A0 /* Beacon */,

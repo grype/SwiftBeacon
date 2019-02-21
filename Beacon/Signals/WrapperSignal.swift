@@ -48,6 +48,11 @@ public class WrapperSignal: Signal {
 }
 
 /// Wraps any value into WrapperSignal and emits the resulting signal
-public func emit(_ value: Any, on aBeacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    WrapperSignal(value).emit(on: aBeacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+public func emit(_ value: Any, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    WrapperSignal(value).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+}
+
+/// Wraps any value into WrapperSignal and emits the resulting signal
+public func emit(_ value: Any, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    WrapperSignal(value).emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
