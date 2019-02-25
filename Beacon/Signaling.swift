@@ -15,16 +15,16 @@ import Foundation
  
  For example:
  ````
- extension UIViewController : Signaling {
+ extension URLRequest : Signaling {
     var beaconSignal: Signal {
-        return ViewControllerSignal(self)
+        return URLRequestSignal(self)
     }
  }
  
- class ViewControllerSignal: Signal {
-    var controller: UIViewController
-    init(_ aController: UIViewController) {
-        controller = aController
+ class URLRequestSignal: Signal {
+    var urlRequest: URLRequest
+    init(_ aRequest: URLRequest) {
+        urlRequest = aRequest
         super.init()
     }
  }
