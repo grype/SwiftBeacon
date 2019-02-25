@@ -8,10 +8,6 @@
 
 import Foundation
 
-fileprivate func isTypeOf<T>(_ instance: Any, a kind: T.Type) -> Bool{
-    return instance is T;
-}
-
 /**
  I am an abstract logger of `Signal`s.
  
