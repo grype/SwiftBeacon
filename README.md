@@ -158,3 +158,23 @@ emit(Event.loggedIn(user), on: Beacons.events)  // will be handled by both logge
 In the first case, we setup a console logger to observe the shared beacon, and a hypothetical remote logger to observe a dedicated beacon for signaling application events. When we emit signals, we specify which beacons to signal ( `+` operator combines beacons and arrays of beacons).
 
 In the second case, we setup a console logger that observes both the shared and the dedicate event beacons. When we emit an event signal - we direct it to the dedicated event beacon object. In both cases the end result is the same.
+
+## Objective-C
+
+This framework supports both Swift and Objective-C. There are, however, a few language-specific differences between the two. When it comes to emitting signals, there are a few macros defined for convenience:
+
+```objective-c
+// emit context signal
+BeaconEmitContext(beacons, userInfo);
+
+// emit value
+BeaconEmit(someObject, beacons, userInfo);
+
+// emit error
+BeaconEmitError(someError, beacons, userInfo);
+
+// emit call stack
+BeaconEmitStackTrace(someError, beacons, userInfo);
+```
+
+The `beacons` argument expects either `NSArray<Beacon*>*` or nil, implying `Beacon.shared`.

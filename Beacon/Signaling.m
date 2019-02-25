@@ -7,28 +7,31 @@
 //
 
 #import "Signaling.h"
+#import <Beacon/Beacon-Swift.h>
 
-void BeaconEmit(id<Signaling> object, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
+void _BeaconEmit(id<Signaling> object, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
     Signal *signal = (object == nil) ? [[ContextSignal alloc] init] : [object beaconSignal];
-    [signal emitOn:beacons
+    [signal emitOn:(beacons != nil) ? beacons : @[[Beacon shared]]
           userInfo:userInfo
           fileName:file
               line:line
       functionName:function];
 }
 
-void BeaconEmitError(NSError* error, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
-    [[[ErrorSignal alloc] initWithError:error] emitOn:beacons
-                                             userInfo:userInfo
-                                             fileName:file
-                                                 line:line
-                                         functionName:function];
+void _BeaconEmitError(NSError* error, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
+    ErrorSignal *signal = [[ErrorSignal alloc] initWithError:error];
+    [signal emitOn:(beacons != nil) ? beacons : @[[Beacon shared]]
+          userInfo:userInfo
+          fileName:file
+              line:line
+      functionName:function];
 }
 
-void BeaconEmitStackTrace(NSArray<NSString *>* stackTrace, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
-    [[[StackTraceSignal alloc] initWithStackTrace:stackTrace] emitOn:beacons
-                                                            userInfo:userInfo
-                                                            fileName:file
-                                                                line:line
-                                                        functionName:function];
+void _BeaconEmitStackTrace(NSArray<NSString *>* stackTrace, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
+    StackTraceSignal *signal = [[StackTraceSignal alloc] initWithStackTrace:stackTrace];
+    [signal emitOn:(beacons != nil) ? beacons : @[[Beacon shared]]
+          userInfo:userInfo
+          fileName:file
+              line:line
+      functionName:function];
 }

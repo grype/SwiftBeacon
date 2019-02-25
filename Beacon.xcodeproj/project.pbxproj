@@ -101,6 +101,10 @@
 		C46980962223C936003C5030 /* Beacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C418425F2216233800FC21A0 /* Beacon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C46980972223C937003C5030 /* Beacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C418425F2216233800FC21A0 /* Beacon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C46980982223C938003C5030 /* Beacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C418425F2216233800FC21A0 /* Beacon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C46980992223CE5C003C5030 /* Signaling.h in Headers */ = {isa = PBXBuildFile; fileRef = C469808C2223ADB8003C5030 /* Signaling.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C469809A2223CE5D003C5030 /* Signaling.h in Headers */ = {isa = PBXBuildFile; fileRef = C469808C2223ADB8003C5030 /* Signaling.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C469809B2223CE61003C5030 /* Signaling.h in Headers */ = {isa = PBXBuildFile; fileRef = C469808C2223ADB8003C5030 /* Signaling.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C469809C2223CE61003C5030 /* Signaling.h in Headers */ = {isa = PBXBuildFile; fileRef = C469808C2223ADB8003C5030 /* Signaling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -302,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C418426D2216233800FC21A0 /* Beacon.h in Headers */,
+				C46980992223CE5C003C5030 /* Signaling.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C46980962223C936003C5030 /* Beacon.h in Headers */,
+				C469809A2223CE5D003C5030 /* Signaling.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +324,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C46980972223C937003C5030 /* Beacon.h in Headers */,
+				C469809B2223CE61003C5030 /* Signaling.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C46980982223C938003C5030 /* Beacon.h in Headers */,
+				C469809C2223CE61003C5030 /* Signaling.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
