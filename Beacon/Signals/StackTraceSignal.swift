@@ -13,12 +13,12 @@ import Foundation
  
  Simply call `emitStackTrace()` to emit me, and I'll capture the current call stack.
  */
-public class StackTraceSignal : ErrorSignal {
+public class StackTraceSignal : Signal {
     public var stackTrace: [String]
     
-    public init(error: Error, stackTrace aStackTrace: [String] = Thread.callStackSymbols) {
+    public init(stackTrace aStackTrace: [String] = Thread.callStackSymbols) {
         stackTrace = aStackTrace
-        super.init(error: error)
+        super.init()
     }
     
     public override var signalName: String {
@@ -32,10 +32,10 @@ public class StackTraceSignal : ErrorSignal {
     }
 }
 
-public func emitStackTrace(error: Error, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    StackTraceSignal(error: error).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+public func emitStackTrace(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    StackTraceSignal().emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
-public func emitStackTrace(error: Error, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    StackTraceSignal(error: error).emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+public func emitStackTrace(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    StackTraceSignal().emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
