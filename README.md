@@ -23,14 +23,14 @@ Loggers carry an arbitrary name to distinguish them from one another. They also 
 Logging is essentially done by sending signals to a beacon object:
 
 ```swift
-Beacon.shared.signal(ContextSignal())
+ContextSignal().emit(on: Beacon.shared)
 ```
 
-The `ContextSignal` captures the context in which it is created. It is then used to signal the shared beacon object, which in turn notifies our console logger, which then prints the context information out to the console:
+The `ContextSignal` captures the context in which it is created. It is then emitted on the shared beacon object, which in turn notifies our console logger, which then prints the context information out to the console:
 
 `2018-01-01 01:02:03.123456 MyAppication 🌀 Context [AppDelegate.swift:20] #application(_:didFinishLaunchingWithOptions:)`
 
-A more succinct way to emit a signal is to use the `emit()` function. The last example can be reduced to:
+A more succinct way to emit a signal is to use one of several global `emit()` function. The last example can be reduced to:
 
 ```swift
 emit()
@@ -147,7 +147,7 @@ Loggers.append(HypotheticalRemoteLogger.starting(name: "event", on: Beacons.even
 emit("Debugging")  // will be handled by the console logger
 emit(Event.loggedIn(user), on: Beacon.shared + Beacons.events)  // will be handled by both loggers
 
-// 2. Logging vioa multiple beacons
+// 2. Logging via multiple beacons
 Loggers.append(ConsoleLogger.starting(name: "console", on: Beacon.shared + Beacons.events))
 Loggers.append(HypotheticalRemoteLogger.starting(name: "event", on: Beacons.events)
 
