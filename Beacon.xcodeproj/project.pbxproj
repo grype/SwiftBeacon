@@ -94,6 +94,13 @@
 		C4184381221931EC00FC21A0 /* StackTraceSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418437C221931EC00FC21A0 /* StackTraceSignal.swift */; };
 		C4184382221931EC00FC21A0 /* StackTraceSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418437C221931EC00FC21A0 /* StackTraceSignal.swift */; };
 		C4184383221931EC00FC21A0 /* StackTraceSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418437C221931EC00FC21A0 /* StackTraceSignal.swift */; };
+		C46980922223ADB8003C5030 /* Signaling.m in Sources */ = {isa = PBXBuildFile; fileRef = C469808D2223ADB8003C5030 /* Signaling.m */; };
+		C46980932223ADB8003C5030 /* Signaling.m in Sources */ = {isa = PBXBuildFile; fileRef = C469808D2223ADB8003C5030 /* Signaling.m */; };
+		C46980942223ADB8003C5030 /* Signaling.m in Sources */ = {isa = PBXBuildFile; fileRef = C469808D2223ADB8003C5030 /* Signaling.m */; };
+		C46980952223ADB8003C5030 /* Signaling.m in Sources */ = {isa = PBXBuildFile; fileRef = C469808D2223ADB8003C5030 /* Signaling.m */; };
+		C46980962223C936003C5030 /* Beacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C418425F2216233800FC21A0 /* Beacon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C46980972223C937003C5030 /* Beacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C418425F2216233800FC21A0 /* Beacon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C46980982223C938003C5030 /* Beacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C418425F2216233800FC21A0 /* Beacon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +152,8 @@
 		C418434D22168B0300FC21A0 /* Notification+Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Signal.swift"; sourceTree = "<group>"; };
 		C418437B221911AE00FC21A0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C418437C221931EC00FC21A0 /* StackTraceSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackTraceSignal.swift; sourceTree = "<group>"; };
+		C469808C2223ADB8003C5030 /* Signaling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Signaling.h; sourceTree = "<group>"; };
+		C469808D2223ADB8003C5030 /* Signaling.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Signaling.m; sourceTree = "<group>"; };
 		C4B99950221FA7BC00F49D3F /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
@@ -271,6 +280,8 @@
 				C41841FB2213F28B00FC21A0 /* Signals */,
 				C418425F2216233800FC21A0 /* Beacon.h */,
 				C41842F12216255700FC21A0 /* Info.plist */,
+				C469808C2223ADB8003C5030 /* Signaling.h */,
+				C469808D2223ADB8003C5030 /* Signaling.m */,
 			);
 			path = Beacon;
 			sourceTree = "<group>";
@@ -298,6 +309,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C46980962223C936003C5030 /* Beacon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +317,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C46980972223C937003C5030 /* Beacon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +325,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C46980982223C938003C5030 /* Beacon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,24 +470,28 @@
 				TargetAttributes = {
 					C418425C2216233700FC21A0 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 					C41842642216233800FC21A0 = {
 						CreatedOnToolsVersion = 10.1;
 					};
 					C41842862216241400FC21A0 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 					C418428E2216241500FC21A0 = {
 						CreatedOnToolsVersion = 10.1;
 					};
 					C41842ED2216255700FC21A0 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 					C41842F52216255700FC21A0 = {
 						CreatedOnToolsVersion = 10.1;
 					};
 					C41843092216258000FC21A0 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -563,6 +581,7 @@
 				C41842AE2216245100FC21A0 /* MemoryLogger.swift in Sources */,
 				C41842B12216245100FC21A0 /* ErrorSignal.swift in Sources */,
 				C41842B22216245100FC21A0 /* WrapperSignal.swift in Sources */,
+				C46980922223ADB8003C5030 /* Signaling.m in Sources */,
 				C41842B02216245100FC21A0 /* ContextSignal.swift in Sources */,
 				C41842A32216243F00FC21A0 /* Signal.swift in Sources */,
 				C418434E22168B0300FC21A0 /* Notification+Signal.swift in Sources */,
@@ -601,6 +620,7 @@
 				C41842C02216245300FC21A0 /* MemoryLogger.swift in Sources */,
 				C41842C32216245300FC21A0 /* ErrorSignal.swift in Sources */,
 				C41842C42216245300FC21A0 /* WrapperSignal.swift in Sources */,
+				C46980932223ADB8003C5030 /* Signaling.m in Sources */,
 				C41842C22216245300FC21A0 /* ContextSignal.swift in Sources */,
 				C41842A62216244100FC21A0 /* Signal.swift in Sources */,
 				C418435022168B0300FC21A0 /* Notification+Signal.swift in Sources */,
@@ -639,6 +659,7 @@
 				C41843172216277000FC21A0 /* MemoryLogger.swift in Sources */,
 				C418431A2216277000FC21A0 /* ErrorSignal.swift in Sources */,
 				C418431B2216277000FC21A0 /* WrapperSignal.swift in Sources */,
+				C46980942223ADB8003C5030 /* Signaling.m in Sources */,
 				C41843192216277000FC21A0 /* ContextSignal.swift in Sources */,
 				C41843142216277000FC21A0 /* Signal.swift in Sources */,
 				C418435222168B0300FC21A0 /* Notification+Signal.swift in Sources */,
@@ -677,6 +698,7 @@
 				C41843292216277100FC21A0 /* MemoryLogger.swift in Sources */,
 				C418432C2216277100FC21A0 /* ErrorSignal.swift in Sources */,
 				C418432D2216277100FC21A0 /* WrapperSignal.swift in Sources */,
+				C46980952223ADB8003C5030 /* Signaling.m in Sources */,
 				C418432B2216277100FC21A0 /* ContextSignal.swift in Sources */,
 				C41843262216277100FC21A0 /* Signal.swift in Sources */,
 				C418435422168B0300FC21A0 /* Notification+Signal.swift in Sources */,
@@ -742,6 +764,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -809,6 +832,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -837,6 +861,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -857,6 +882,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -866,6 +892,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -941,6 +968,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -960,6 +988,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -970,6 +999,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -1047,6 +1077,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1067,6 +1098,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.grype.SwiftBeacon;
 				PRODUCT_NAME = Beacon;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
@@ -1075,6 +1107,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1145,6 +1178,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
@@ -1163,6 +1197,7 @@
 				PRODUCT_NAME = Beacon;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -1173,6 +1208,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
