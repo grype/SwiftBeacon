@@ -14,9 +14,9 @@ import Foundation
  Simply call `emit(anError)` to emit me, and I'll capture the error.
  */
 public class ErrorSignal : Signal {
-    private(set) var error: Error
+    @objc private(set) var error: Error
     
-    public init(error anError: Error) {
+    @objc public init(error anError: Error) {
         error = anError
         super.init()
     }

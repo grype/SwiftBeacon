@@ -14,9 +14,9 @@ import Foundation
  Simply call `emitStackTrace()` to emit me, and I'll capture the current call stack.
  */
 public class StackTraceSignal : Signal {
-    public var stackTrace: [String]
+    @objc public var stackTrace: [String]
     
-    public init(stackTrace aStackTrace: [String] = Thread.callStackSymbols) {
+    @objc public init(stackTrace aStackTrace: [String] = Thread.callStackSymbols) {
         stackTrace = aStackTrace
         super.init()
     }

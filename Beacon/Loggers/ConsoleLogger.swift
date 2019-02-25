@@ -17,9 +17,9 @@ import Foundation
 public class ConsoleLogger : SignalLogger {
     /// Period of time since receiving the last signal, after which I am considered idle.
     /// When the value is > 0, I will prefix the next signal with a special `inactivityDelimiter`.
-    public var markedInactvitiyPeriod: TimeInterval = 10
-    public var inactivityDelimiter: String = "⏳"
-    private var lastPrintDate: Date?
+    @objc public var markedInactvitiyPeriod: TimeInterval = 10
+    @objc public var inactivityDelimiter: String = "⏳"
+    @objc private var lastPrintDate: Date?
     
     override public func nextPut(_ aSignal: Signal) {
         if markedInactvitiyPeriod > 0, let lastPrintDate = lastPrintDate, Date().timeIntervalSince(lastPrintDate) > markedInactvitiyPeriod {

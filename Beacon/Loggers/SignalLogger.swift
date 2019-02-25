@@ -24,15 +24,15 @@ import Foundation
  
  - See Also: `ConsoleLogger`, `MemoryLogger`
  */
-public class SignalLogger : CustomStringConvertible, Hashable {
+public class SignalLogger : NSObject {
     
     /// Logger name.
     /// Used to distinguish one logger from another.
-    public var name: String
+    @objc public var name: String
     
     /// Indicates whether the logger is running.
     /// When running, it will respond to signals posted to its beacon's announcer.
-    var isRunning : Bool {
+    @objc var isRunning : Bool {
         return !observedBeacons.isEmpty
     }
     
@@ -69,7 +69,7 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     
     // MARK:- Init/Deinit
     
-    public required init(name aName: String) {
+    @objc public required init(name aName: String) {
         name = aName
     }
     
@@ -81,12 +81,12 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     
     /// Starts logging.
     /// This causes the logger to subscribe to signals posted by specified beacon.
-    public func start(on aBeacon: Beacon = Beacon.shared, filter aFilter: Filter? = nil) {
+    @objc public func start(on aBeacon: Beacon = Beacon.shared, filter aFilter: Filter? = nil) {
         subscribe(to: aBeacon, filter: aFilter)
     }
     
     /// Stops logging.
-    public func stop(on beacon: Beacon? = nil) {
+    @objc public func stop(on beacon: Beacon? = nil) {
         if let beacon = beacon {
             unsubscribe(from: beacon)
         }
@@ -98,12 +98,12 @@ public class SignalLogger : CustomStringConvertible, Hashable {
     // MARK:- Signaling
     
     /// Processes a signal.
-    public func nextPut(_ aSignal: Signal) {
+    @objc public func nextPut(_ aSignal: Signal) {
         fatalError("Subclass must override \(#function)")
     }
     
     /// Process signals in bulk.
-    public func nextPutAll(_ signals: [Signal]) {
+    @objc public func nextPutAll(_ signals: [Signal]) {
         signals.forEach { (aSignal) in
             nextPut(aSignal)
         }
@@ -160,19 +160,9 @@ public class SignalLogger : CustomStringConvertible, Hashable {
         objc_sync_exit(observedBeacons)
     }
     
-    // MARK:- Hashable
-    
-    public static func == (lhs: SignalLogger, rhs: SignalLogger) -> Bool {
-        return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(self).hashValue)
-    }
-    
     // MARK:- CustomStringConvertible
     
-    public var description: String {
+    public override var description: String {
         return "<\(String(describing: type(of: self))): \(Unmanaged.passUnretained(self).toOpaque())> Name: \(name); Running: \(isRunning)"
     }
 }

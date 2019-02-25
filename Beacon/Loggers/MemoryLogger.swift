@@ -16,10 +16,10 @@ import Foundation
  
  */
 public class MemoryLogger : SignalLogger {
-    public static var shared = MemoryLogger(name: "MemoryLogger")
+    @objc public static var shared = MemoryLogger(name: "MemoryLogger")
     
-    public private(set) var recordings = [Signal]()
-    public var limit: Int = 100
+    @objc public private(set) var recordings = [Signal]()
+    @objc public var limit: Int = 100
     
     public override func nextPut(_ aSignal: Signal) {
         objc_sync_enter(recordings)
@@ -30,7 +30,7 @@ public class MemoryLogger : SignalLogger {
         recordings.removeFirst(recordings.count - limit)
     }
     
-    public func clear() {
+    @objc public func clear() {
         objc_sync_enter(recordings)
         recordings.removeAll()
         objc_sync_exit(recordings)

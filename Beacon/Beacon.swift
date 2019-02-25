@@ -41,38 +41,29 @@ extension Notification.Name {
  ````
  
  */
-public class Beacon : Hashable {
+public class Beacon : NSObject {
     
-    public static var shared = Beacon()
-    public static let SignalUserInfoKey = "signal"
+    @objc public static var shared = Beacon()
+    @objc public static let SignalUserInfoKey = "signal"
     
     // MARK:- Properties
     
     internal let announcer = NotificationCenter.default
     
-    private(set) var queue: OperationQueue!
+    @objc private(set) var queue: OperationQueue!
     
-    public init(queue aQueue: OperationQueue? = OperationQueue.current) {
+    @objc public init(queue aQueue: OperationQueue? = OperationQueue.current) {
         queue = aQueue ?? OperationQueue.main
     }
     
     // MARK:- Announcements
 
-    public func signal(_ aSignal: Signal) {
+    @objc public func signal(_ aSignal: Signal) {
         announcer.post(name: NSNotification.Name.BeaconSignal,
                        object: self,
                        userInfo: [Beacon.SignalUserInfoKey: aSignal])
     }
     
-    // MARK:- Hashable
-    
-    public static func == (lhs: Beacon, rhs: Beacon) -> Bool {
-        return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(self).hashValue)
-    }
 }
 
 public func +(lhs: Beacon, rhs: Beacon) -> [Beacon] {

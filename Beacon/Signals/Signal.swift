@@ -18,7 +18,7 @@ import Foundation
  (using `Signal.Source` struct) and then announces myself via relevant `Beacon` instance.
  
  */
-public class Signal : CustomStringConvertible {
+public class Signal : NSObject {
     
     // MARK:- Structs
     
@@ -52,7 +52,7 @@ public class Signal : CustomStringConvertible {
     // MARK: Properties
     
     /// Default signal name, which is derived from the class name, stripping "Signal" suffix
-    public class var signalName: String {
+    @objc public class var signalName: String {
         let classString = String(describing: self)
         let suffix = "Signal"
         guard classString.hasSuffix(suffix) else { return classString }
@@ -67,32 +67,32 @@ public class Signal : CustomStringConvertible {
     public var source: Source?
     
     /// User info data passed along by the signaler. 
-    public var userInfo: [AnyHashable : Any]?
+    @objc public var userInfo: [AnyHashable : Any]?
     
     /// Signal name as appropriate for the instance. By default this is the same as class-side `signalName`.
-    public var signalName: String {
+    @objc public var signalName: String {
         return type(of: self).signalName
     }
     
     /// Time when the signal was `emit()`ed.
-    private(set) var timestamp: Date!
+    @objc private(set) var timestamp: Date!
     
     // MARK: Properties - Private
     
-    private(set) lazy var dateFormatter: DateFormatter = {
+    @objc public lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss.SSSSSSZ"
         return dateFormatter
     }()
     
-    private(set) lazy var bundleName: String = {
+    @objc private(set) lazy var bundleName: String = {
         return Bundle.main.infoDictionary!["CFBundleName"] as! String
     }()
     
     // MARK:- Emitting
     
     /// Emits signal to all running instances of `SignalLogger`
-    public func emit(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    @objc public func emit(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
         let source = Signal.Source(fileName: fileName, line: line, functionName: functionName)
         emit(on: beacons, source: source, userInfo: userInfo)
     }
@@ -107,7 +107,7 @@ public class Signal : CustomStringConvertible {
     
     // MARK:- CustomStringConvertible
     
-    public var description: String {
+    public override var description: String {
         var sourceDescription = ""
         if let source = source {
             sourceDescription = " \(source)"

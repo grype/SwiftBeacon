@@ -19,13 +19,13 @@ import Foundation
  */
 public class WrapperSignal: Signal {
     /// Wrapped value
-    public let value: Any
+    @objc public let value: Any
     
     public override var signalName: String {
         return "📦 \(String(describing: type(of: value)))"
     }
     
-    public init(_ aValue: Any) {
+    @objc public init(_ aValue: Any) {
         if let copyTarget = aValue as? NSCopying {
             value = copyTarget.copy(with: nil)
         }
@@ -35,7 +35,7 @@ public class WrapperSignal: Signal {
         super.init()
     }
     
-    public var valueDescription: String {
+    @objc public var valueDescription: String {
         if let value = value as? CustomStringConvertible {
             return String(describing: value)
         }
