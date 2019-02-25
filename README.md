@@ -26,7 +26,7 @@ Logging is essentially done by sending signals to a beacon object:
 Beacon.shared.signal(ContextSignal())
 ```
 
-The `ContextSignal` simply captures the context in which it is created. It is then used to signal the shared beacon object, which in turn notifies our console logger, which then prints the context information out to the console:
+The `ContextSignal` captures the context in which it is created. It is then used to signal the shared beacon object, which in turn notifies our console logger, which then prints the context information out to the console:
 
 `2018-01-01 01:02:03.123456 MyAppication 🌀 Context [AppDelegate.swift:20] #application(_:didFinishLaunchingWithOptions:)`
 
@@ -44,7 +44,7 @@ emit("I am a string")
 
 In that manner, any value can be emitted, not just strings. 
 
-To facilitate this behavior, there exists a `WrapperSignal` for wrapping arbitrary values. When you call `emit()` _with_ an argument, an instance of `WrapperSignal` is created, capturing that argument (or its copy if it conforms to `NSCopying`). The resulting signal is then sent to the beacon object (the shared instance, or one explicitly specified in the `emit()` call). The console logger will indicate the wrapped value: 
+To facilitate this behavior, there exists a `WrapperSignal` for wrapping arbitrary values. When you call `emit()` _with_ an argument, an instance of `WrapperSignal` is created, capturing that argument (or its copy if it's passed by copy or otherwise conforms to `NSCopying`). The resulting signal is then sent to the beacon object (the shared instance, or one explicitly specified in the `emit()` call). The console logger will indicate the wrapped value: 
 
 `2018-01-01 01:02:03.123456 MyAppication 📦 __NSCFString [AppDelegate.swift:21] #application(_:didFinishLaunchingWithOptions:) I am a string`
 
@@ -57,7 +57,7 @@ do {
     throw "I am an error"
 } catch {
     emit(error: error)
-    emitStackTrace(error: error)
+    emitStackTrace()
 }
 ```
 
@@ -128,32 +128,33 @@ ConsoleLogger.starting(name: "Console error logger")) {
 }
 ```
 
-Keep in mind that starting a logger makes it observe a beacon object for relevant signals. Starting a logger on multiple beacons would result in that logger observing multiple beacons. Starting a logger on a beacon it's already observing would resign it from prior observation and filtering, making the most recent call to start() determine the logger's ultimate behavior with respect to that beacon.
+Keep in mind that starting a logger makes it observe beacon objects for relevant signals. Starting a logger on multiple beacons would result in that logger observing multiple beacons. Starting a logger on a beacon it's already observing would resign it from prior observation and filtering, making the most recent call to start() determine the logger's ultimate behavior with respect to that beacon.
 
 ### Multiple beacons
 
-Multiple beacons can be used to both: emit signals and to start loggers. This makes it possible to create versatile configurations. For example:
+Multiple beacons can be used by both signals and loggers. This makes it possible to create versatile configurations. For example:
 
 ```swift
 
-let Beacons = (debug: Beacon(), release: Beacon(), events: Beacon())
+var Beacons = (events: Beacon())
 // we need to retain our loggers...
 var Loggers = [SignalLogger]()
 
-#if DEBUG
-Loggers.append(ConsoleLogger.starting(name: "console", on: Beacons.debug))
-#endif
-
-#if RELEASE
-Loggers.append(ConsoleLogger.starting(name: "console", on: Beacons.release))
-Loggers.append(HypotheticalFileLogger.starting(fileURL: aLogfileURL, name: "file", on: Beacons.release))
-#endif
-
+// 1. Emitting to multiple beacons
+Loggers.append(ConsoleLogger.starting(name: "console"))
 Loggers.append(HypotheticalRemoteLogger.starting(name: "event", on: Beacons.events)
 
-emit("Debugging", on: Beacons.debug) // will be handled in the debug builds
-emit(error: anError, on: Beacons.debug + Beacons.release)  // will be handled in either build
-emit(Event.loggedIn(user), on: Beacons.debug + Beacons.events)
+emit("Debugging")  // will be handled by the console logger
+emit(Event.loggedIn(user), on: Beacon.shared + Beacons.events)  // will be handled by both loggers
+
+// 2. Logging vioa multiple beacons
+Loggers.append(ConsoleLogger.starting(name: "console", on: Beacon.shared + Beacons.events))
+Loggers.append(HypotheticalRemoteLogger.starting(name: "event", on: Beacons.events)
+
+emit("Debugging")  // will be handled by the console logger
+emit(Event.loggedIn(user), on: Beacons.events)  // will be handled by both loggers
 ```
 
-Three beacons were created - the debug beacon will be configured in the debug builds, release - in the release builds, and all the builds get a beacon for signaling application events. When we need to emit a signal - we simply specify on which beacons ( `+` operator combines beacons and arrays of beacons), and thus avoid sprinkling the codebase with conditional statements. Also, be mindful that `Beacon` and `SignalLogger` objects that you create need to be retained!
+In the first case, we setup a console logger to observe the shared beacon, and a hypothetical remote logger to observe a dedicated beacon for signaling application events. When we emit signals, we specify which beacons to signal ( `+` operator combines beacons and arrays of beacons).
+
+In the second case, we setup a console logger that observes both the shared and the dedicate event beacons. When we emit an event signal - we direct it to the dedicated event beacon object. In both cases the end result is the same.
