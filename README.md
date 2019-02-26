@@ -1,6 +1,13 @@
 # SwiftBeacon
 
-Implementation of the [Beacon](https://github.com/pharo-project/pharo-beacon) logging framework in Swift. The framework distinguishes itself from traditional logging systems by doing away with levels and allowing for logging of arbitrary values, not just text. For background information on Beacon, see [this article](http://www.humane-assessment.com/blog/beacon). 
+Implementation of the [Beacon](https://github.com/pharo-project/pharo-beacon) logging framework in Swift. The framework distinguishes itself from traditional logging systems by doing away with levels and allowing for logging of arbitrary values, not just text. For background information on Beacon, see [this article](http://www.humane-assessment.com/blog/beacon).
+
+## Installing
+
+Carthage:
+```
+github "grype/SwiftBeacon.git" "master"
+```
 
 ## Getting started 
 
@@ -20,7 +27,7 @@ Loggers carry an arbitrary name to distinguish them from one another. They also 
 
 ### Emitting signals
 
-Logging is essentially done by sending signals to a beacon object:
+Logging is essentially done by emitting a signal on a beacon object:
 
 ```swift
 ContextSignal().emit(on: Beacon.shared)
