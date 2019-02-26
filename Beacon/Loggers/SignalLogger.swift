@@ -26,19 +26,18 @@ import Foundation
  */
 public class SignalLogger : NSObject {
     
-    /// Logger name.
-    /// Used to distinguish one logger from another.
-    @objc public var name: String
-    
-    /// Indicates whether the logger is running.
-    /// When running, it will respond to signals posted to its beacon's announcer.
-    @objc var isRunning : Bool {
-        return !observedBeacons.isEmpty
-    }
+    // MARK:- Type aliases
     
     /// Filtering function takes a signal as an argument and return a boolean value
     /// indicating whether the signal should be processed
     public typealias Filter = (Signal)->Bool
+    
+    /// Block of code for evaluating during momentary runs
+    ///
+    /// @See `run(during:)`
+    public typealias RunBlock = (SignalLogger)->Void
+    
+    // MARK:- Structs
     
     private struct BeaconObservationToken : Hashable {
         static func == (lhs: SignalLogger.BeaconObservationToken, rhs: SignalLogger.BeaconObservationToken) -> Bool {
@@ -52,16 +51,22 @@ public class SignalLogger : NSObject {
         var data : NSObjectProtocol
     }
     
+    // MARK:- Properties
+    
+    /// Logger name.
+    /// Used to distinguish one logger from another.
+    @objc public var name: String
+    
+    /// Indicates whether the logger is running.
+    /// When running, it will respond to signals posted to its beacon's announcer.
+    @objc var isRunning : Bool {
+        return !observedBeacons.isEmpty
+    }
+    
     /// Array of all observed beacons
     private var observedBeacons = [Beacon : NSObjectProtocol]()
     
-    public class func starting<T:SignalLogger>(name aName: String, on beacon: Beacon = Beacon.shared, filter: Filter? = nil) -> T {
-        let me = self.init(name: aName)
-        me.subscribe(to: beacon, filter: filter)
-        return me as! T
-    }
-    
-    public class func starting<T:SignalLogger>(name aName: String, on beacons: [Beacon], filter: Filter? = nil) -> T {
+    public class func starting<T:SignalLogger>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(name: aName)
         me.subscribe(to: beacons, filter: filter)
         return me as! T
@@ -79,20 +84,51 @@ public class SignalLogger : NSObject {
     
     // MARK:- Starting/Stopping
     
-    /// Starts logging.
-    /// This causes the logger to subscribe to signals posted by specified beacon.
-    @objc public func start(on aBeacon: Beacon = Beacon.shared, filter aFilter: Filter? = nil) {
-        subscribe(to: aBeacon, filter: aFilter)
+    /// Starts observing shared beacon object and logging relevant signals.
+    /// If filter function is given, only those signals for which the function returns true will be handled.
+    @objc public func start(filter aFilter: Filter? = nil) {
+        start(on: [Beacon.shared], filter: aFilter)
     }
     
-    /// Stops logging.
-    @objc public func stop(on beacon: Beacon? = nil) {
-        if let beacon = beacon {
-            unsubscribe(from: beacon)
+    /// Starts observing given beacons and logging relevant signals.
+    /// If filter function is given, only those signals for which the function returns true will be handled.
+    @objc public func start(on beacons: [Beacon] = [Beacon.shared], filter aFilter: Filter? = nil) {
+        subscribe(to: beacons, filter: aFilter)
+    }
+    
+    /// Start on shared beacon for the duration of the given run block
+    @objc public func run(during: RunBlock) {
+        run(on: [Beacon.shared], during: during)
+    }
+    
+    /// Start on given beacons for the duration of the given run block
+    @objc public func run(on beacons: [Beacon] = [Beacon.shared], during runBlock: RunBlock) {
+        subscribe(to: beacons)
+        runBlock(self)
+        unsubscribe(from: beacons)
+    }
+    
+    /// Start on given beacons for the duration of the given run block, filtering in given signal types
+    @objc public func run(for signals: [Signal.Type], on beacons: [Beacon] = [Beacon.shared], during runBlock: RunBlock) {
+        subscribe(to: beacons) { (aSignal) -> Bool in
+            return signals.first(where: { (aType) -> Bool in
+                return aType == type(of: aSignal)
+            }) != nil
         }
-        else {
-            unsubscribeFromAllBeacons()
+        runBlock(self)
+        unsubscribe(from: beacons)
+    }
+    
+    /// Stops observing given beacons and with that logging any signals emitted on those beacons.
+    @objc public func stop(on beacons: [Beacon] = [Beacon.shared]) {
+        beacons.forEach { (aBeacon) in
+            unsubscribe(from: aBeacon)
         }
+    }
+    
+    /// Stops observing all currently observing beacons. No logging will take place until started again.
+    @objc public func stop() {
+        unsubscribeFromAllBeacons()
     }
     
     // MARK:- Signaling

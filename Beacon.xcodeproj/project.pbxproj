@@ -105,6 +105,9 @@
 		C469809A2223CE5D003C5030 /* Signaling.h in Headers */ = {isa = PBXBuildFile; fileRef = C469808C2223ADB8003C5030 /* Signaling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C469809B2223CE61003C5030 /* Signaling.h in Headers */ = {isa = PBXBuildFile; fileRef = C469808C2223ADB8003C5030 /* Signaling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C469809C2223CE61003C5030 /* Signaling.h in Headers */ = {isa = PBXBuildFile; fileRef = C469808C2223ADB8003C5030 /* Signaling.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C469809E22250CEA003C5030 /* SignalLoggerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C469809D22250CEA003C5030 /* SignalLoggerTest.swift */; };
+		C469809F22250CEB003C5030 /* SignalLoggerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C469809D22250CEA003C5030 /* SignalLoggerTest.swift */; };
+		C46980A022250CEB003C5030 /* SignalLoggerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C469809D22250CEA003C5030 /* SignalLoggerTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,6 +161,7 @@
 		C418437C221931EC00FC21A0 /* StackTraceSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackTraceSignal.swift; sourceTree = "<group>"; };
 		C469808C2223ADB8003C5030 /* Signaling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Signaling.h; sourceTree = "<group>"; };
 		C469808D2223ADB8003C5030 /* Signaling.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Signaling.m; sourceTree = "<group>"; };
+		C469809D22250CEA003C5030 /* SignalLoggerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalLoggerTest.swift; sourceTree = "<group>"; };
 		C4B99950221FA7BC00F49D3F /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
@@ -271,6 +275,7 @@
 				C41842092213F2E200FC21A0 /* SignalTest.swift */,
 				C418434822167E3500FC21A0 /* BeaconTest.swift */,
 				C41842FD2216255700FC21A0 /* Info.plist */,
+				C469809D22250CEA003C5030 /* SignalLoggerTest.swift */,
 			);
 			path = "Beacon-Tests";
 			sourceTree = "<group>";
@@ -609,6 +614,7 @@
 				C41842B42216245200FC21A0 /* MemoryLogger.swift in Sources */,
 				C41842B72216245200FC21A0 /* ErrorSignal.swift in Sources */,
 				C41842B82216245200FC21A0 /* WrapperSignal.swift in Sources */,
+				C469809E22250CEA003C5030 /* SignalLoggerTest.swift in Sources */,
 				C418437E221931EC00FC21A0 /* StackTraceSignal.swift in Sources */,
 				C41842B62216245200FC21A0 /* ContextSignal.swift in Sources */,
 				C418434F22168B0300FC21A0 /* Notification+Signal.swift in Sources */,
@@ -648,6 +654,7 @@
 				C41842AC2216244800FC21A0 /* Signaling.swift in Sources */,
 				C41842C72216245400FC21A0 /* ConsoleLogger.swift in Sources */,
 				C41842C52216245400FC21A0 /* SignalLogger.swift in Sources */,
+				C469809F22250CEB003C5030 /* SignalLoggerTest.swift in Sources */,
 				C4184380221931EC00FC21A0 /* StackTraceSignal.swift in Sources */,
 				C41842A72216244200FC21A0 /* Signal.swift in Sources */,
 				C418435122168B0300FC21A0 /* Notification+Signal.swift in Sources */,
@@ -687,6 +694,7 @@
 				C41843202216277000FC21A0 /* MemoryLogger.swift in Sources */,
 				C418431F2216277000FC21A0 /* SignalLogger.swift in Sources */,
 				C418431C2216277000FC21A0 /* Beacon.swift in Sources */,
+				C46980A022250CEB003C5030 /* SignalLoggerTest.swift in Sources */,
 				C4184382221931EC00FC21A0 /* StackTraceSignal.swift in Sources */,
 				C418431D2216277000FC21A0 /* Signal.swift in Sources */,
 				C418435322168B0300FC21A0 /* Notification+Signal.swift in Sources */,
