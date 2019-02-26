@@ -44,7 +44,7 @@ extension Notification.Name {
 public class Beacon : NSObject {
     
     @objc public static var shared = Beacon()
-    @objc public static let SignalUserInfoKey = "signal"
+    @objc public static let SignalUserInfoKey = "BeaconSignal"
     
     // MARK:- Properties
     
