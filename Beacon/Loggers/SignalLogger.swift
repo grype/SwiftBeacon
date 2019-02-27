@@ -37,20 +37,6 @@ public class SignalLogger : NSObject {
     /// @See `run(during:)`
     public typealias RunBlock = (SignalLogger)->Void
     
-    // MARK:- Structs
-    
-    private struct BeaconObservationToken : Hashable {
-        static func == (lhs: SignalLogger.BeaconObservationToken, rhs: SignalLogger.BeaconObservationToken) -> Bool {
-            return lhs.data.hash == rhs.data.hash
-        }
-        
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(data.hash)
-        }
-        
-        var data : NSObjectProtocol
-    }
-    
     // MARK:- Properties
     
     /// Logger name.
