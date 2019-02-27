@@ -14,30 +14,29 @@ extension Notification.Name {
 
 
 /**
- I am the central object around signaling.
+ I am the central object around signaling and provide an interface for notifying subscribed loggers with signals.
  
- I provide an interface for notifying subscribed loggers with signals:
- 
- ````
- Beacon.shared.signal(WrapperSignal("This is only a string"))
- ````
- 
- It is up to the logger to decide whether and how to handle a signal.
- 
- While this is the most direct way to emit signals, a more succinct way is using `emit()`:
+ I utilize NotificationCenter to post notification about the signals I receive. Subscribed loggers decide whether and how to handle a signal.
  
  ````
- emit()     // Emits current context signal
- emit(aSignalingObject)   // Emits a signal associated with an object that conforms to Signaling
- emit(error: anError)   // Emits an error signal
+ let logger = ConsoleLogger(named: "My Console Logger")
+ logger.start(on: [aBeacon])
+ 
+ emit(on: [aBeacon])     // Emits current context signal
+ emit(aSignalingObject, on: [eBeacon])   // Emits a signal associated with an object that conforms to Signaling
+ emit(error: anError, on: [aBeacon])   // Emits an error signal
+ 
+ logger.stop(on: [aBeacon])
  ````
  
- - Note: *I maintain a shared instance, as one instance is generally sufficient.
- If you require multiple beacon objects, be sure to include the appropriate object
- when calling emit:*
+ I also provide a shared general-purpose instance, as a single instance is sufficient in most cases.
+ Omitting a beacon when starting a logger or emitting a signal implies this shared instance:
  
  ````
- emit(something, on: myBeaconObject)
+ let logger = ConsoleLogger(named: "My Console Logger")
+ logger.run {
+    emit()
+ }
  ````
  
  */
