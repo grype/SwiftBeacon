@@ -43,8 +43,9 @@ extension Notification.Name {
  */
 public class Beacon : NSObject {
     
+    /// Shared general-purpose instance
     @objc public static var shared = Beacon()
-    @objc public static let SignalUserInfoKey = "BeaconSignal"
+    @objc internal static let SignalUserInfoKey = "BeaconSignal"
     
     // MARK:- Properties
     
@@ -58,7 +59,7 @@ public class Beacon : NSObject {
     
     // MARK:- Announcements
 
-    @objc public func signal(_ aSignal: Signal) {
+    @objc internal func signal(_ aSignal: Signal) {
         announcer.post(name: NSNotification.Name.BeaconSignal,
                        object: self,
                        userInfo: [Beacon.SignalUserInfoKey: aSignal])
