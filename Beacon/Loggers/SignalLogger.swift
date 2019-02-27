@@ -52,6 +52,7 @@ public class SignalLogger : NSObject {
     /// Array of all observed beacons
     private var observedBeacons = [Beacon : NSObjectProtocol]()
     
+    /// Creates a running instance
     public class func starting<T:SignalLogger>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(name: aName)
         me.subscribe(to: beacons, filter: filter)
