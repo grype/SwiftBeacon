@@ -45,4 +45,23 @@ class BeaconTest: XCTestCase {
         assert(logger.recordings.count == 1, "ContextSignal instances should pass through")
     }
     
+    func testAggregationOfSingles() {
+        let result = beacon + Beacon.shared
+        assert(result == [beacon, Beacon.shared], "Adding two beacons should aggregate them into an array")
+    }
+    
+    func testAggregationOfArraysOfBeacons() {
+        let first = [Beacon(), Beacon()]
+        let second = [Beacon(), Beacon()]
+        let result = first + second
+        assert(result == [first[0], first[1], second[0], second[1]], "Adding two arrays of beacons should result in a flat array containing their elements")
+    }
+    
+    func testMixedAggregation() {
+        let first = Beacon()
+        let second = [Beacon(), Beacon()]
+        let result = first + second
+        assert(result == [first, second[0], second[1]], "Adding beacon and array of beacons should result in a flat array containing all of them")
+    }
+    
 }
