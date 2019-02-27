@@ -108,6 +108,9 @@
 		C469809E22250CEA003C5030 /* SignalLoggerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C469809D22250CEA003C5030 /* SignalLoggerTest.swift */; };
 		C469809F22250CEB003C5030 /* SignalLoggerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C469809D22250CEA003C5030 /* SignalLoggerTest.swift */; };
 		C46980A022250CEB003C5030 /* SignalLoggerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C469809D22250CEA003C5030 /* SignalLoggerTest.swift */; };
+		C4984C6B2226626300B73313 /* MemoryLoggerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4984C6A2226626200B73313 /* MemoryLoggerTest.swift */; };
+		C4984C6C2226626300B73313 /* MemoryLoggerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4984C6A2226626200B73313 /* MemoryLoggerTest.swift */; };
+		C4984C6D2226626300B73313 /* MemoryLoggerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4984C6A2226626200B73313 /* MemoryLoggerTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,6 +165,7 @@
 		C469808C2223ADB8003C5030 /* Signaling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Signaling.h; sourceTree = "<group>"; };
 		C469808D2223ADB8003C5030 /* Signaling.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Signaling.m; sourceTree = "<group>"; };
 		C469809D22250CEA003C5030 /* SignalLoggerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalLoggerTest.swift; sourceTree = "<group>"; };
+		C4984C6A2226626200B73313 /* MemoryLoggerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryLoggerTest.swift; sourceTree = "<group>"; };
 		C4B99950221FA7BC00F49D3F /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
@@ -276,6 +280,7 @@
 				C418434822167E3500FC21A0 /* BeaconTest.swift */,
 				C41842FD2216255700FC21A0 /* Info.plist */,
 				C469809D22250CEA003C5030 /* SignalLoggerTest.swift */,
+				C4984C6A2226626200B73313 /* MemoryLoggerTest.swift */,
 			);
 			path = "Beacon-Tests";
 			sourceTree = "<group>";
@@ -608,6 +613,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C41842A92216244700FC21A0 /* Signaling.swift in Sources */,
+				C4984C6B2226626300B73313 /* MemoryLoggerTest.swift in Sources */,
 				C41842B32216245200FC21A0 /* SignalLogger.swift in Sources */,
 				C418429F2216243900FC21A0 /* Beacon.swift in Sources */,
 				C41842CB2216247300FC21A0 /* SignalTest.swift in Sources */,
@@ -648,6 +654,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C41842C92216245400FC21A0 /* ErrorSignal.swift in Sources */,
+				C4984C6C2226626300B73313 /* MemoryLoggerTest.swift in Sources */,
 				C41842C62216245400FC21A0 /* MemoryLogger.swift in Sources */,
 				C41842C82216245400FC21A0 /* ContextSignal.swift in Sources */,
 				C41842CA2216245400FC21A0 /* WrapperSignal.swift in Sources */,
@@ -688,6 +695,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C41843242216277000FC21A0 /* WrapperSignal.swift in Sources */,
+				C4984C6D2226626300B73313 /* MemoryLoggerTest.swift in Sources */,
 				C41843222216277000FC21A0 /* ContextSignal.swift in Sources */,
 				C41843122216275600FC21A0 /* SignalTest.swift in Sources */,
 				C418431E2216277000FC21A0 /* Signaling.swift in Sources */,

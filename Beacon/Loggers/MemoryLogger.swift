@@ -26,7 +26,7 @@ public class MemoryLogger : SignalLogger {
         defer { objc_sync_exit(recordings) }
         
         recordings.append(aSignal)
-        guard limit > 0, recordings.count > limit, recordings.count - limit > 0 else { return }
+        guard limit > 0, recordings.count - limit > 0 else { return }
         recordings.removeFirst(recordings.count - limit)
     }
     
