@@ -15,6 +15,7 @@ import Foundation
  I can also indicate periods of inactivity via `markedInactivityPeriod`.
  */
 public class ConsoleLogger : SignalLogger {
+    @objc public static let shared = ConsoleLogger(name: "Shared Console Logger")
     /// Period of time since receiving the last signal, after which I am considered idle.
     /// When the value is > 0, I will prefix the next signal with a special `inactivityDelimiter`.
     @objc public var markedInactvitiyPeriod: TimeInterval = 10

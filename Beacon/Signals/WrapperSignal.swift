@@ -19,20 +19,60 @@ import Foundation
  */
 public class WrapperSignal: Signal {
     /// Wrapped value
-    @objc public let value: Any
+    @objc public var value: Any {
+        if let encodable = encodableValue {
+            return encodable
+        }
+        return anyValue!
+    }
+    
+    private var anyValue: Any?
+    private var encodableValue: Encodable?
     
     public override var signalName: String {
-        return "📦 \(String(describing: type(of: value)))"
+        return "📦"
+    }
+    
+    override public class var portableClassName : String? {
+        return "RemoteWrapperSignal"
+    }
+    
+    public init(_ aValue: Encodable) {
+        encodableValue = aValue
     }
     
     @objc public init(_ aValue: Any) {
-        if let copyTarget = aValue as? NSCopying {
-            value = copyTarget.copy(with: nil)
-        }
-        else {
+        anyValue = aValue
+        super.init()
+    }
+    
+    private enum CodingKeys : String, CodingKey {
+        case value = "target", valueType = "targetType"
+    }
+    
+    private struct ValueWrapper : Encodable {
+        private var value : Encodable
+        init(_ aValue: Encodable) {
             value = aValue
         }
-        super.init()
+        func encode(to encoder: Encoder) throws {
+            try value.encode(to: encoder)
+        }
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
+        var container = encoder.container(keyedBy: WrapperSignal.CodingKeys.self)
+        try container.encode(String(describing: type(of: value)), forKey: .valueType)
+        if let value = encodableValue {
+            try container.encode(ValueWrapper(value), forKey: .value)
+        }
+        else if let value = value as? CustomDebugStringConvertible {
+            try container.encode(value.debugDescription, forKey: .value)
+        }
+        else {
+            try container.encode(String(describing: value), forKey: .value)
+        }
     }
     
     @objc public var valueDescription: String {
@@ -43,7 +83,7 @@ public class WrapperSignal: Signal {
     }
     
     public override var description: String {
-        return "\(super.description) \(valueDescription)"
+        return "\(super.description): \(valueDescription)"
     }
 }
 

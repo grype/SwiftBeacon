@@ -15,19 +15,41 @@ import Foundation
  */
 public class ErrorSignal : Signal {
     @objc private(set) var error: Error
+    @objc public var stack: [String]
     
-    @objc public init(error anError: Error) {
+    @objc public init(error anError: Error, stack aStack: [String] = Thread.callStackSymbols) {
         error = anError
+        stack = aStack
         super.init()
     }
     
     public override var signalName: String {
         return "⚡ \(super.signalName)"
     }
+    public override class var portableClassName : String? {
+        return "RemoteExceptionSignal"
+    }
+    
+    private enum CodingKeys : String, CodingKey {
+        case error = "exception", stack
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
+        var container = encoder.container(keyedBy: ErrorSignal.CodingKeys.self)
+        try container.encode(stack, forKey: .stack)
+        if let encodableError = error as? Encodable {
+            try encodableError.encode(to: encoder)
+        }
+        else {
+            try container.encode(error.localizedDescription, forKey: .error)
+        }
+    }
     
     public override var description: String {
         let errorDescription = (type(of: error) == NSError.self) ? error.localizedDescription : String(describing: error)
-        let result = "\(super.description): \(errorDescription)"
+        var result = "\(super.description): \(errorDescription)"
+        stack.forEach { result.append(contentsOf: "\n\t\($0)") }
         return result
     }
 }

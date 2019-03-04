@@ -35,7 +35,7 @@ import Foundation
  - See Also: `WrapperSignal`
  
  */
-@objc public protocol Signaling {
+public protocol Signaling {
     var beaconSignal: Signal { get }
 }
 

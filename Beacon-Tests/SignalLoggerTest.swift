@@ -100,7 +100,7 @@ class SignalLoggerTest: XCTestCase {
             emit(on: [activeBeacon])
             assert(self.logger.recordings.count == 0, "Logger logged a signal it was supposed to ignore")
             
-            emit("Here", on: [activeBeacon])
+            emit(1, on: [activeBeacon])
             assert(logger.recordings.count == 1, "Logger should have logged wrapper signal")
             
             do {

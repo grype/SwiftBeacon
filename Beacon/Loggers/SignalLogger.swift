@@ -118,6 +118,12 @@ public class SignalLogger : NSObject {
         unsubscribeFromAllBeacons()
     }
     
+    @objc internal func didStart() {
+    }
+    
+    @objc internal func didStop() {
+    }
+    
     // MARK:- Signaling
     
     /// Processes a signal.
@@ -140,12 +146,14 @@ public class SignalLogger : NSObject {
     
     // MARK:- Un/Subscribing
     
-    private func subscribe(to aBeacon: Beacon, filter: Filter? = nil) {
+    internal func subscribe(to aBeacon: Beacon, filter: Filter? = nil) {
         subscribe(to: [aBeacon], filter: filter)
     }
     
-    private func subscribe(to beacons: [Beacon], filter: Filter? = nil) {
+    internal func subscribe(to beacons: [Beacon], filter: Filter? = nil) {
         objc_sync_enter(observedBeacons)
+        defer { objc_sync_exit(observedBeacons) }
+        
         beacons.forEach { (aBeacon) in
             if let index = observedBeacons.index(forKey: aBeacon) {
                 aBeacon.announcer.removeObserver(observedBeacons.remove(at: index).value)
@@ -157,30 +165,34 @@ public class SignalLogger : NSObject {
             }
             observedBeacons[aBeacon] = token
         }
-        objc_sync_exit(observedBeacons)
+        didStart()
     }
     
-    private func unsubscribe(from aBeacon: Beacon) {
+    internal func unsubscribe(from aBeacon: Beacon) {
         unsubscribe(from: [aBeacon])
     }
     
-    private func unsubscribe(from beacons: [Beacon]) {
+    internal func unsubscribe(from beacons: [Beacon]) {
         objc_sync_enter(observedBeacons)
+        defer { objc_sync_exit(observedBeacons) }
+        
         beacons.forEach { (aBeacon) in
             guard let token = observedBeacons[aBeacon] else { return }
             aBeacon.announcer.removeObserver(token)
             observedBeacons.removeValue(forKey: aBeacon)
         }
-        objc_sync_exit(observedBeacons)
+        guard observedBeacons.isEmpty else { return }
+        didStop()
     }
     
-    private func unsubscribeFromAllBeacons() {
+    internal func unsubscribeFromAllBeacons() {
         objc_sync_enter(observedBeacons)
+        defer { objc_sync_exit(observedBeacons) }
         observedBeacons.forEach { (aBeacon, token) in
             aBeacon.announcer.removeObserver(token)
         }
         observedBeacons.removeAll()
-        objc_sync_exit(observedBeacons)
+        didStop()
     }
     
     // MARK:- CustomStringConvertible

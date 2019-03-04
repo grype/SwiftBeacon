@@ -34,12 +34,12 @@ class SignalTest : XCTestCase, Error {
     }
     
     func testEmitStringSignal() {
-        let string = "I am a test string"
-        emit(string)
+        let value = 123
+        emit(value)
         assert(logger.recordings.count == 1, "String did not signal")
         let signal = logger.recordings.first as? WrapperSignal
         assert(signal != nil, "emit() does not produce ContextSignal")
-        assert(signal!.value as? String == string, "StringSignal did not capture emitting string")
+        assert(signal!.value as? Int == value, "StringSignal did not capture emitting string")
     }
     
     func testErrorSignal() {

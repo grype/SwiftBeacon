@@ -9,8 +9,20 @@
 #import "Signaling.h"
 #import <Beacon/Beacon-Swift.h>
 
-void _BeaconEmit(id<Signaling> object, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
-    Signal *signal = (object == nil) ? [[ContextSignal alloc] init] : [object beaconSignal];
+void _BeaconEmit(id object, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
+    Signal *signal = nil;
+    if (object == nil) {
+        signal = [[ContextSignal alloc] initWithStack:[NSThread callStackSymbols]];
+    }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    else if ([object respondsToSelector:@selector(beaconSignal)]) {
+        signal = [object performSelector:@selector(beaconSignal)];
+    }
+#pragma clang diagnostic pop
+    else {
+        signal = [[WrapperSignal alloc] init:object];
+    }
     [signal emitOn:(beacons != nil) ? beacons : @[[Beacon shared]]
           userInfo:userInfo
           fileName:file
@@ -19,7 +31,7 @@ void _BeaconEmit(id<Signaling> object, NSArray<Beacon*>* beacons, NSDictionary* 
 }
 
 void _BeaconEmitError(NSError* error, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
-    ErrorSignal *signal = [[ErrorSignal alloc] initWithError:error];
+    ErrorSignal *signal = [[ErrorSignal alloc] initWithError:error stack: [NSThread callStackSymbols]];
     [signal emitOn:(beacons != nil) ? beacons : @[[Beacon shared]]
           userInfo:userInfo
           fileName:file

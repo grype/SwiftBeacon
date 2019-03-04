@@ -18,17 +18,19 @@ import Foundation
  (using `Signal.Source` struct) and then announces myself via relevant `Beacon` instance.
  
  */
-public class Signal : NSObject {
+public class Signal : NSObject, Encodable {
     
     // MARK:- Structs
     
     /// Used to capture `emit()` invocation context
-    public struct Source : CustomStringConvertible {
+    public struct Source : CustomStringConvertible, Codable {
+        var origin: String?
         var fileName: String
         var line: Int
         var functionName: String?
         
-        public init(fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
+        public init(origin anOrigin: String?, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
+            origin = anOrigin
             fileName = aFileName
             line = aLine
             functionName = aFunctionName
@@ -43,7 +45,8 @@ public class Signal : NSObject {
                 functionDescription = " #\(functionName)"
             }
             let filePrintName = fileName.components(separatedBy: "/").last ?? fileName
-            return "[\(filePrintName):\(line)]\(functionDescription)"
+            let originName = (origin != nil) ? "\(origin!)." : ""
+            return "[\(originName)\(filePrintName):\(line)]\(functionDescription)"
         }
     }
     
@@ -59,15 +62,23 @@ public class Signal : NSObject {
         return String(classString.dropLast(suffix.count))
     }
     
+    public class var portableClassName : String? {
+        return String(describing: self)
+    }
+    
     // MARK:- Instance
     
     // MARK: Properties
     
+    public enum UserInfoKeys : String {
+        case source
+    }
+    
     /// Source where the signal was `emit()`ed from.
-    public var source: Source?
+    private(set) var source: Source?
     
     /// User info data passed along by the signaler. 
-    @objc public var userInfo: [AnyHashable : Any]?
+    @objc public var userInfo = [AnyHashable : Any]()
     
     /// Signal name as appropriate for the instance. By default this is the same as class-side `signalName`.
     @objc public var signalName: String {
@@ -75,7 +86,7 @@ public class Signal : NSObject {
     }
     
     /// Time when the signal was `emit()`ed.
-    @objc private(set) var timestamp: Date!
+    @objc public let timestamp: Date = Date()
     
     // MARK: Properties - Private
     
@@ -85,24 +96,52 @@ public class Signal : NSObject {
         return dateFormatter
     }()
     
-    @objc private(set) lazy var bundleName: String = {
-        return Bundle.main.infoDictionary!["CFBundleName"] as! String
+    @objc private(set) lazy var bundleName: String? = {
+        return Bundle.main.infoDictionary?["CFBundleName"] as? String
     }()
     
     // MARK:- Emitting
     
     /// Emits signal to all running instances of `SignalLogger`
     @objc public func emit(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-        let source = Signal.Source(fileName: fileName, line: line, functionName: functionName)
+        let source = Signal.Source(origin: bundleName, fileName: fileName, line: line, functionName: functionName)
         emit(on: beacons, source: source, userInfo: userInfo)
     }
     
     /// Emits signal to all running instances of `SignalLogger`
     private func emit(on beacons: [Beacon], source aSource: Signal.Source, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
-        timestamp = Date()
+        if let anUserInfo = anUserInfo {
+            for (key, value) in anUserInfo {
+                userInfo[key] = value
+            }
+        }
         source = aSource
-        userInfo = anUserInfo
         beacons.forEach { $0.signal(self) }
+    }
+    
+    // MARK:- Encodable
+    
+    private enum CodingKeys : String , CodingKey {
+        case timestamp, source, userInfo = "properties", portableClassName = "__class"
+    }
+    
+    struct EncodableWrapper: Encodable {
+        let wrapped: Encodable
+
+        func encode(to encoder: Encoder) throws {
+            try self.wrapped.encode(to: encoder)
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Signal.CodingKeys.self)
+        try container.encodeIfPresent(type(of: self).portableClassName, forKey: .portableClassName)
+        try container.encodeIfPresent(dateFormatter.string(from: timestamp), forKey: .timestamp)
+        try container.encode(source, forKey: .source)
+        if let codableInfo = userInfo as? [String : Encodable] {
+            let wrapped = codableInfo.mapValues(EncodableWrapper.init(wrapped:))
+            try container.encode(wrapped, forKey: .userInfo)
+        }
     }
     
     // MARK:- CustomStringConvertible
@@ -113,7 +152,7 @@ public class Signal : NSObject {
             sourceDescription = " \(source)"
         }
         let dateString = dateFormatter.string(from: timestamp)
-        return "\(dateString) \(bundleName) \(signalName)\(sourceDescription)"
+        return "\(dateString) \(signalName)\(sourceDescription)"
     }
 
 }
