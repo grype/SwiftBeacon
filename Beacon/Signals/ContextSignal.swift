@@ -37,7 +37,7 @@ public class ContextSignal: Signal {
     public override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(stack, forKey: .stack)
+        try container.encode(stack.map { CallStackSymbol.fromString($0) }, forKey: .stack)
     }
     
     public override var description: String {
@@ -55,4 +55,26 @@ public func emit(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any
 /// Signal current context
 public func emit(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     ContextSignal().emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+}
+
+struct CallStackSymbol : Encodable, CustomStringConvertible {
+    var index: Int
+    var module: String
+    var address: Int
+    var invocation: String
+    
+    static func fromString(_ aString: String) -> CallStackSymbol {
+        let parts = aString.components(separatedBy: CharacterSet.whitespaces).filter { !$0.isEmpty }
+        let index = Int(parts[0])!
+        let address = Int(parts[2].suffix(from: parts[2].index(parts[2].startIndex, offsetBy: 2)), radix: 16)!
+        return CallStackSymbol(index: index, module: parts[1], address: address, invocation: Array(parts[3..<parts.count]).joined(separator: " "))
+    }
+    
+    private enum CodingKeys : String, CodingKey {
+        case index, module, address, invocation
+    }
+    
+    var description: String {
+        return "\(index) \(module) \(String(format: "%02x", address)) \(invocation)"
+    }
 }
