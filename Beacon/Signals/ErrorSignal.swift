@@ -37,7 +37,7 @@ public class ErrorSignal : Signal {
     public override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: ErrorSignal.CodingKeys.self)
-        try container.encode(stack, forKey: .stack)
+        try container.encode(stack.map { CallStackFrame.fromString($0) }, forKey: .stack)
         if let encodableError = error as? Encodable {
             try encodableError.encode(to: encoder)
         }

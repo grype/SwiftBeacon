@@ -125,6 +125,13 @@
 		C4984C7B22290C6700B73313 /* StringSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4984C7622290C6200B73313 /* StringSignal.swift */; };
 		C4984C7C22290C6800B73313 /* StringSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4984C7622290C6200B73313 /* StringSignal.swift */; };
 		C4984C7D22290C6900B73313 /* StringSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4984C7622290C6200B73313 /* StringSignal.swift */; };
+		C49F86662231D97C00874E82 /* CallStackFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49F86652231D97C00874E82 /* CallStackFrame.swift */; };
+		C49F86672231D97C00874E82 /* CallStackFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49F86652231D97C00874E82 /* CallStackFrame.swift */; };
+		C49F86682231D97C00874E82 /* CallStackFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49F86652231D97C00874E82 /* CallStackFrame.swift */; };
+		C49F86692231D97C00874E82 /* CallStackFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49F86652231D97C00874E82 /* CallStackFrame.swift */; };
+		C49F866A2231D97C00874E82 /* CallStackFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49F86652231D97C00874E82 /* CallStackFrame.swift */; };
+		C49F866B2231D97C00874E82 /* CallStackFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49F86652231D97C00874E82 /* CallStackFrame.swift */; };
+		C49F866C2231D97C00874E82 /* CallStackFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49F86652231D97C00874E82 /* CallStackFrame.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -182,6 +189,7 @@
 		C4984C6A2226626200B73313 /* MemoryLoggerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryLoggerTest.swift; sourceTree = "<group>"; };
 		C4984C6E22273FA000B73313 /* JRPCLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRPCLogger.swift; sourceTree = "<group>"; };
 		C4984C7622290C6200B73313 /* StringSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringSignal.swift; sourceTree = "<group>"; };
+		C49F86652231D97C00874E82 /* CallStackFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStackFrame.swift; sourceTree = "<group>"; };
 		C4B99950221FA7BC00F49D3F /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
@@ -308,6 +316,7 @@
 			children = (
 				C41841F42213F25B00FC21A0 /* Beacon.swift */,
 				C41841F62213F26300FC21A0 /* Signaling.swift */,
+				C49F86652231D97C00874E82 /* CallStackFrame.swift */,
 				C41841F72213F26C00FC21A0 /* Loggers */,
 				C41841FB2213F28B00FC21A0 /* Signals */,
 				C418425F2216233800FC21A0 /* Beacon.h */,
@@ -619,6 +628,7 @@
 				C41842AE2216245100FC21A0 /* MemoryLogger.swift in Sources */,
 				C41842B12216245100FC21A0 /* ErrorSignal.swift in Sources */,
 				C41842B22216245100FC21A0 /* WrapperSignal.swift in Sources */,
+				C49F86662231D97C00874E82 /* CallStackFrame.swift in Sources */,
 				C46980922223ADB8003C5030 /* Signaling.m in Sources */,
 				C41842B02216245100FC21A0 /* ContextSignal.swift in Sources */,
 				C41842A32216243F00FC21A0 /* Signal.swift in Sources */,
@@ -646,6 +656,7 @@
 				C4984C7322273FAB00B73313 /* JRPCLogger.swift in Sources */,
 				C41842B62216245200FC21A0 /* ContextSignal.swift in Sources */,
 				C418434F22168B0300FC21A0 /* Notification+Signal.swift in Sources */,
+				C49F86672231D97C00874E82 /* CallStackFrame.swift in Sources */,
 				C418434922167E3500FC21A0 /* BeaconTest.swift in Sources */,
 				C41842A42216244000FC21A0 /* Signal.swift in Sources */,
 				C41842B52216245200FC21A0 /* ConsoleLogger.swift in Sources */,
@@ -664,6 +675,7 @@
 				C41842C02216245300FC21A0 /* MemoryLogger.swift in Sources */,
 				C41842C32216245300FC21A0 /* ErrorSignal.swift in Sources */,
 				C41842C42216245300FC21A0 /* WrapperSignal.swift in Sources */,
+				C49F86682231D97C00874E82 /* CallStackFrame.swift in Sources */,
 				C46980932223ADB8003C5030 /* Signaling.m in Sources */,
 				C41842C22216245300FC21A0 /* ContextSignal.swift in Sources */,
 				C41842A62216244100FC21A0 /* Signal.swift in Sources */,
@@ -691,6 +703,7 @@
 				C4984C7422273FAC00B73313 /* JRPCLogger.swift in Sources */,
 				C41842A72216244200FC21A0 /* Signal.swift in Sources */,
 				C418435122168B0300FC21A0 /* Notification+Signal.swift in Sources */,
+				C49F86692231D97C00874E82 /* CallStackFrame.swift in Sources */,
 				C418434A22167E3500FC21A0 /* BeaconTest.swift in Sources */,
 				C41842A22216243B00FC21A0 /* Beacon.swift in Sources */,
 				C41842CC2216247400FC21A0 /* SignalTest.swift in Sources */,
@@ -709,6 +722,7 @@
 				C41843172216277000FC21A0 /* MemoryLogger.swift in Sources */,
 				C418431A2216277000FC21A0 /* ErrorSignal.swift in Sources */,
 				C418431B2216277000FC21A0 /* WrapperSignal.swift in Sources */,
+				C49F866A2231D97C00874E82 /* CallStackFrame.swift in Sources */,
 				C46980942223ADB8003C5030 /* Signaling.m in Sources */,
 				C41843192216277000FC21A0 /* ContextSignal.swift in Sources */,
 				C41843142216277000FC21A0 /* Signal.swift in Sources */,
@@ -736,6 +750,7 @@
 				C4984C7522273FAD00B73313 /* JRPCLogger.swift in Sources */,
 				C418431D2216277000FC21A0 /* Signal.swift in Sources */,
 				C418435322168B0300FC21A0 /* Notification+Signal.swift in Sources */,
+				C49F866B2231D97C00874E82 /* CallStackFrame.swift in Sources */,
 				C418434B22167E3500FC21A0 /* BeaconTest.swift in Sources */,
 				C41843232216277000FC21A0 /* ErrorSignal.swift in Sources */,
 				C41843212216277000FC21A0 /* ConsoleLogger.swift in Sources */,
@@ -754,6 +769,7 @@
 				C41843292216277100FC21A0 /* MemoryLogger.swift in Sources */,
 				C418432C2216277100FC21A0 /* ErrorSignal.swift in Sources */,
 				C418432D2216277100FC21A0 /* WrapperSignal.swift in Sources */,
+				C49F866C2231D97C00874E82 /* CallStackFrame.swift in Sources */,
 				C46980952223ADB8003C5030 /* Signaling.m in Sources */,
 				C418432B2216277100FC21A0 /* ContextSignal.swift in Sources */,
 				C41843262216277100FC21A0 /* Signal.swift in Sources */,

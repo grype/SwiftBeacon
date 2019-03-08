@@ -19,6 +19,6 @@ emit(loggers)
 emit(view)
 do { throw NSError(domain: "This is a test", code: 123, userInfo: nil) }
 catch { emit(error: error) }
-DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
     allLoggers.forEach { $0.stop() }
 }
