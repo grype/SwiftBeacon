@@ -13,6 +13,7 @@ import Foundation
  
  Simply call `emitStackTrace()` to emit me, and I'll capture the current call stack.
  */
+@available(*, deprecated)
 public class StackTraceSignal : Signal {
     @objc public var stackTrace: [String]
     
