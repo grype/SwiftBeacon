@@ -8,6 +8,19 @@
 
 import Foundation
 
+#if os(iOS)
+import UIKit
+let UniqueDeviceIdentifier: String? = UIDevice.current.identifierForVendor?.uuidString
+#else
+import IOKit
+let UniqueDeviceIdentifier: String? = {
+    let platformExpert: io_service_t = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"));
+    let serialNumberAsCFString = IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformSerialNumberKey as CFString, kCFAllocatorDefault, 0);
+    IOObjectRelease(platformExpert);
+    return serialNumberAsCFString?.takeUnretainedValue() as? String
+}()
+#endif
+
 /**
  I am an abstract signal.
  
@@ -24,13 +37,14 @@ public class Signal : NSObject, Encodable {
     
     /// Used to capture `emit()` invocation context
     public struct Source : CustomStringConvertible, Codable {
-        var origin: String?
+        var identifier: String? = UniqueDeviceIdentifier
+        var module: String?
         var fileName: String
         var line: Int
         var functionName: String?
         
         public init(origin anOrigin: String?, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
-            origin = anOrigin
+            module = anOrigin
             fileName = aFileName
             line = aLine
             functionName = aFunctionName
@@ -45,7 +59,7 @@ public class Signal : NSObject, Encodable {
                 functionDescription = " #\(functionName)"
             }
             let filePrintName = fileName.components(separatedBy: "/").last ?? fileName
-            let originName = (origin != nil) ? "\(origin!)." : ""
+            let originName = (module != nil) ? "\(module!)." : ""
             return "[\(originName)\(filePrintName):\(line)]\(functionDescription)"
         }
     }
