@@ -38,12 +38,3 @@ void _BeaconEmitError(NSError* error, NSArray<Beacon*>* beacons, NSDictionary* u
               line:line
       functionName:function];
 }
-
-void _BeaconEmitStackTrace(NSArray<NSString *>* stackTrace, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
-    StackTraceSignal *signal = [[StackTraceSignal alloc] initWithStackTrace:stackTrace];
-    [signal emitOn:(beacons != nil) ? beacons : @[[Beacon shared]]
-          userInfo:userInfo
-          fileName:file
-              line:line
-      functionName:function];
-}
