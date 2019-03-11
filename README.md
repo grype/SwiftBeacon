@@ -17,24 +17,22 @@ Logging with Beacon is a matter of emitting a signal. Let's start by creating a 
 // create and start an instance of a console logger
 let consoleLogger = ConsoleLogger.starting(name: "Console")
 
-// emit current context signal, capturing the stack trace
+// emit current context, capturing the stack trace
 emit()
 
-// emit string signal
+// emit a string
 emit("A message")
 
-// emit whatever your want
+// emit arbitrary value
 emit(anything)
 
-// emit errors
+// emit an error
 do { try something() } catch { emit(error) }
 
 consoleLogger.stop()
 ```
 
-Calling `emit()` creates an appropriate instance of `BeaconSignal` and posts it on the shared `Beacon` object. While running, the console logger is observing the shared beacon object, and handles any signals posted there by printing them out onto the console.
-
-Multiple loggers and beacon objects can be used:
+The framework uses the Observer pattern, with instances of `SignalLogger` subscribing to notifications posted on a `Beacon` object. Calling `emit()` creates an appropriate instance of `BeaconSignal` and posts it on a `Beacon` object, thus notifying observing loggers. In the above examples, a shared instance of `Beacon` is implied. However, multiple loggers and beacons can be used:
 
 ```swift
 let Beacons = (
@@ -50,11 +48,17 @@ let Loggers = (
     jrpc: JRPCLogger.starting(url: "http://localhost:4000", method: "emit", name: "JRPC", on: Beacons.shared + Beacons.rpc)
 )
 
-// emit current context signal on shared beacon (handled by both loggers)
+// emit current context on the shared beacon (handled by both loggers)
 emit()
 
-// emit current context signal on rpc beacon (handled by RPC logger only)
+// emit current context on rpc beacon (handled by RPC logger only)
 emit(on: Beacons.rpc)
+```
+
+Signals can be augmented with arbitrary user info:
+
+```swift
+emit(something, userInfo: ["detail" : "Detail Info"])
 ```
 
 Loggers can be started temporarily:
@@ -69,13 +73,7 @@ ConsoleLogger(name: "Console").run {
 emit()
 ```
 
-Signals can be augmented with arbitrary user info:
-
-```swift
-emit(something, userInfo: ["detail" : "Detail Info"])
-```
-
-Loggers are capable of filtering signals:
+and are capable of filtering signals:
 
 ```swift
 let consoleLogger = ConsoleLogger.starting(name: "Console error logger")) {
@@ -92,15 +90,15 @@ emit("A String")
 The framework provides the following types of signals and loggers:
 
 Signals:
-- ContextSignal captures its execution context
-- ErrorSignal captures an error and a stack trace that lead to it 
-- StringSignal for signaling strings - ala traditional logging facilities
-- WrapperSignal for signaling arbitrary values
+- `ContextSignal` captures execution context where it's created, including stack trace
+- `ErrorSignal` captures an error and a stack trace that lead to it
+- `StringSignal` for signaling strings - ala traditional logging facilities
+- `WrapperSignal` for signaling arbitrary values
 
 Loggers:
-- MemoryLogger records a limited number of signals in a FIFO fashion
-- ConsoleLogger prints signals out onto the console
-- JRPCLogger sends signals to a JSON-RPC server (see [Beacon-Server](https://github.com/grype/Beacon-Server/) for a server implementation in Pharo)
+- `MemoryLogger` records signals using a FIFO pool
+- `ConsoleLogger` prints signals onto the console
+- `JRPCLogger` sends signals to a JSON-RPC server (see [Beacon-Server](https://github.com/grype/Beacon-Server/) for a server implementation in Pharo)
 
 The framework is designed to be lightweight and to be easily extended in order to accommodate custom types. See [Implementation Details](Documentation/ImplementationDetails.md) for more info.
 
@@ -119,11 +117,11 @@ BeaconEmit(someObject, beacons, userInfo);
 BeaconEmitError(someError, beacons, userInfo);
 ```
 
-The `beacons` argument expects either `NSArray<Beacon*>*` or nil, implying `Beacon.shared`.
+The `beacons` argument expects either `NSArray<Beacon*>*` or nil, implying the shared beacon object.
 
-When it comes to emitting custom signals, you'd have to either provide your own macros, or simply use the signaling flow:
+When it comes to emitting custom signals, you'd have to either provide your own macros, or use this flow:
 
 ```objective-c
-StringSignal *signal = [[StringSignal alloc] init: @"Message"];
+MySignal *signal = [MySignal new];
 BeaconEmitSignal(signal, on: arrayOfBeacons, userInfo: aUserInfoDictionary)
 ```
