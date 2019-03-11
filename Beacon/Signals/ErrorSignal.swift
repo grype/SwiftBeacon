@@ -54,10 +54,18 @@ public class ErrorSignal : Signal {
     }
 }
 
-public func emit(error: Error, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emit(error: Error?, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    guard let error = error else {
+        emit(on: beacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+        return
+    }
     ErrorSignal(error: error).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
-public func emit(error: Error, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emit(error: Error?, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    guard let error = error else {
+        emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+        return
+    }
     ErrorSignal(error: error).emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
