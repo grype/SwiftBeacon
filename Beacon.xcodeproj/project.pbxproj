@@ -183,6 +183,7 @@
 		C4984C7622290C6200B73313 /* StringSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringSignal.swift; sourceTree = "<group>"; };
 		C49F86652231D97C00874E82 /* CallStackFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStackFrame.swift; sourceTree = "<group>"; };
 		C4B99950221FA7BC00F49D3F /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C4F50C4C22364434007CDC03 /* ImplementationDetails.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ImplementationDetails.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -330,6 +331,7 @@
 		C4F50C4B22362B45007CDC03 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				C4F50C4C22364434007CDC03 /* ImplementationDetails.md */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";

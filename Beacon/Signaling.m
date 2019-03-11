@@ -38,3 +38,11 @@ void _BeaconEmitError(NSError* error, NSArray<Beacon*>* beacons, NSDictionary* u
               line:line
       functionName:function];
 }
+
+void _BeaconEmitSignal(Signal* signal, NSArray<Beacon*>* beacons, NSDictionary* userInfo, NSString* file, NSInteger line, NSString* function) {
+    [signal emitOn:(beacons != nil) ? beacons : @[[Beacon shared]]
+          userInfo:userInfo
+          fileName:file
+              line:line
+      functionName:function];
+}
