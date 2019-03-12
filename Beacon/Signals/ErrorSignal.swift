@@ -54,6 +54,14 @@ public class ErrorSignal : Signal {
     }
 }
 
+/**
+ In the event of non-nil error argument, emits an ErrorSignal. Otherwise - ContextSignal.
+ 
+ This methods exists in order to distinguish objects that conform to Error. Calling emit(value) will
+ wrap that value in a WrapperSignal. This may not be desired when the value conforms to Error. The optionality
+ of the error argument is solely for convenience, so as to avoid having to check optional error values and
+ introducing if/else statements all over the code.
+*/
 public func emit(error: Error?, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     guard let error = error else {
         emit(on: beacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
@@ -62,6 +70,14 @@ public func emit(error: Error?, on beacon: Beacon = Beacon.shared, userInfo: [An
     ErrorSignal(error: error).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
+/**
+ In the event of non-nil error argument, emits an ErrorSignal. Otherwise - ContextSignal.
+ 
+ This methods exists in order to distinguish objects that conform to Error. Calling emit(value) will
+ wrap that value in a WrapperSignal. This may not be desired when the value conforms to Error. The optionality
+ of the error argument is solely for convenience, so as to avoid having to check optional error values and
+ introducing if/else statements all over the code.
+ */
 public func emit(error: Error?, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     guard let error = error else {
         emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)

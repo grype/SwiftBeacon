@@ -52,6 +52,14 @@ class SignalTest : XCTestCase, Error {
         assert(signal != nil, "emit() does not produce ErrorSignal")
     }
     
+    func testOptionalErrorSignal() {
+        let err: Error? = nil
+        emit(error: err)
+        assert(logger.recordings.count == 1, "Error did not signal")
+        let signal = logger.recordings.first as? ContextSignal
+        assert(signal != nil, "emit() does not produce ContextSignal")
+    }
+    
     func testWrapperSignal() {
         emit(self)
         assert(logger.recordings.count == 1, "WrapperSignal did not signal")
