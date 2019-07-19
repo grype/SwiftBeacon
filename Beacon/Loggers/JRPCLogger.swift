@@ -199,7 +199,7 @@ public class JRPCLogger: SignalLogger {
 }
 
 fileprivate extension WrapperSignal {
-    fileprivate enum CodingKeys : String, CodingKey {
+    enum CodingKeys : String, CodingKey {
         case value = "target"
     }
 }
