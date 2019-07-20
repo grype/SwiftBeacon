@@ -7,12 +7,29 @@
 //
 
 import XCTest
+import Beacon
 
 class SignalLoggerTest: XCTestCase {
     
     private var activeBeacon: Beacon!
     private var inactiveBeacon: Beacon!
     private var logger: MemoryLogger!
+    
+    static var allTests = [
+        ("testInit", testInit),
+        ("testStart", testStart),
+        ("testInitAndStart", testInitAndStart),
+        ("testStartStop", testStartStop),
+        ("testStop", testStop),
+        ("testStopAll", testStopAll),
+        ("testStartOnBeacon", testStartOnBeacon),
+        ("testFilter", testFilter),
+        ("testRunDuring", testRunDuring),
+        ("testRunForSignals", testRunForSignals),
+        ("testMultipleBeaconSubscription", testMultipleBeaconSubscription),
+        ("testMultipleSubscriptionsToSameBeacon", testMultipleSubscriptionsToSameBeacon),
+        ("testMultipleSubscriptionsToSameBeaconWithDifferentFilters", testMultipleSubscriptionsToSameBeaconWithDifferentFilters),
+    ]
     
     override func setUp() {
         super.setUp()

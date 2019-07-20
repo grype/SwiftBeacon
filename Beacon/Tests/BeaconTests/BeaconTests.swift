@@ -7,10 +7,20 @@
 //
 
 import XCTest
+import Beacon
 
 class BeaconTest: XCTestCase {
     private var beacon: Beacon!
     private var logger: MemoryLogger!
+    
+    static var allTests = [
+        ("testSignaling", testSignaling),
+        ("testSignalingWhileStopped", testSignalingWhileStopped),
+        ("testSignalingWhileFiltering", testSignalingWhileFiltering),
+        ("testAggregationOfSingles", testAggregationOfSingles),
+        ("testAggregationOfArraysOfBeacons", testAggregationOfArraysOfBeacons),
+        ("testMixedAggregation", testMixedAggregation),
+    ]
     
     override func setUp() {
         beacon = Beacon()
@@ -63,5 +73,5 @@ class BeaconTest: XCTestCase {
         let result = first + second
         assert(result == [first, second[0], second[1]], "Adding beacon and array of beacons should result in a flat array containing all of them")
     }
-    
+
 }

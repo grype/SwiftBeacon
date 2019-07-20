@@ -58,7 +58,7 @@ public class Beacon : NSObject {
     
     // MARK:- Announcements
 
-    @objc internal func signal(_ aSignal: Signal) {
+    @objc public func signal(_ aSignal: Signal) {
         announcer.post(name: NSNotification.Name.BeaconSignal,
                        object: self,
                        userInfo: [Beacon.SignalUserInfoKey: aSignal])

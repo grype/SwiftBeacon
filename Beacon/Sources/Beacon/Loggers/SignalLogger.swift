@@ -45,7 +45,7 @@ public class SignalLogger : NSObject {
     
     /// Indicates whether the logger is running.
     /// When running, it will respond to signals posted to its beacon's announcer.
-    @objc var isRunning : Bool {
+    @objc public var isRunning : Bool {
         return !observedBeacons.isEmpty
     }
     
