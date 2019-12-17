@@ -13,7 +13,7 @@ public class JRPCLogger: SignalLogger {
     /// MARK:- Properties
     
     /// Base URL to the JSON RPC server
-    private(set) var url: URL!
+    @objc public private(set) var url: URL!
     
     /// JRPC Method to call
     private(set) var method: String!
