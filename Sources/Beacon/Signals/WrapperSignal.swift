@@ -19,7 +19,7 @@ import Foundation
  */
 open class WrapperSignal: Signal {
     /// Wrapped value
-    @objc public var value: Any {
+    @objc open var value: Any {
         if let encodable = encodableValue {
             return encodable
         }
@@ -29,11 +29,11 @@ open class WrapperSignal: Signal {
     private var anyValue: Any?
     private var encodableValue: Encodable?
     
-    public override var signalName: String {
+    open override var signalName: String {
         return "📦"
     }
     
-    override public class var portableClassName : String? {
+    override open class var portableClassName : String? {
         return "RemoteWrapperSignal"
     }
     
@@ -60,7 +60,7 @@ open class WrapperSignal: Signal {
         }
     }
     
-    public override func encode(to encoder: Encoder) throws {
+    open override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: WrapperSignal.CodingKeys.self)
         try container.encode(String(describing: type(of: value)), forKey: .valueType)
@@ -75,14 +75,14 @@ open class WrapperSignal: Signal {
         }
     }
     
-    @objc public var valueDescription: String {
+    @objc open var valueDescription: String {
         if let value = value as? CustomStringConvertible {
             return String(describing: value)
         }
         return "<\(String(describing: type(of: value))): \(Unmanaged.passUnretained(self).toOpaque())>"
     }
     
-    public override var description: String {
+    open override var description: String {
         return "\(super.description): \(valueDescription)"
     }
 }

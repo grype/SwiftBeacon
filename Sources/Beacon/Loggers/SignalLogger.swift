@@ -41,11 +41,11 @@ open class SignalLogger : NSObject {
     
     /// Logger name.
     /// Used to distinguish one logger from another.
-    @objc public var name: String
+    @objc open var name: String
     
     /// Indicates whether the logger is running.
     /// When running, it will respond to signals posted to its beacon's announcer.
-    @objc public var isRunning : Bool {
+    @objc open var isRunning : Bool {
         return !observedBeacons.isEmpty
     }
     
@@ -53,7 +53,7 @@ open class SignalLogger : NSObject {
     private var observedBeacons = [Beacon : NSObjectProtocol]()
     
     /// Creates a running instance
-    public class func starting<T:SignalLogger>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
+    open class func starting<T:SignalLogger>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(name: aName)
         me.subscribe(to: beacons, filter: filter)
         return me as! T
@@ -73,30 +73,30 @@ open class SignalLogger : NSObject {
     
     /// Starts observing shared beacon object and logging relevant signals.
     /// If filter function is given, only those signals for which the function returns true will be handled.
-    @objc public func start(filter aFilter: Filter? = nil) {
+    @objc open func start(filter aFilter: Filter? = nil) {
         start(on: [Beacon.shared], filter: aFilter)
     }
     
     /// Starts observing given beacons and logging relevant signals.
     /// If filter function is given, only those signals for which the function returns true will be handled.
-    @objc public func start(on beacons: [Beacon] = [Beacon.shared], filter aFilter: Filter? = nil) {
+    @objc open func start(on beacons: [Beacon] = [Beacon.shared], filter aFilter: Filter? = nil) {
         subscribe(to: beacons, filter: aFilter)
     }
     
     /// Start on shared beacon for the duration of the given run block
-    @objc public func run(during: RunBlock) {
+    @objc open func run(during: RunBlock) {
         run(on: [Beacon.shared], during: during)
     }
     
     /// Start on given beacons for the duration of the given run block
-    @objc public func run(on beacons: [Beacon] = [Beacon.shared], during runBlock: RunBlock) {
+    @objc open func run(on beacons: [Beacon] = [Beacon.shared], during runBlock: RunBlock) {
         subscribe(to: beacons)
         runBlock(self)
         unsubscribe(from: beacons)
     }
     
     /// Start on given beacons for the duration of the given run block, filtering in given signal types
-    @objc public func run(for signals: [Signal.Type], on beacons: [Beacon] = [Beacon.shared], during runBlock: RunBlock) {
+    @objc open func run(for signals: [Signal.Type], on beacons: [Beacon] = [Beacon.shared], during runBlock: RunBlock) {
         subscribe(to: beacons) { (aSignal) -> Bool in
             return signals.first(where: { (aType) -> Bool in
                 return aType == type(of: aSignal)
@@ -107,14 +107,14 @@ open class SignalLogger : NSObject {
     }
     
     /// Stops observing given beacons and with that logging any signals emitted on those beacons.
-    @objc public func stop(on beacons: [Beacon] = [Beacon.shared]) {
+    @objc open func stop(on beacons: [Beacon] = [Beacon.shared]) {
         beacons.forEach { (aBeacon) in
             unsubscribe(from: aBeacon)
         }
     }
     
     /// Stops observing all currently observing beacons. No logging will take place until started again.
-    @objc public func stop() {
+    @objc open func stop() {
         unsubscribeFromAllBeacons()
     }
     
@@ -127,12 +127,12 @@ open class SignalLogger : NSObject {
     // MARK:- Signaling
     
     /// Processes a signal.
-    @objc public func nextPut(_ aSignal: Signal) {
+    @objc open func nextPut(_ aSignal: Signal) {
         fatalError("Subclass must override \(#function)")
     }
     
     /// Process signals in bulk.
-    @objc public func nextPutAll(_ signals: [Signal]) {
+    @objc open func nextPutAll(_ signals: [Signal]) {
         signals.forEach { (aSignal) in
             nextPut(aSignal)
         }
@@ -197,7 +197,7 @@ open class SignalLogger : NSObject {
     
     // MARK:- CustomStringConvertible
     
-    public override var description: String {
+    open override var description: String {
         return "<\(String(describing: type(of: self))): \(Unmanaged.passUnretained(self).toOpaque())> Name: \(name); Running: \(isRunning)"
     }
 }

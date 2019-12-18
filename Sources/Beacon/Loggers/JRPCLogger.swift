@@ -13,7 +13,7 @@ open class JRPCLogger: SignalLogger {
     /// MARK:- Properties
     
     /// Base URL to the JSON RPC server
-    @objc public private(set) var url: URL!
+    @objc open private(set) var url: URL!
     
     /// JRPC Method to call
     private(set) var method: String!
@@ -89,13 +89,13 @@ open class JRPCLogger: SignalLogger {
         fatalError("Use init(url:name:) to instantiate")
     }
     
-    override public func nextPut(_ aSignal: Signal) {
+    override open func nextPut(_ aSignal: Signal) {
         queue.async {
             self.signalQueue.append(aSignal)
         }
     }
     
-    override public func nextPutAll(_ signals: [Signal]) {
+    override open func nextPutAll(_ signals: [Signal]) {
         queue.async {
             self.signalQueue.append(contentsOf: signals)
         }
@@ -111,7 +111,7 @@ open class JRPCLogger: SignalLogger {
     
     // MARK:- Timer
     
-    var interval: TimeInterval = 2 {
+    open var interval: TimeInterval = 2 {
         didSet {
             guard let timer = timer, timer.isValid else { return }
             stopTimer()

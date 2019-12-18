@@ -71,14 +71,14 @@ open class Signal : NSObject, Encodable {
     // MARK: Properties
     
     /// Default signal name, which is derived from the class name, stripping "Signal" suffix
-    @objc public class var signalName: String {
+    @objc open class var signalName: String {
         let classString = String(describing: self)
         let suffix = "Signal"
         guard classString.hasSuffix(suffix) else { return classString }
         return String(classString.dropLast(suffix.count))
     }
     
-    public class var portableClassName : String? {
+    open class var portableClassName : String? {
         return String(describing: self)
     }
     
@@ -94,10 +94,10 @@ open class Signal : NSObject, Encodable {
     private(set) var source: Source?
     
     /// User info data passed along by the signaler. 
-    @objc public var userInfo: [AnyHashable : Any]?
+    @objc open var userInfo: [AnyHashable : Any]?
     
     /// Signal name as appropriate for the instance. By default this is the same as class-side `signalName`.
-    @objc public var signalName: String {
+    @objc open var signalName: String {
         return type(of: self).signalName
     }
     
@@ -106,7 +106,7 @@ open class Signal : NSObject, Encodable {
     
     // MARK: Properties - Private
     
-    @objc public lazy var dateFormatter: DateFormatter = {
+    @objc open lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss.SSSSSSZ"
         return dateFormatter
@@ -119,7 +119,7 @@ open class Signal : NSObject, Encodable {
     // MARK:- Emitting
     
     /// Emits signal to all running instances of `SignalLogger`
-    @objc public func emit(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    @objc open func emit(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
         let source = Signal.Source(origin: bundleName, fileName: fileName, line: line, functionName: functionName)
         emit(on: beacons, source: source, userInfo: userInfo)
     }
@@ -145,7 +145,7 @@ open class Signal : NSObject, Encodable {
         }
     }
     
-    public func encode(to encoder: Encoder) throws {
+    open func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Signal.CodingKeys.self)
         try container.encodeIfPresent(type(of: self).portableClassName, forKey: .portableClassName)
         try container.encodeIfPresent(dateFormatter.string(from: timestamp), forKey: .timestamp)
@@ -158,7 +158,7 @@ open class Signal : NSObject, Encodable {
     
     // MARK:- CustomStringConvertible
     
-    public override var description: String {
+    open override var description: String {
         var sourceDescription = ""
         if let source = source {
             sourceDescription = " \(source)"

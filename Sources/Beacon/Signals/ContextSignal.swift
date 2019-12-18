@@ -15,18 +15,18 @@ import Foundation
  any arguments...
  */
 open class ContextSignal: Signal {
-    @objc public var stack: [String]
+    @objc open var stack: [String]
     
     @objc public init(stack aStack: [String] = Thread.callStackSymbols) {
         stack = aStack
         super.init()
     }
 
-    public override var signalName: String {
+    open override var signalName: String {
         return "🌀 \(super.signalName)"
     }
     
-    public override class var portableClassName : String? {
+    open override class var portableClassName : String? {
         return "RemoteContextStackSignal"
     }
     
@@ -34,13 +34,13 @@ open class ContextSignal: Signal {
         case stack
     }
     
-    public override func encode(to encoder: Encoder) throws {
+    open override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(stack.map { CallStackFrame.fromString($0) }, forKey: .stack)
     }
     
-    public override var description: String {
+    open override var description: String {
         var result = "\(super.description)"
         stack.forEach { result.append(contentsOf: "\n\t\($0)") }
         return result

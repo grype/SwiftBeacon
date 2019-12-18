@@ -9,18 +9,18 @@
 import Foundation
 
 open class StringSignal: Signal {
-    @objc public private(set) var message: String
+    @objc open private(set) var message: String
     
     @objc public init(_ aMessage: String) {
         message = aMessage
         super.init()
     }
     
-    public override var signalName: String {
+    open override var signalName: String {
         return "🏷"
     }
     
-    override public class var portableClassName : String? {
+    override open class var portableClassName : String? {
         return "RemoteStringSignal"
     }
     
@@ -28,7 +28,7 @@ open class StringSignal: Signal {
         case message
     }
     
-    public override var description: String {
+    open override var description: String {
         let userInfoDescription : String!
         if let userInfo = userInfo {
             userInfoDescription = "\nUserInfo: \(userInfo.debugDescription)".replacingOccurrences(of: "\n", with: "\n\t")
@@ -40,7 +40,7 @@ open class StringSignal: Signal {
         return result
     }
     
-    public override func encode(to encoder: Encoder) throws {
+    open override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: StringSignal.CodingKeys.self)
         try container.encode(message, forKey: .message)
