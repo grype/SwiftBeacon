@@ -50,10 +50,10 @@ There are two more signals baked into the framework: `ErrorSignal` - for capturi
 
 ```swift
 do {
-throw "I am an error"
+  throw "I am an error"
 } catch {
-emit(error: error)
-emitStackTrace()
+  emit(error: error)
+  emitStackTrace()
 }
 ```
 
@@ -71,27 +71,27 @@ The framework doesn't provide much specialization beyond the aforementioned sign
 
 ```swift
 class URLRequestSignal : Signal {
-private(set) var request: URLRequest
+  private(set) var request: URLRequest
 
-override class var signalName: String {
-return "📡 \(super.signalName)"
-}
+  override class var signalName: String {
+    return "📡 \(super.signalName)"
+  }
 
-init(_ aRequest: URLRequest) {
-request = aRequest
-super.init()
-}
+  init(_ aRequest: URLRequest) {
+    request = aRequest
+    super.init()
+  }
 
-override var description: String {
-var urlDescription = ""
-if let method = request.httpMethod {
-urlDescription += "\(method) "
-}
-if let url = request.url {
-urlDescription += "\(url)"
-}
-return "\(super.description) \(urlDescription)"
-}
+  override var description: String {
+    var urlDescription = ""
+    if let method = request.httpMethod {
+      urlDescription += "\(method) "
+    }
+    if let url = request.url {
+      urlDescription += "\(url)"
+    }
+    return "\(super.description) \(urlDescription)"
+  }
 }
 ```
 
@@ -104,9 +104,9 @@ To make it possible to `emit()` a `URLRequest` object, we need to make it confor
 
 ```swift
 extension URLRequest : Signaling {
-var beaconSignal: Signal {
-return URLRequestSignal(self)
-}
+  var beaconSignal: Signal {
+    return URLRequestSignal(self)
+  }
 }
 ```
 
@@ -120,7 +120,7 @@ A logger can be started with a filtering function. For example, to log only the 
 
 ```swift
 ConsoleLogger.starting(name: "Console error logger")) {
-return aSignal is ErrorSignal
+  return aSignal is ErrorSignal
 }
 ```
 
