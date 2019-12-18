@@ -3,7 +3,7 @@
 //  Beacon
 //
 //  Created by Pavel Skaldin on 10/21/18.
-//  Copyright © 2018 Pavel Skaldin. All rights reserved.
+//  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
 import Foundation
