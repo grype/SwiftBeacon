@@ -40,7 +40,7 @@ extension Notification.Name {
  ````
  
  */
-public class Beacon : NSObject {
+open class Beacon : NSObject {
     
     /// Shared general-purpose instance
     @objc public static var shared = Beacon()

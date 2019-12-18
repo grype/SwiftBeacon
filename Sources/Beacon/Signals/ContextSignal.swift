@@ -14,7 +14,7 @@ import Foundation
  I am used for announcing a particular point in the code. Simply call `emit()`, without
  any arguments...
  */
-public class ContextSignal: Signal {
+open class ContextSignal: Signal {
     @objc public var stack: [String]
     
     @objc public init(stack aStack: [String] = Thread.callStackSymbols) {

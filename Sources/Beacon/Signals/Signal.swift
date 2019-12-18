@@ -33,7 +33,7 @@ let UniqueDeviceIdentifier: String? = nil
  (using `Signal.Source` struct) and then announces myself via relevant `Beacon` instance.
  
  */
-public class Signal : NSObject, Encodable {
+open class Signal : NSObject, Encodable {
     
     // MARK:- Structs
     

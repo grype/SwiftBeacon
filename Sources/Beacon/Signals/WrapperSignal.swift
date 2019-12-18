@@ -17,7 +17,7 @@ import Foundation
  to NSCopying, and if so, I'll store a copy of the value. Otherwise I'll capture the value using regular
  Swift mechanism - by value or reference, depending on the type of value.
  */
-public class WrapperSignal: Signal {
+open class WrapperSignal: Signal {
     /// Wrapped value
     @objc public var value: Any {
         if let encodable = encodableValue {

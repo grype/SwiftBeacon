@@ -24,7 +24,7 @@ import Foundation
  
  - See Also: `ConsoleLogger`, `MemoryLogger`
  */
-public class SignalLogger : NSObject {
+open class SignalLogger : NSObject {
     
     // MARK:- Type aliases
     

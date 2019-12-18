@@ -13,7 +13,7 @@ import Foundation
  
  Simply call `emit(anError)` to emit me, and I'll capture the error.
  */
-public class ErrorSignal : Signal {
+open class ErrorSignal : Signal {
     @objc private(set) var error: Error
     @objc public var stack: [String]
     

@@ -15,7 +15,7 @@ import Foundation
  I am mostly useful for debugging at run time.
  
  */
-public class MemoryLogger : SignalLogger {
+open class MemoryLogger : SignalLogger {
     @objc public static var shared = MemoryLogger(name: "MemoryLogger")
     
     @objc public private(set) var recordings = [Signal]()

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class StringSignal: Signal {
+open class StringSignal: Signal {
     @objc public private(set) var message: String
     
     @objc public init(_ aMessage: String) {

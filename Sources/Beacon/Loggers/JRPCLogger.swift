@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class JRPCLogger: SignalLogger {
+open class JRPCLogger: SignalLogger {
     
     /// MARK:- Properties
     
