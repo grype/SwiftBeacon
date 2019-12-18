@@ -94,7 +94,7 @@ public class Signal : NSObject, Encodable {
     private(set) var source: Source?
     
     /// User info data passed along by the signaler. 
-    @objc public var userInfo = [AnyHashable : Any]()
+    @objc public var userInfo: [AnyHashable : Any]?
     
     /// Signal name as appropriate for the instance. By default this is the same as class-side `signalName`.
     @objc public var signalName: String {
@@ -126,11 +126,7 @@ public class Signal : NSObject, Encodable {
     
     /// Emits signal to all running instances of `SignalLogger`
     private func emit(on beacons: [Beacon], source aSource: Signal.Source, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
-        if let anUserInfo = anUserInfo {
-            for (key, value) in anUserInfo {
-                userInfo[key] = value
-            }
-        }
+        userInfo = anUserInfo
         source = aSource
         beacons.forEach { $0.signal(self) }
     }

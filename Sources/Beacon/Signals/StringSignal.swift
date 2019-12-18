@@ -9,7 +9,7 @@
 import Foundation
 
 public class StringSignal: Signal {
-    @objc private(set) var message: String
+    @objc public private(set) var message: String
     
     @objc public init(_ aMessage: String) {
         message = aMessage
@@ -29,7 +29,14 @@ public class StringSignal: Signal {
     }
     
     public override var description: String {
-        let result = "\(super.description): \(message)"
+        let userInfoDescription : String!
+        if let userInfo = userInfo {
+            userInfoDescription = "\nUserInfo: \(userInfo.debugDescription)".replacingOccurrences(of: "\n", with: "\n\t")
+        }
+        else {
+            userInfoDescription = ""
+        }
+        let result = "\(super.description): \(message)\(userInfoDescription!)"
         return result
     }
     
