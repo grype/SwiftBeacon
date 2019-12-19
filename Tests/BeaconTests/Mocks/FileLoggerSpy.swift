@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  FileLoggerSpy.swift
 //  
 //
 //  Created by Pavel Skaldin on 12/18/19.
