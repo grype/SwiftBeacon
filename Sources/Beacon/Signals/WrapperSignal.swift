@@ -37,17 +37,20 @@ open class WrapperSignal: Signal {
         return "RemoteWrapperSignal"
     }
     
-    public init(_ aValue: Encodable) {
+    public init(_ aValue: Encodable, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         encodableValue = aValue
+        super.init()
+        userInfo = anUserInfo
     }
     
-    @objc public init(_ aValue: Any) {
+    @objc public init(_ aValue: Any, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         anyValue = aValue
         super.init()
+        userInfo = anUserInfo
     }
     
     private enum CodingKeys : String, CodingKey {
-        case value = "target", valueType = "targetType"
+        case value = "target", valueType = "targetType", userInfo
     }
     
     private struct ValueWrapper : Encodable {
@@ -62,8 +65,11 @@ open class WrapperSignal: Signal {
     
     open override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
+        
         var container = encoder.container(keyedBy: WrapperSignal.CodingKeys.self)
+        
         try container.encode(String(describing: type(of: value)), forKey: .valueType)
+        
         if let value = encodableValue {
             try container.encode(ValueWrapper(value), forKey: .value)
         }
@@ -73,6 +79,14 @@ open class WrapperSignal: Signal {
         else {
             try container.encode(String(describing: value), forKey: .value)
         }
+        
+        var encodableUserInfo = [String : EncodableWrapper]()
+        userInfo?.forEach({ (each) in
+            if let key = each.key as? String, let value = each.value as? Encodable {
+                encodableUserInfo[key] = EncodableWrapper(wrapped: value)
+            }
+        })
+        try container.encode(encodableUserInfo, forKey: .userInfo)
     }
     
     @objc open var valueDescription: String {
