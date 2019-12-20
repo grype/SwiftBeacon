@@ -50,7 +50,7 @@ open class WrapperSignal: Signal {
     }
     
     private enum CodingKeys : String, CodingKey {
-        case value = "target", valueType = "targetType", userInfo
+        case value = "target", valueType = "targetType"
     }
     
     private struct ValueWrapper : Encodable {
@@ -79,14 +79,6 @@ open class WrapperSignal: Signal {
         else {
             try container.encode(String(describing: value), forKey: .value)
         }
-        
-        var encodableUserInfo = [String : EncodableWrapper]()
-        userInfo?.forEach({ (each) in
-            if let key = each.key as? String, let value = each.value as? Encodable {
-                encodableUserInfo[key] = EncodableWrapper(wrapped: value)
-            }
-        })
-        try container.encode(encodableUserInfo, forKey: .userInfo)
     }
     
     @objc open var valueDescription: String {
