@@ -108,7 +108,7 @@ open class Signal : NSObject, Encodable {
     
     @objc open lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss.SSSSSSZ"
+        dateFormatter.dateFormat = "YYYY-MM-dd'T'HH:mm:ss.SSSSSSZ"
         return dateFormatter
     }()
     
