@@ -9,7 +9,7 @@
 import XCTest
 import Beacon
 
-class SignalLoggerTest: XCTestCase {
+class SignalLoggerTests: XCTestCase {
     
     private var activeBeacon: Beacon!
     private var inactiveBeacon: Beacon!

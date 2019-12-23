@@ -9,7 +9,7 @@
 import XCTest
 import Beacon
 
-class MemoryLoggerTest: XCTestCase {
+class MemoryLoggerTests: XCTestCase {
     private var logger: MemoryLogger!
     
     static var allTests = [

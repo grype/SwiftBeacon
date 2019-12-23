@@ -8,7 +8,7 @@
 import XCTest
 import Beacon
 
-class StringSignalTest : XCTestCase, Error {
+class StringSignalTests : XCTestCase, Error {
     
     private var logger: MemoryLogger!
     

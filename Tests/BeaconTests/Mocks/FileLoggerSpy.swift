@@ -1,6 +1,6 @@
 //
 //  FileLoggerSpy.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 12/18/19.
 //
@@ -9,22 +9,70 @@ import Foundation
 @testable import Beacon
 
 class FileLoggerSpy : FileLogger {
-    var invokedUrlSetter = false
-    var invokedUrlSetterCount = 0
-    var invokedUrl: URL?
-    var invokedUrlList = [URL?]()
     var invokedUrlGetter = false
     var invokedUrlGetterCount = 0
     var stubbedUrl: URL!
     var forwardToOriginalUrl = true
-    override var url: URL! {
-        get {
-            invokedUrlGetter = true
-            invokedUrlGetterCount += 1
-            if forwardToOriginalUrl {
-                return super.url
+    override var url: URL? {
+        invokedUrlGetter = true
+        invokedUrlGetterCount += 1
+        if forwardToOriginalUrl {
+            return super.url
+        }
+        return stubbedUrl
+    }
+    var invokedStreamSetter = false
+    var invokedStreamSetterCount = 0
+    var invokedStream: OutputStream?
+    var invokedStreamList = [OutputStream]()
+    var invokedStreamGetter = false
+    var invokedStreamGetterCount = 0
+    var stubbedStream: OutputStream!
+    var forwardToOriginalStream = true
+    override var stream: OutputStream {
+        set {
+            invokedStreamSetter = true
+            invokedStreamSetterCount += 1
+            invokedStream = newValue
+            invokedStreamList.append(newValue)
+            if forwardToOriginalStream {
+                super.stream = newValue
             }
-            return stubbedUrl
+        }
+        get {
+            invokedStreamGetter = true
+            invokedStreamGetterCount += 1
+            if forwardToOriginalStream {
+                return super.stream
+            }
+            return stubbedStream
+        }
+    }
+    var invokedEncoderSetter = false
+    var invokedEncoderSetterCount = 0
+    var invokedEncoder: SignalEncoding?
+    var invokedEncoderList = [SignalEncoding]()
+    var invokedEncoderGetter = false
+    var invokedEncoderGetterCount = 0
+    var stubbedEncoder: SignalEncoding!
+    var forwardToOriginalEncoder = true
+    override var encoder: SignalEncoding {
+        set {
+            invokedEncoderSetter = true
+            invokedEncoderSetterCount += 1
+            invokedEncoder = newValue
+            invokedEncoderList.append(newValue)
+            if forwardToOriginalEncoder {
+                super.encoder = newValue
+            }
+        }
+        get {
+            invokedEncoderGetter = true
+            invokedEncoderGetterCount += 1
+            if forwardToOriginalEncoder {
+                return super.encoder
+            }
+            return stubbedEncoder
         }
     }
     var invokedNameSetter = false
@@ -78,21 +126,6 @@ class FileLoggerSpy : FileLogger {
         }
         return stubbedDescription
     }
-    var invokedNextPut = false
-    var invokedNextPutCount = 0
-    var invokedNextPutParameters: (aSignal: Signal, Void)?
-    var invokedNextPutParametersList = [(aSignal: Signal, Void)]()
-    var forwardToOriginalNextPut = true
-    override func nextPut(_ aSignal: Signal) {
-        invokedNextPut = true
-        invokedNextPutCount += 1
-        invokedNextPutParameters = (aSignal, ())
-        invokedNextPutParametersList.append((aSignal, ()))
-        if forwardToOriginalNextPut {
-            super.nextPut(aSignal)
-            return
-        }
-    }
     var invokedDidStart = false
     var invokedDidStartCount = 0
     var forwardToOriginalDidStart = true
@@ -115,25 +148,18 @@ class FileLoggerSpy : FileLogger {
             return
         }
     }
-    var invokedOpenFileForWriting = false
-    var invokedOpenFileForWritingCount = 0
-    var forwardToOriginalOpenFileForWriting = true
-    override func openFileForWriting() {
-        invokedOpenFileForWriting = true
-        invokedOpenFileForWritingCount += 1
-        if forwardToOriginalOpenFileForWriting {
-            super.openFileForWriting()
-            return
-        }
-    }
-    var invokedCloseFile = false
-    var invokedCloseFileCount = 0
-    var forwardToOriginalCloseFile = true
-    override func closeFile() {
-        invokedCloseFile = true
-        invokedCloseFileCount += 1
-        if forwardToOriginalCloseFile {
-            super.closeFile()
+    var invokedNextPut = false
+    var invokedNextPutCount = 0
+    var invokedNextPutParameters: (aSignal: Signal, Void)?
+    var invokedNextPutParametersList = [(aSignal: Signal, Void)]()
+    var forwardToOriginalNextPut = true
+    override func nextPut(_ aSignal: Signal) {
+        invokedNextPut = true
+        invokedNextPutCount += 1
+        invokedNextPutParameters = (aSignal, ())
+        invokedNextPutParametersList.append((aSignal, ()))
+        if forwardToOriginalNextPut {
+            super.nextPut(aSignal)
             return
         }
     }

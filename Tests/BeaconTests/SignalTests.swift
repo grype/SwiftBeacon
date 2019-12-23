@@ -9,7 +9,7 @@
 import XCTest
 import Beacon
 
-class SignalTest : XCTestCase, Error {
+class SignalTests : XCTestCase, Error {
     
     private var logger: MemoryLogger!
     
@@ -76,7 +76,7 @@ class SignalTest : XCTestCase, Error {
         assert(logger.recordings.count == 1, "WrapperSignal did not signal")
         let signal = logger.recordings.first as? WrapperSignal
         assert(signal != nil, "emit() does not produce WrapperSignal")
-        assert(signal?.value as? SignalTest == self, "WrapperSignal did not capture its target")
+        assert(signal?.value as? SignalTests == self, "WrapperSignal did not capture its target")
     }
     
     func testEmitPerformance() {

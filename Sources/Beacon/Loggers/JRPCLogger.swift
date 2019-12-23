@@ -131,9 +131,8 @@ open class JRPCLogger: SignalLogger {
     }
     
     private func stopTimer() {
-        guard let timer = timer else { return }
-        timer.invalidate()
-        self.timer = nil
+        timer?.invalidate()
+        timer = nil
     }
     
     @objc private func timerFired(_ timer: Timer) {
