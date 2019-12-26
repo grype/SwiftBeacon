@@ -8,7 +8,7 @@
 import Foundation
 @testable import Beacon
 
-class FileLoggerSpy : FileLogger {
+class StreamLoggerSpy : StreamLogger {
     var invokedUrlGetter = false
     var invokedUrlGetterCount = 0
     var stubbedUrl: URL!

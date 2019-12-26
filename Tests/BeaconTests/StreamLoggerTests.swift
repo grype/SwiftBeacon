@@ -12,14 +12,14 @@ class StreamLoggerTests : XCTestCase {
     
     private let fileURL = URL(fileURLWithPath: "/tmp/beacon-test.log")
     
-    private var logger: FileLoggerSpy!
+    private var logger: StreamLoggerSpy!
     
     private let stringEncoder = SignalStringEncoder(.utf8)
     
     override func setUp() {
         super.setUp()
         removeLogfile()
-        logger = FileLoggerSpy(name: "Beacon-Test-File-Logger", on: fileURL, encoder: stringEncoder)
+        logger = StreamLoggerSpy(name: "Beacon-Test-File-Logger", on: fileURL, encoder: stringEncoder)
     }
     
     override func tearDown() {
