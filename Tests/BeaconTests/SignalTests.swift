@@ -13,16 +13,6 @@ class SignalTests : XCTestCase, Error {
     
     private var logger: MemoryLogger!
     
-    static var allTests = [
-        ("testEmitContextSignal", testEmitContextSignal),
-        ("testEmitStringSignal", testEmitStringSignal),
-        ("testErrorSignal", testErrorSignal),
-        ("testOptionalErrorSignal", testOptionalErrorSignal),
-        ("testWrapperSignal", testWrapperSignal),
-        ("testEmitSmallScaling", testEmitSmallScaling),
-        ("testEmitLargeScaling", testEmitLargeScaling),
-    ]
-    
     override func setUp() {
         super.setUp()
         logger = MemoryLogger.starting(name: "BeaconTestLogger")

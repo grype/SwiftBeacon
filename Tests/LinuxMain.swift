@@ -3,5 +3,6 @@ import XCTest
 import BeaconTests
 
 var tests = [XCTestCaseEntry]()
-tests += BeaconTests.allTests()
+tests += BeaconTests.__allTests()
+
 XCTMain(tests)

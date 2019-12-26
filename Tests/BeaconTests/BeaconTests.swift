@@ -13,15 +13,6 @@ class BeaconTest: XCTestCase {
     private var beacon: Beacon!
     private var logger: MemoryLogger!
     
-    static var allTests = [
-        ("testSignaling", testSignaling),
-        ("testSignalingWhileStopped", testSignalingWhileStopped),
-        ("testSignalingWhileFiltering", testSignalingWhileFiltering),
-        ("testAggregationOfSingles", testAggregationOfSingles),
-        ("testAggregationOfArraysOfBeacons", testAggregationOfArraysOfBeacons),
-        ("testMixedAggregation", testMixedAggregation),
-    ]
-    
     override func setUp() {
         beacon = Beacon()
         logger = MemoryLogger.starting(name: "Test Logger", on: [beacon])

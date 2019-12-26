@@ -12,12 +12,6 @@ import Beacon
 class MemoryLoggerTests: XCTestCase {
     private var logger: MemoryLogger!
     
-    static var allTests = [
-        ("testNextPut", testNextPut),
-        ("testClear", testClear),
-        ("testLimit", testLimit),
-    ]
-    
     override func setUp() {
         super.setUp()
         logger = MemoryLogger(name: "Test logger")
