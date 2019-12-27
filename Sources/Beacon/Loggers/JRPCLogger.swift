@@ -8,25 +8,32 @@
 
 import Foundation
 
-open class JRPCLogger: SignalLogger {
+/**
+ I am a logger for a JSON RPC service.
+ 
+ I am an interval logger, and as such, I collect signals into a queue
+ which I process at regular intervals. When I process my queue, I initiate
+ a POST request to a JSON RPC service, with all the signals I've collected
+ to that point, and I refrain from making additional network requests until
+ I am finished with the current one.
+ */
+open class JRPCLogger: IntervalLogger {
     
-    /// MARK:- Properties
+    // MARK: - Variables
     
     /// Base URL to the JSON RPC server
     @objc open private(set) var url: URL!
     
     /// JRPC Method to call
-    private(set) var method: String!
+    @objc open private(set) var method: String!
     
-    private var signalQueue = [Signal]()
+    // MARK: - Variables (private)
     
-    private let queue = DispatchQueue(label: "JRPCLogger")
+    internal var urlSessionTask: URLSessionTask?
     
-    private var urlSessionTask: URLSessionTask?
+    internal var lastCompletionDate: Date?
     
-    private var lastCompletionDate: Date?
-    
-    // MARK:- Structs
+    // MARK: - Structs
     
     private struct MethodArgument : Encodable {
         var argument : Encodable
@@ -79,91 +86,46 @@ open class JRPCLogger: SignalLogger {
     
     // MARK: - Init
     
-    @objc required public init(url anUrl: URL, method aMethod: String, name: String) {
+    @objc required public init(url anUrl: URL, method aMethod: String, name aName: String, interval anInterval: TimeInterval = 3, queue aQueue: DispatchQueue? = nil) {
         url = anUrl
         method = aMethod
-        super.init(name: name)
+        super.init(name: aName, interval: anInterval, queue: aQueue)
     }
     
     @objc public required init(name aName: String) {
         fatalError("Use init(url:name:) to instantiate")
     }
     
-    override open func nextPut(_ aSignal: Signal) {
-        queue.async {
-            self.signalQueue.append(aSignal)
-        }
+    required public init(name aName: String, interval anInterval: TimeInterval, queue aQueue: DispatchQueue? = nil) {
+        fatalError("init(name:interval:queue:) has not been implemented")
     }
     
-    override open func nextPutAll(_ signals: [Signal]) {
-        queue.async {
-            self.signalQueue.append(contentsOf: signals)
-        }
+    // MARK: - Flushing
+    
+    override open var shouldFlush: Bool {
+        return super.shouldFlush && isReadyToFlush
     }
     
-    override func didStart() {
-        startTimer()
+    private var isReadyToFlush: Bool {
+        guard urlSessionTask == nil else { return false }
+        guard let lastCompletionDate = lastCompletionDate else { return true }
+        return Date().timeIntervalSince(lastCompletionDate) > flushInterval
     }
     
-    override func didStop() {
-        stopTimer()
-    }
-    
-    // MARK:- Timer
-    
-    open var interval: TimeInterval = 2 {
-        didSet {
-            guard let timer = timer, timer.isValid else { return }
-            stopTimer()
-            startTimer()
-        }
-    }
-    
-    private var timer: Timer?
-    
-    private func startTimer() {
-        guard timer == nil else { return }
-        timer = Timer.scheduledTimer(timeInterval: interval,
-                                     target: self,
-                                     selector: #selector(JRPCLogger.timerFired(_:)),
-                                     userInfo: nil,
-                                     repeats: true)
-    }
-    
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    @objc private func timerFired(_ timer: Timer) {
-        queue.async {
-            self.flushQueue()
-        }
-    }
-    
-    // MARK:- SignalQueue
-    
-    private var shouldFlushQueue: Bool {
-        return urlSessionTask == nil
-            && !signalQueue.isEmpty
-            && (lastCompletionDate == nil ||  Date().timeIntervalSince(lastCompletionDate!) > interval)
-    }
-    
-    private func flushQueue() {
-        guard shouldFlushQueue, let urlRequest = createUrlRequest() else { return }
-        
-        let count = signalQueue.count
+    override open func flush() {
+        let signals = buffer
+        guard let urlRequest = createUrlRequest(with: signals) else { return }
         perform(urlRequest: urlRequest) { (success) in
             self.urlSessionTask = nil
             guard success else { return }
-            self.signalQueue.removeFirst(count)
+            self.buffer.removeFirst(signals.count)
         }
     }
     
-    // MARK:- Networking
+    // MARK: - Networking
     
-    private func createUrlRequest() -> URLRequest? {
-        let jrpcMethod = Method(method: method, arguments: signalQueue)
+    private func createUrlRequest(with signals: [Signal]) -> URLRequest? {
+        let jrpcMethod = Method(method: method, arguments: signals)
         let encoder = JSONEncoder()
         guard let body = try? encoder.encode(jrpcMethod) else { return nil }
         var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)

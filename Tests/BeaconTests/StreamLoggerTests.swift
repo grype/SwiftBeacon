@@ -66,7 +66,7 @@ class StreamLoggerTests : XCTestCase {
         }
     }
     
-    // mark:- Helpers
+    // MARK: - Helpers
     
     private func removeLogfile() {
         let fileManager = FileManager.default

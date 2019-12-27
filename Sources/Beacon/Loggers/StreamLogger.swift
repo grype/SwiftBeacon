@@ -9,11 +9,15 @@ import Foundation
 
 open class StreamLogger : SignalLogger {
     
+    // MARK: - Variables
+    
     private(set) var url: URL?
     
     var stream: OutputStream
     
     var encoder: SignalEncoding
+    
+    // MARK: - Init
     
     @objc(initWithName:onStream:encoder:)
     public required init(name aName: String, on aStream: OutputStream, encoder anEncoder: SignalEncoding) {
@@ -32,6 +36,8 @@ open class StreamLogger : SignalLogger {
         fatalError("Instantiate with init(name:on:)")
     }
     
+    // MARK: - Starting/Stopping
+    
     override func didStart() {
         super.didStart()
         if let url = url {
@@ -47,6 +53,8 @@ open class StreamLogger : SignalLogger {
         super.didStop()
         stream.close()
     }
+    
+    // MARK: - Logging
     
     override open func nextPut(_ aSignal: Signal) {
         encoder.encode(aSignal, on: stream)
