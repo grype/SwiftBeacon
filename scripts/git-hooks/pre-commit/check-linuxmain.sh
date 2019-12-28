@@ -8,11 +8,8 @@ hasTestCaseChanges() {
 }
 
 if hasTestCaseChanges; then
-	echo "${RED}Test files changed!${CLEAR}"
-	echo "Update LinuxMain.swift before committing:"
+	echo "${RED}TestCase changes detected!${CLEAR}"
+	echo "Be sure to update LinuxMain.swift with:"
 	echo "  make linuxmain"
-  echo "or"
-  echo "  touch ${MANIFEST}"
 	echo
-	exit 1
 fi
