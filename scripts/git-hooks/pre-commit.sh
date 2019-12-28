@@ -2,12 +2,13 @@
 
 GIT_DIR=$(git rev-parse --show-toplevel)
 SCRIPTS_DIR="${GIT_DIR}/scripts/git-hooks/pre-commit"
+alias -g ERR='>&2'
 
-echo
-echo "Running pre-commit hooks..."
+echo ERR
+echo "Running pre-commit hooks..." ERR
 
 for i in $SCRIPTS_DIR/**/*(.); do
-  echo
-  echo "> ${i:t}" 
+  echo ERR
+  echo "> ${i:t}" ERR
   $i || return 1
 done
