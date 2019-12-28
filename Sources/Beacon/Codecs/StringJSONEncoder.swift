@@ -12,9 +12,22 @@ I encode Signals by trying to represent them in JSON notation.
 */
 
 open class StringJSONEncoder : SignalStringEncoder {
-    public override func encode(_ aSignal: Signal, on aStream: OutputStream) {
-        let encoder = JSONEncoder()
-        guard let data = try? encoder.encode(aSignal), let str = String(data: data, encoding: encoding) else { return }
-        aStream.write(str, maxLength: str.lengthOfBytes(using: encoding))
+    
+    let encoder = JSONEncoder()
+    
+    open override func encode(_ aSignal: Signal, on aStream: OutputStream) {
+        guard let json = json(for: aSignal) else { return }
+        aStream.write(json, maxLength: json.lengthOfBytes(using: encoding))
     }
+    
+    open override func encodedSize(of aSignal: Signal) -> Int {
+        guard let json = json(for: aSignal) else { return 0 }
+        return json.maximumLengthOfBytes(using: encoding)
+    }
+    
+    private func json(for aSignal: Signal) -> String? {
+        guard let data = try? encoder.encode(aSignal) else { return nil }
+        return String(data: data, encoding: encoding)
+    }
+    
 }

@@ -21,8 +21,12 @@ open class SignalStringEncoder : SignalEncoding {
         encoding = anEncoding
     }
     
-    public func encode(_ aSignal: Signal, on aStream: OutputStream) {
+    open func encode(_ aSignal: Signal, on aStream: OutputStream) {
         let text = "\(String(describing: aSignal))\(separator)"
         aStream.write(text, maxLength: text.lengthOfBytes(using: encoding))
+    }
+    
+    open func encodedSize(of aSignal: Signal) -> Int {
+        return aSignal.description.maximumLengthOfBytes(using: encoding)
     }
 }
