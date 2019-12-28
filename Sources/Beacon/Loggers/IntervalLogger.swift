@@ -25,7 +25,7 @@ open class IntervalLogger : SignalLogger {
     
     // MARK: - Variables
     
-    @objc open var flushInterval: TimeInterval = 3 {
+    @objc open var flushInterval: TimeInterval {
         didSet { restartFlushTimer() }
     }
     
@@ -38,8 +38,8 @@ open class IntervalLogger : SignalLogger {
     // MARK: - Init
     
     required public init(name aName: String, interval anInterval: TimeInterval, queue aQueue: DispatchQueue? = nil) {
-        super.init(name: aName)
         flushInterval = anInterval
+        super.init(name: aName)
         queue = aQueue ?? DispatchQueue(label: String(describing: type(of: self)))
     }
     

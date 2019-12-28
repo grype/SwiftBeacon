@@ -78,10 +78,16 @@ open class JRPCLogger: IntervalLogger {
         }
     }
     
+    // MARK: - Instance Creation
+    
     public class func starting<T:JRPCLogger>(url anUrl: URL, method aMethod: String, name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(url: anUrl, method: aMethod, name: aName)
         me.subscribe(to: beacons, filter: filter)
         return me as! T
+    }
+    
+    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T : SignalLogger {
+        fatalError("Use JRPCLogger.starting(url:method:name:on:filter:)")
     }
     
     // MARK: - Init
@@ -124,7 +130,7 @@ open class JRPCLogger: IntervalLogger {
     
     // MARK: - Networking
     
-    private func createUrlRequest(with signals: [Signal]) -> URLRequest? {
+    internal func createUrlRequest(with signals: [Signal]) -> URLRequest? {
         let jrpcMethod = Method(method: method, arguments: signals)
         let encoder = JSONEncoder()
         guard let body = try? encoder.encode(jrpcMethod) else { return nil }
@@ -135,7 +141,7 @@ open class JRPCLogger: IntervalLogger {
         return urlRequest
     }
     
-    private func perform(urlRequest: URLRequest, completion:((Bool)->Void)? = nil) {
+    internal func perform(urlRequest: URLRequest, completion:((Bool)->Void)? = nil) {
         let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             var success = false
             defer { completion?(success) }
