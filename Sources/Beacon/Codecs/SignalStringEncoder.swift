@@ -7,6 +7,10 @@
 
 import Foundation
 
+/**
+ I encode Signals using their description property.
+ */
+
 open class SignalStringEncoder : SignalEncoding {
     
     var encoding : String.Encoding

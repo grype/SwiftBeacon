@@ -7,6 +7,19 @@
 
 import Foundation
 
+/**
+ I am a logger that logs signals onto an OutputStream.
+ 
+ I get instantiated with an output stream and an encoder.
+ When I am started, I open the stream and write out emitted signals
+ onto that stream by using an encoder. The encoder is what's
+ going to be doing the actual writing onto the stream.
+ 
+ Example:
+ let logger = StreamLogger(name: "Example", on: URL(fileURLWithPath: "/tmp/example.log"), encoder: SignalStringEncoder(.utf8))
+ logger.nextPut(StringSignal("Hello world"))
+ */
+
 open class StreamLogger : SignalLogger {
     
     // MARK: - Variables

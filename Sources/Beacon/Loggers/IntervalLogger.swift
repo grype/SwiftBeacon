@@ -7,7 +7,20 @@
 
 import Foundation
 
-
+/**
+ I am a buffering logger that logs emitted signals using a timer.
+ 
+ I am an abstract logger and have no conception of logging, I simply
+ provide the necessary machinery for supporting periodic logging.
+ 
+ For a concrete example, see JRPCLogger.
+ 
+ Example:
+ let logger = SubclassOfIntervalLogger(name: "Test", interval: 3)
+ logger.start()
+ logger.nextPut(StringSignal("test"))
+ 
+ */
 open class IntervalLogger : SignalLogger {
     
     // MARK: - Variables
