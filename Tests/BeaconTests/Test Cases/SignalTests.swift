@@ -29,18 +29,18 @@ class SignalTests : XCTestCase, Error {
     
     func testEmitContextSignal() {
         emit()
-        assert(logger.recordings.count == 1, "Context did not signal")
+        XCTAssertEqual(logger.recordings.count, 1, "Context did not signal")
         let signal = logger.recordings.first!
-        assert(type(of: signal) == ContextSignal.self, "emit() does not produce ContextSignal")
+        XCTAssertTrue(type(of: signal) == ContextSignal.self, "emit() does not produce ContextSignal")
     }
     
     func testEmitStringSignal() {
         let value = 123
         emit(value)
-        assert(logger.recordings.count == 1, "String did not signal")
+        XCTAssertEqual(logger.recordings.count, 1, "String did not signal")
         let signal = logger.recordings.first as? WrapperSignal
-        assert(signal != nil, "emit() does not produce ContextSignal")
-        assert(signal!.value as? Int == value, "StringSignal did not capture emitting string")
+        XCTAssertNotNil(signal, "emit() does not produce ContextSignal")
+        XCTAssertEqual(signal!.value as? Int, value, "StringSignal did not capture emitting string")
     }
     
     func testErrorSignal() {
@@ -48,25 +48,25 @@ class SignalTests : XCTestCase, Error {
         catch {
             emit(error: error)
         }
-        assert(logger.recordings.count == 1, "Error did not signal")
+        XCTAssertEqual(logger.recordings.count, 1, "Error did not signal")
         let signal = logger.recordings.first as? ErrorSignal
-        assert(signal != nil, "emit() does not produce ErrorSignal")
+        XCTAssertNotNil(signal, "emit() does not produce ErrorSignal")
     }
     
     func testOptionalErrorSignal() {
         let err: Error? = nil
         emit(error: err)
-        assert(logger.recordings.count == 1, "Error did not signal")
+        XCTAssertEqual(logger.recordings.count, 1, "Error did not signal")
         let signal = logger.recordings.first as? ContextSignal
-        assert(signal != nil, "emit() does not produce ContextSignal")
+        XCTAssertNotNil(signal, "emit() does not produce ContextSignal")
     }
     
     func testWrapperSignal() {
         emit(self)
-        assert(logger.recordings.count == 1, "WrapperSignal did not signal")
+        XCTAssertEqual(logger.recordings.count, 1, "WrapperSignal did not signal")
         let signal = logger.recordings.first as? WrapperSignal
-        assert(signal != nil, "emit() does not produce WrapperSignal")
-        assert(signal?.value as? SignalTests == self, "WrapperSignal did not capture its target")
+        XCTAssertNotNil(signal, "emit() does not produce WrapperSignal")
+        XCTAssertEqual(signal?.value as? SignalTests, self, "WrapperSignal did not capture its target")
     }
     
     func testEmitPerformance() {

@@ -19,13 +19,13 @@ class MemoryLoggerTests: XCTestCase {
     
     func testNextPut() {
         logger.nextPut(ContextSignal())
-        assert(logger.recordings.count == 1, "Logger should have recorded a signal")
+        XCTAssertEqual(logger.recordings.count, 1, "Logger should have recorded a signal")
     }
     
     func testClear() {
         logger.nextPut(ContextSignal())
         logger.clear()
-        assert(logger.recordings.count == 0, "Logged recordings should have been cleared")
+        XCTAssertEqual(logger.recordings.count, 0, "Logged recordings should have been cleared")
     }
     
     func testLimit() {
@@ -34,8 +34,8 @@ class MemoryLoggerTests: XCTestCase {
         logger.nextPut(signals.first)
         logger.nextPut(signals.second)
         logger.nextPut(signals.third)
-        assert(logger.recordings.count == 2, "Logger should keep at most the configured limit of recordings")
-        assert(logger.recordings.contains(signals.second), "Logger did not keep second to last recording")
-        assert(logger.recordings.contains(signals.third), "Logger did not keep last recording")
+        XCTAssertEqual(logger.recordings.count, 2, "Logger should keep at most the configured limit of recordings")
+        XCTAssertTrue(logger.recordings.contains(signals.second), "Logger did not keep second to last recording")
+        XCTAssertTrue(logger.recordings.contains(signals.third), "Logger did not keep last recording")
     }
 }

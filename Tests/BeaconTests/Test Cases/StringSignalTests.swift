@@ -26,12 +26,12 @@ class StringSignalTests : XCTestCase, Error {
     
     func testEmitStringOnly() {
         emit(message)
-        assert(logger.recordings.first != nil, "emit() did not produce an artifact")
+        XCTAssertNotNil(logger.recordings.first, "emit() did not produce an artifact")
         let signal = logger.recordings.first!
-        assert(type(of: signal) == StringSignal.self, "emit() did not produce StringSignal")
+        XCTAssertTrue(type(of: signal) == StringSignal.self, "emit() did not produce StringSignal")
         let stringSignal = signal as! StringSignal
-        assert(stringSignal.message == message, "emit() produce StringSignal without matching message")
-        assert(stringSignal.userInfo == nil, "emit() resulted in incorrect userInfo")
+        XCTAssertEqual(stringSignal.message, message, "emit() produce StringSignal without matching message")
+        XCTAssertNil(stringSignal.userInfo, "emit() resulted in incorrect userInfo")
     }
     
     func testEmitStringWithUserInfo() {
@@ -39,9 +39,9 @@ class StringSignalTests : XCTestCase, Error {
         emit(message, userInfo: userInfo)
         let signal = logger.recordings.first!
         print(signal.description)
-        assert(type(of: signal) == StringSignal.self, "emit() did not produce StringSignal")
+        XCTAssertTrue(type(of: signal) == StringSignal.self, "emit() did not produce StringSignal")
         let stringSignal = signal as! StringSignal
-        assert(stringSignal.message == message, "emit() produce StringSignal without matching message")
-        assert(stringSignal.userInfo as? [String:String] == userInfo, "emit() resulted in incorrect userInfo")
+        XCTAssertEqual(stringSignal.message, message, "emit() produce StringSignal without matching message")
+        XCTAssertEqual(stringSignal.userInfo as? [String:String], userInfo, "emit() resulted in incorrect userInfo")
     }
 }
