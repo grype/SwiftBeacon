@@ -9,18 +9,6 @@ import Foundation
 @testable import Beacon
 
 class StreamLoggerSpy : StreamLogger {
-    var invokedUrlGetter = false
-    var invokedUrlGetterCount = 0
-    var stubbedUrl: URL!
-    var forwardToOriginalUrl = true
-    override var url: URL? {
-        invokedUrlGetter = true
-        invokedUrlGetterCount += 1
-        if forwardToOriginalUrl {
-            return super.url
-        }
-        return stubbedUrl
-    }
     var invokedStreamSetter = false
     var invokedStreamSetterCount = 0
     var invokedStream: OutputStream?

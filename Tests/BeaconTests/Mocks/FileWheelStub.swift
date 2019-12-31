@@ -10,15 +10,9 @@ import Foundation
 
 class FileWheelStub : FileWheel {
     convenience init() {
-        self.init(rotateOnStart: false, maxFileSize: 0, block: {_ in})
-    }
-    var stubbedRotateOnStart: Bool! = false
-    override var rotateOnStart: Bool {
-        set {
-        }
-        get {
-            return stubbedRotateOnStart
-        }
+        self.init(maxFileSize: 0, block: {_ -> Bool in
+            return true
+        })
     }
     var stubbedMaxFileSize: UInt64! = 0
     override var maxFileSize: UInt64 {
@@ -37,10 +31,11 @@ class FileWheelStub : FileWheel {
         }
     }
     var stubbedShouldRotateResult: Bool! = false
-    override func shouldRotate(fileAt url: URL, for event: FileLogger.Event) -> Bool {
+    override func shouldRotate(fileAt url: URL, for data: Data) -> Bool {
         return stubbedShouldRotateResult
     }
-    override func rotate(fileAt url: URL) {
+    override func rotate(fileAt url: URL) -> Bool {
+        return true
     }
     var stubbedFileExistsResult: Bool! = false
     override func fileExists(at url: URL) -> Bool {

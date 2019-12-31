@@ -13,11 +13,10 @@ import Foundation
  I am used by FileLogger for managing log files.
  */
 public protocol FileRotation {
-    // Whether implementor should rotate file at given URL for a given event.
-    // For example, whether file needs to be rotated when logger is started
-    // or when logging a signal as part of normal operation
-    func shouldRotate(fileAt: URL, for: FileLogger.Event) -> Bool
+    // Whether implemntor should be given a change to rotate file for given data,
+    // before that data is written to the indicated file
+    func shouldRotate(fileAt: URL, for: Data) -> Bool
     
-    // Rotates file at given URL
-    func rotate(fileAt: URL)
+    // Rotates file at given URL and returns Bool indicating successful operation
+    func rotate(fileAt: URL) -> Bool
 }

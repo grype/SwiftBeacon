@@ -18,14 +18,16 @@ class SignalStringEncoderTests : XCTestCase {
         
         let encoder = SignalStringEncoder(.utf8)
         encoder.separator = "🔅"
-        encoder.encode(signals.first!, on: stream)
+        var data = encoder.data(from: signals.first!)!
+        let _ = data.write(on: stream)
         
         var output = contents(of: stream, encoding: encoder.encoding)
         
         XCTAssertEqual(output, "\(signals.first!.description)\(encoder.separator)", "First signal encoded incorrectly")
 
         (1..<count).forEach { (i) in
-            encoder.encode(signals[i], on: stream)
+            data = encoder.data(from: signals[i])!
+            let _ = data.write(on: stream)
         }
 
         output = contents(of: stream, encoding: encoder.encoding)

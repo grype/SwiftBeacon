@@ -14,6 +14,5 @@ import Foundation
  */
 
 @objc public protocol SignalEncoding {
-    func encode(_ aSignal: Signal, on aStream: OutputStream)
-    func encodedSize(of aSignal: Signal) -> Int
+    func data(from aSignal: Signal) -> Data?
 }

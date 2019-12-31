@@ -10,28 +10,31 @@ import XCTest
 
 class StreamLoggerTests : XCTestCase {
     
-    private let fileURL = URL(fileURLWithPath: "/tmp/beacon-test.log")
-    
     private var logger: StreamLoggerSpy!
     
     private let stringEncoder = SignalStringEncoder(.utf8)
     
+    private var stream: OutputStream!
+    
     override func setUp() {
         super.setUp()
-        removeLogfile()
-        logger = StreamLoggerSpy(name: "Beacon-Test-File-Logger", on: fileURL, encoder: stringEncoder)
+        stream = OutputStream.toMemory()
+        logger = StreamLoggerSpy(name: "Beacon-Test-File-Logger", on: stream, encoder: stringEncoder)
     }
     
     override func tearDown() {
         super.tearDown()
+        stream.close()
+        stream = nil
         logger.stop()
+        logger = nil
     }
     
     func testNextPut() {
         logger.start()
         let signal = StringSignal("Hello world")
         logger.nextPut(signal)
-        let result = logFileContents()
+        let result = streamContents()
         XCTAssertNotNil(result, "Failed to fetch data from log file")
         if let result = result {
             XCTAssertEqual(result, "\(signal.description)\(stringEncoder.separator)", "Logged signal isn't the same as its description")
@@ -56,7 +59,7 @@ class StreamLoggerTests : XCTestCase {
         }
         wait(for: expectations, timeout: 3, enforceOrder: false)
         
-        let result = logFileContents()
+        let result = streamContents()
         XCTAssertNotNil(result, "Failed to fetch data from log file")
         if let result = result {
             let gotSorted = result.components(separatedBy: stringEncoder.separator).filter { !$0.isEmpty }.sorted()
@@ -68,15 +71,8 @@ class StreamLoggerTests : XCTestCase {
     
     // MARK: - Helpers
     
-    private func removeLogfile() {
-        let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: fileURL.path) {
-            try! fileManager.removeItem(at: fileURL)
-        }
-    }
-    
-    private func logFileContents() -> String? {
-        guard let data = try? Data(contentsOf: fileURL) else { return nil }
+    private func streamContents() -> String? {
+        guard let data = stream.property(forKey: .dataWrittenToMemoryStreamKey) as? Data else { return nil }
         return String(data: data, encoding: .utf8)
     }
     

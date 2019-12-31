@@ -10,34 +10,9 @@ import Foundation
 
 class FileWheelSpy : FileWheel {
     convenience init() {
-        self.init(rotateOnStart: false, maxFileSize: 0, block: { _ in })
-    }
-    var invokedRotateOnStartSetter = false
-    var invokedRotateOnStartSetterCount = 0
-    var invokedRotateOnStart: Bool?
-    var invokedRotateOnStartList = [Bool]()
-    var invokedRotateOnStartGetter = false
-    var invokedRotateOnStartGetterCount = 0
-    var stubbedRotateOnStart: Bool! = false
-    var forwardToOriginalRotateOnStart = true
-    override var rotateOnStart: Bool {
-        set {
-            invokedRotateOnStartSetter = true
-            invokedRotateOnStartSetterCount += 1
-            invokedRotateOnStart = newValue
-            invokedRotateOnStartList.append(newValue)
-            if forwardToOriginalRotateOnStart {
-                super.rotateOnStart = newValue
-            }
-        }
-        get {
-            invokedRotateOnStartGetter = true
-            invokedRotateOnStartGetterCount += 1
-            if forwardToOriginalRotateOnStart {
-                return super.rotateOnStart
-            }
-            return stubbedRotateOnStart
-        }
+        self.init(maxFileSize: 0, block: { _ in
+            return true
+        })
     }
     var invokedMaxFileSizeSetter = false
     var invokedMaxFileSizeSetterCount = 0
@@ -95,17 +70,17 @@ class FileWheelSpy : FileWheel {
     }
     var invokedShouldRotate = false
     var invokedShouldRotateCount = 0
-    var invokedShouldRotateParameters: (url: URL, event: FileLogger.Event)?
-    var invokedShouldRotateParametersList = [(url: URL, event: FileLogger.Event)]()
+    var invokedShouldRotateParameters: (url: URL, data: Data)?
+    var invokedShouldRotateParametersList = [(url: URL, data: Data)]()
     var stubbedShouldRotateResult: Bool! = false
     var forwardToOriginalShouldRotate = true
-    override func shouldRotate(fileAt url: URL, for event: FileLogger.Event) -> Bool {
+    override func shouldRotate(fileAt url: URL, for data: Data) -> Bool {
         invokedShouldRotate = true
         invokedShouldRotateCount += 1
-        invokedShouldRotateParameters = (url, event)
-        invokedShouldRotateParametersList.append((url, event))
+        invokedShouldRotateParameters = (url, data)
+        invokedShouldRotateParametersList.append((url, data))
         if forwardToOriginalShouldRotate {
-            return super.shouldRotate(fileAt: url, for: event)
+            return super.shouldRotate(fileAt: url, for: data)
         }
         return stubbedShouldRotateResult
     }
@@ -114,15 +89,15 @@ class FileWheelSpy : FileWheel {
     var invokedRotateParameters: (url: URL, Void)?
     var invokedRotateParametersList = [(url: URL, Void)]()
     var forwardToOriginalRotate = true
-    override func rotate(fileAt url: URL) {
+    override func rotate(fileAt url: URL) -> Bool {
         invokedRotate = true
         invokedRotateCount += 1
         invokedRotateParameters = (url, ())
         invokedRotateParametersList.append((url, ()))
         if forwardToOriginalRotate {
-            super.rotate(fileAt: url)
-            return
+            return super.rotate(fileAt: url)
         }
+        return true
     }
     var invokedFileExists = false
     var invokedFileExistsCount = 0
