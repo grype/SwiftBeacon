@@ -73,7 +73,7 @@ The framework doesn't provide much specialization beyond the aforementioned sign
 class URLRequestSignal : Signal {
   private(set) var request: URLRequest
 
-  override class var signalName: String {
+  override var signalName: String {
     return "📡 \(super.signalName)"
   }
 

@@ -70,14 +70,6 @@ open class Signal : NSObject, Encodable {
     
     // MARK: Properties
     
-    /// Default signal name, which is derived from the class name, stripping "Signal" suffix
-    @objc open class var signalName: String {
-        let classString = String(describing: self)
-        let suffix = "Signal"
-        guard classString.hasSuffix(suffix) else { return classString }
-        return String(classString.dropLast(suffix.count))
-    }
-    
     open class var portableClassName : String? {
         return String(describing: self)
     }
@@ -96,9 +88,12 @@ open class Signal : NSObject, Encodable {
     /// User info data passed along by the signaler. 
     @objc open var userInfo: [AnyHashable : Any]?
     
-    /// Signal name as appropriate for the instance. By default this is the same as class-side `signalName`.
+    /// Signal name as appropriate for the instance.
     @objc open var signalName: String {
-        return type(of: self).signalName
+        let classString = String(describing: type(of: self))
+        let suffix = "Signal"
+        guard classString.hasSuffix(suffix) else { return classString }
+        return String(classString.dropLast(suffix.count))
     }
     
     /// Time when the signal was `emit()`ed.
