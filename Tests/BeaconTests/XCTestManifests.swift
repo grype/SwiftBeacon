@@ -115,6 +115,7 @@ extension SignalTests {
     // to regenerate.
     static let __allTests__SignalTests = [
         ("testEmitContextSignal", testEmitContextSignal),
+        ("testEmitFromMainThread", testEmitFromMainThread),
         ("testEmitLargeScaling", testEmitLargeScaling),
         ("testEmitPerformance", testEmitPerformance),
         ("testEmitSmallScaling", testEmitSmallScaling),
