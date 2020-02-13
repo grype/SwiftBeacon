@@ -69,6 +69,18 @@ class SignalTests : XCTestCase, Error {
         XCTAssertEqual(signal?.value as? SignalTests, self, "WrapperSignal did not capture its target")
     }
     
+    func testEmitFromMainThread() {
+        let expect = expectation(description: "Waiting for emit from main thread")
+        DispatchQueue.main.async {
+            emit(self)
+            expect.fulfill()
+        }
+        wait(for: [expect], timeout: 1)
+        let signal = logger.recordings.first as? WrapperSignal
+        XCTAssertNotNil(signal, "emit() does not produce WrapperSignal")
+        XCTAssertEqual(signal?.value as? SignalTests, self, "WrapperSignal did not capture its target")
+    }
+    
     func testEmitPerformance() {
         measure {
             emit()
