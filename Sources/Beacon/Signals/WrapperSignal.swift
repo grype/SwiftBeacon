@@ -88,8 +88,18 @@ open class WrapperSignal: Signal {
         return "<\(String(describing: type(of: value))): \(Unmanaged.passUnretained(self).toOpaque())>"
     }
     
+    @objc open var userInfoDescription: String? {
+        guard let userInfo = userInfo else { return nil }
+        return "\(userInfo.debugDescription)".replacingOccurrences(of: "\n", with: "\n\t")
+    }
+    
     open override var description: String {
-        return "\(super.description): \(valueDescription)"
+        var result = "\(super.description): \(valueDescription)"
+        if let userInfoDescription = userInfoDescription {
+            result.append("\n")
+            result.append("UserInfo: \(userInfoDescription)")
+        }
+        return result
     }
 }
 
