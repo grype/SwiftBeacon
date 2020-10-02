@@ -7,9 +7,11 @@
 
 #define SHARED_BEACONS @[[Beacon shared]]
 
+#define BeaconSignalFrom(value) (Signal *)([value respondsToSelector: NSSelectorFromString(@"beaconSignal")] ? [value beaconSignal] : [[WrapperSignal alloc] init:value userInfo:nil])
+
 #define BeaconEmitContext(beacons, anUserInfo) [[[ContextSignal alloc] initWithStack: [NSThread callStackSymbols]] emitOn:beacons userInfo:anUserInfo fileName:[NSString stringWithCString:__FILE__ encoding:NSUTF8StringEncoding] line:__LINE__ functionName:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]]
 
-#define BeaconEmit(value, beacons, anUserInfo) [[[WrapperSignal alloc] init:value userInfo:nil] emitOn:beacons userInfo:anUserInfo fileName:[NSString stringWithCString:__FILE__ encoding:NSUTF8StringEncoding] line:__LINE__ functionName:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]]
+#define BeaconEmit(value, beacons, anUserInfo) [ BeaconSignalFrom(value) emitOn:beacons userInfo:anUserInfo fileName:[NSString stringWithCString:__FILE__ encoding:NSUTF8StringEncoding] line:__LINE__ functionName:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]]
 
 #define BeaconEmitError(anError, beacons, anUserInfo) [[[ErrorSignal alloc] initWithError: anError stack: [NSThread callStackSymbols]] emitOn:beacons userInfo:anUserInfo fileName:[NSString stringWithCString:__FILE__ encoding:NSUTF8StringEncoding] line:__LINE__ functionName:[NSString stringWithCString:__FUNCTION__ encoding:NSUTF8StringEncoding]]
 
