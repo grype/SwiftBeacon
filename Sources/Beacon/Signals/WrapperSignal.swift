@@ -41,12 +41,20 @@ open class WrapperSignal: Signal {
         encodableValue = aValue
         super.init()
         userInfo = anUserInfo
+        valueDescription = valueDescription(for: aValue)
+        if let userInfo = anUserInfo {
+            userInfoDescription = userInfoDescription(for: userInfo)
+        }
     }
     
     @objc public init(_ aValue: Any, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         anyValue = aValue
         super.init()
         userInfo = anUserInfo
+        valueDescription = valueDescription(for: aValue)
+        if let userInfo = anUserInfo {
+            userInfoDescription = userInfoDescription(for: userInfo)
+        }
     }
     
     private enum CodingKeys : String, CodingKey {
@@ -81,16 +89,19 @@ open class WrapperSignal: Signal {
         }
     }
     
-    @objc open var valueDescription: String {
-        if let value = value as? CustomStringConvertible {
+    @objc open private(set) var valueDescription: String?
+    
+    @objc open func valueDescription(for aValue: Any) -> String? {
+        if let value = aValue as? CustomStringConvertible {
             return String(describing: value)
         }
-        return "<\(String(describing: type(of: value))): \(Unmanaged.passUnretained(self).toOpaque())>"
+        return "<\(String(describing: type(of: aValue))): \(Unmanaged.passUnretained(self).toOpaque())>"
     }
     
-    @objc open var userInfoDescription: String? {
-        guard let userInfo = userInfo else { return nil }
-        return "\(userInfo.debugDescription)".replacingOccurrences(of: "\n", with: "\n\t")
+    @objc open private(set) var userInfoDescription: String?
+    
+    @objc func userInfoDescription(for aUserInfo: [AnyHashable : Any]) -> String {
+        return "\(aUserInfo.debugDescription)".replacingOccurrences(of: "\n", with: "\n\t")
     }
     
     open override var description: String {

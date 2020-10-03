@@ -89,4 +89,22 @@ class WrapperSignalTests: XCTestCase {
         let properties = decodedValue!["properties"] as? [String : String]
         XCTAssertTrue(properties == userInfo, "Incorrectly encoded userInfo")
     }
+    
+    func testInTimeDescription() {
+        var foo = "First"
+        var info = ["Foo": "I am Foo"]
+        
+        let signal = WrapperSignal(foo, userInfo: info)
+        
+        let valueDescription = signal.valueDescription
+        let userInfoDescription = signal.userInfoDescription
+        let description = signal.description
+        
+        foo.append("<CHANGED>")
+        info["Bar"] = "I am foo"
+        
+        XCTAssertEqual(signal.valueDescription, valueDescription, "Incorrectly captured value description")
+        XCTAssertEqual(signal.userInfoDescription, userInfoDescription, "Incorrectly captured value description")
+        XCTAssertEqual(signal.description, description, "Incorrectly captured description")
+    }
 }
