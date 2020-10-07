@@ -89,9 +89,12 @@ open class WrapperSignal: Signal {
         }
     }
     
-    @objc open private(set) var valueDescription: String?
+    @objc open private(set) var valueDescription: String!
     
-    @objc open func valueDescription(for aValue: Any) -> String? {
+    @objc open func valueDescription(for aValue: Any) -> String {
+        if let value = aValue as? CustomDebugStringConvertible {
+            return String(reflecting: value)
+        }
         if let value = aValue as? CustomStringConvertible {
             return String(describing: value)
         }
@@ -101,11 +104,11 @@ open class WrapperSignal: Signal {
     @objc open private(set) var userInfoDescription: String?
     
     @objc func userInfoDescription(for aUserInfo: [AnyHashable : Any]) -> String {
-        return "\(aUserInfo.debugDescription)".replacingOccurrences(of: "\n", with: "\n\t")
+        return String(reflecting: aUserInfo)
     }
     
     open override var description: String {
-        var result = "\(super.description): \(valueDescription)"
+        var result = "\(super.description): \(valueDescription!)"
         if let userInfoDescription = userInfoDescription {
             result.append("\n")
             result.append("UserInfo: \(userInfoDescription)")
