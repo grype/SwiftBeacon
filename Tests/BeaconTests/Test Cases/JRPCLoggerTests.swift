@@ -91,4 +91,19 @@ class JRPCLoggerTests : XCTestCase {
         XCTAssertEqual(logger.invokedPerformCount, 1, "Should have performed URL Request only oince after flush")
     }
     
+    func testLoggingSringError() {
+        logger.start()
+        
+        logger.nextPut(ErrorSignal(error: "Test error" as Error))
+        let expectFlush = expectation(description: "Flushing")
+        logger.queue.asyncAfter(deadline: .now() + logger.flushInterval + 0.1) {
+            expectFlush.fulfill()
+        }
+        wait(for: [expectFlush], timeout: logger.flushInterval + 0.2)
+        
+        XCTAssertEqual(logger.invokedFlushCount, 1, "Should have invoked flush only once")
+        XCTAssertEqual(logger.invokedCreateUrlRequestCount, 1, "Should have created URL Request only once")
+        XCTAssertEqual(logger.invokedPerformCount, 1, "Should have performed URL Request only oince after flush")
+    }
+    
 }

@@ -39,7 +39,8 @@ open class ErrorSignal : Signal {
         var container = encoder.container(keyedBy: ErrorSignal.CodingKeys.self)
         try container.encode(stack.map { CallStackFrame.fromString($0) }, forKey: .stack)
         if let encodableError = error as? Encodable {
-            try encodableError.encode(to: encoder)
+            let wrapped = EncodableWrapper.init(wrapped:encodableError)
+            try container.encode(wrapped, forKey: .error)
         }
         else {
             try container.encode(error.localizedDescription, forKey: .error)
