@@ -31,6 +31,9 @@ open class IntervalLogger : SignalLogger {
     
     @objc private(set) var queue: DispatchQueue!
     
+    /// Maximum number of signals to store in the buffer. Older signals will be removed to accommodate new arrivals.
+    @objc var maxBufferSize = 200
+    
     @objc internal var buffer = [Signal]()
     
     internal var flushTimer: Timer?
@@ -52,6 +55,7 @@ open class IntervalLogger : SignalLogger {
     override open func nextPut(_ aSignal: Signal) {
         queue.async {
             self.buffer.append(aSignal)
+            self.buffer.removeFirst(max(0, self.buffer.count - self.maxBufferSize))
         }
     }
     

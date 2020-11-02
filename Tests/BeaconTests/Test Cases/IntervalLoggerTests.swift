@@ -111,5 +111,18 @@ class IntervalLoggerTests : XCTestCase {
         wait(for: [expect], timeout: 1)
         XCTAssertTrue(logger.shouldFlush, "Should allow flushing when buffer is empty")
     }
+    
+    func testPushOverLimit() {
+        logger.maxBufferSize = 1
+        logger.nextPut(signals[0])
+        logger.nextPut(signals[1])
+        let expect = expectation(description: "Waiting to queue signal")
+        logger.queue.async {
+            expect.fulfill()
+        }
+        wait(for: [expect], timeout: 1)
+        XCTAssert(logger.buffer.count == 1, "Buffer should contain 1 signal")
+        XCTAssert(logger.buffer[0] === signals[1], "Buffer should contain last signal")
+    }
 
 }
