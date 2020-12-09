@@ -43,7 +43,7 @@ open class ConsoleLogger : SignalLogger {
         if markedInactvitiyPeriod > 0, let lastPrintDate = lastPrintDate, Date().timeIntervalSince(lastPrintDate) > markedInactvitiyPeriod {
             print(inactivityDelimiter)
         }
-        print("\(String(reflecting: aSignal))")
+        print("\(aSignal.longDescription)")
         lastPrintDate = Date()
     }
     
