@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  StringJSONEncoder.swift
 //  
 //
 //  Created by Pavel Skaldin on 12/23/19.

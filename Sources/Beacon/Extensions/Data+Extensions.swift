@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Data+Extensions.swift
 //  
 //
 //  Created by Pavel Skaldin on 12/28/19.

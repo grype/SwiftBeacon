@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  StreamLogger.swift
 //  
 //
 //  Created by Pavel Skaldin on 12/20/19.

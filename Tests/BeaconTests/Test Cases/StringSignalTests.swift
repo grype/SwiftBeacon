@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  StringSignalTests.swift
 //  
 //
 //  Created by Pavel Skaldin on 12/17/19.

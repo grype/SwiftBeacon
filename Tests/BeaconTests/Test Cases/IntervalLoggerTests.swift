@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  IntervalLoggerTests.swift
 //  
 //
 //  Created by Pavel Skaldin on 12/26/19.

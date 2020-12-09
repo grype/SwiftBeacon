@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  WrapperSignalTests.swift
 //  
 //
 //  Created by Pavel Skaldin on 12/19/19.
