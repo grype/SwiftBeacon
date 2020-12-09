@@ -1,6 +1,6 @@
 # Beacon
 
-Implementation of [Beacon](https://github.com/pharo-project/pharo-beacon) logging framework in Swift. The framework distinguishes itself from traditional logging systems by doing away with levels and allowing for logging of arbitrary values, not just text. For introductory information on Beacon, see http://www.humane-assessment.com/blog/beacon.
+Implementation of [Beacon](https://github.com/pharo-project/pharo-beacon) structured logging framework in Swift. The framework distinguishes itself from traditional logging systems by allowing logging of arbitrary objects/values and doing away with log levels in favor of filtering by object/value types. For introductory information on Beacon, see http://www.humane-assessment.com/blog/beacon.
 
 ## Installing
 
@@ -24,7 +24,7 @@ emit("A message")
 emit(anything)
 
 // emit an error
-do { try something() } catch { emit(error) }
+do { try something() } catch { emit(error: error) }
 
 consoleLogger.stop()
 ```
@@ -122,3 +122,7 @@ When it comes to emitting custom signals, you'd have to either provide your own 
 MySignal *signal = [MySignal new];
 BeaconEmitSignal(signal, on: arrayOfBeacons, userInfo: aUserInfoDictionary)
 ```
+
+## Xcode Goodies
+
+To simplify creation of custom signal classes, there exists a code snippet that can be added to Xcode's snippet library. You will find it in [Xcode/Snippets/MakeSignal.swift](Xcode/Snippets/MakeSignal.swift)
