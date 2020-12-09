@@ -192,7 +192,7 @@ open class Signal : NSObject, Encodable, SignalStringConvertible {
             result += " \(sourceDescription)"
         }
         if let valueDescription = valueDescription {
-            result += ": \(valueDescription)"
+            result += " : \(valueDescription)"
         }
         return result
     }
