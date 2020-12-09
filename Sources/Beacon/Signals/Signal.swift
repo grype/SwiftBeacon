@@ -33,7 +33,7 @@ let UniqueDeviceIdentifier: String? = nil
  (using `Signal.Source` struct) and then announces myself via relevant `Beacon` instance.
  
  */
-open class Signal : NSObject, Encodable {
+open class Signal : NSObject, Encodable, SignalStringConvertible {
     
     // MARK:- Structs
     
@@ -149,18 +149,71 @@ open class Signal : NSObject, Encodable {
             let wrapped = codableInfo.mapValues(EncodableWrapper.init(wrapped:))
             try container.encode(wrapped, forKey: .userInfo)
         }
+        // Swift is great!
+        else if let codableInfo = (userInfo as? [String : AnyHashable]) as? [String : Encodable] {
+            let wrapped = codableInfo.mapValues(EncodableWrapper.init(wrapped:))
+            try container.encode(wrapped, forKey: .userInfo)
+        }
     }
     
     // MARK:- CustomStringConvertible
     
-    open override var description: String {
-        var sourceDescription = ""
-        if let source = source {
-            sourceDescription = " \(source)"
+    @objc
+    open var signalDescription: String {
+        return signalName
+    }
+    
+    @objc
+    open var sourceDescription: String? {
+        guard let source = source else {
+            return nil
         }
+        return "\(source)"
+    }
+    
+    @objc
+    open var valueDescription: String? {
+        return nil
+    }
+    
+    @objc
+    open var userInfoDescription: String? {
+        guard let userInfo = userInfo else {
+            return nil
+        }
+        return "UserInfo: \(String(reflecting: userInfo))"
+    }
+    
+    @objc
+    open var shortDescription: String {
         let dateString = dateFormatter.string(from: timestamp)
-        return "\(dateString) \(signalName)\(sourceDescription)"
+        var result = "\(dateString) \(signalDescription)"
+        if let sourceDescription = sourceDescription {
+            result += " \(sourceDescription)"
+        }
+        if let valueDescription = valueDescription {
+            result += ": \(valueDescription)"
+        }
+        return result
+    }
+    
+    @objc
+    open var longDescription: String {
+        var result = shortDescription
+        if let userInfoDescription = userInfoDescription {
+            result += "\n\(userInfoDescription)"
+        }
+        return result
+    }
+    
+    @objc
+    open override var description: String {
+        return shortDescription
+    }
+    
+    @objc
+    open override var debugDescription: String {
+        return longDescription
     }
 
 }
-

@@ -35,13 +35,25 @@ class StringSignalTests : XCTestCase, Error {
     }
     
     func testEmitStringWithUserInfo() {
-        let userInfo: [String:String] = ["Hello" : "World"]
+        let userInfo: [String:String] = ["Hello" : "hello, hello...", "Is There" : "Anybody Out There"]
         emit(message, userInfo: userInfo)
         let signal = logger.recordings.first!
-        print(signal.description)
         XCTAssertTrue(type(of: signal) == StringSignal.self, "emit() did not produce StringSignal")
         let stringSignal = signal as! StringSignal
         XCTAssertEqual(stringSignal.message, message, "emit() produce StringSignal without matching message")
         XCTAssertEqual(stringSignal.userInfo as? [String:String], userInfo, "emit() resulted in incorrect userInfo")
+        XCTAssertNotNil(stringSignal.userInfoDescription, "StringSignal with userInfo should have some userInfoDescription")
+    }
+    
+    func testStringSignalDescription() {
+        let userInfo: [String:String] = ["Hello" : "hello, hello...", "Is There" : "Anybody Out There"]
+        emit(message, userInfo: userInfo)
+        let stringSignal = logger.recordings.first as! StringSignal
+        print(stringSignal.description)
+        XCTAssertNotNil(stringSignal.sourceDescription, "StringSignal with userInfo should have some userInfoDescription")
+        XCTAssertNotNil(stringSignal.userInfoDescription, "StringSignal with userInfo should have some userInfoDescription")
+        XCTAssertFalse(stringSignal.description.contains(stringSignal.userInfoDescription!))
+        print(stringSignal.debugDescription)
+        XCTAssertTrue(stringSignal.debugDescription.contains(stringSignal.userInfoDescription!))
     }
 }

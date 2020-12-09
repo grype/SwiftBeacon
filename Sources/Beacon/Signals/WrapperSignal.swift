@@ -41,9 +41,9 @@ open class WrapperSignal: Signal {
         encodableValue = aValue
         super.init()
         userInfo = anUserInfo
-        valueDescription = valueDescription(for: aValue)
+        privateValueDescription = valueDescription(for: aValue)
         if let userInfo = anUserInfo {
-            userInfoDescription = userInfoDescription(for: userInfo)
+            privateUserInfoDescription = userInfoDescription(for: userInfo)
         }
     }
     
@@ -51,9 +51,9 @@ open class WrapperSignal: Signal {
         anyValue = aValue
         super.init()
         userInfo = anUserInfo
-        valueDescription = valueDescription(for: aValue)
+        privateValueDescription = valueDescription(for: aValue)
         if let userInfo = anUserInfo {
-            userInfoDescription = userInfoDescription(for: userInfo)
+            privateUserInfoDescription = userInfoDescription(for: userInfo)
         }
     }
     
@@ -89,9 +89,15 @@ open class WrapperSignal: Signal {
         }
     }
     
-    @objc open private(set) var valueDescription: String!
+    private var privateValueDescription: String!
     
-    @objc open func valueDescription(for aValue: Any) -> String {
+    @objc
+    open override var valueDescription: String? {
+        return privateValueDescription
+    }
+    
+    @objc
+    open func valueDescription(for aValue: Any) -> String {
         if let value = aValue as? CustomDebugStringConvertible {
             return String(reflecting: value)
         }
@@ -101,19 +107,16 @@ open class WrapperSignal: Signal {
         return "<\(String(describing: type(of: aValue))): \(Unmanaged.passUnretained(self).toOpaque())>"
     }
     
-    @objc open private(set) var userInfoDescription: String?
+    private var privateUserInfoDescription: String?
     
-    @objc func userInfoDescription(for aUserInfo: [AnyHashable : Any]) -> String {
-        return String(reflecting: aUserInfo)
+    @objc
+    open override var userInfoDescription: String? {
+        return privateUserInfoDescription
     }
     
-    open override var description: String {
-        var result = "\(super.description): \(valueDescription!)"
-        if let userInfoDescription = userInfoDescription {
-            result.append("\n")
-            result.append("UserInfo: \(userInfoDescription)")
-        }
-        return result
+    @objc
+    func userInfoDescription(for aUserInfo: [AnyHashable : Any]) -> String {
+        return String(reflecting: aUserInfo)
     }
 }
 

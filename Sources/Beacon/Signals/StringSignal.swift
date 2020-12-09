@@ -28,16 +28,8 @@ open class StringSignal: Signal {
         case message
     }
     
-    open override var description: String {
-        let userInfoDescription : String!
-        if let userInfo = userInfo {
-            userInfoDescription = "\nUserInfo: \(userInfo.debugDescription)".replacingOccurrences(of: "\n", with: "\n\t")
-        }
-        else {
-            userInfoDescription = ""
-        }
-        let result = "\(super.description): \(message)\(userInfoDescription!)"
-        return result
+    override open var valueDescription: String? {
+        return message
     }
     
     open override func encode(to encoder: Encoder) throws {
