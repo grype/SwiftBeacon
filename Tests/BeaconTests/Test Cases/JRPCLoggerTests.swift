@@ -71,6 +71,23 @@ class JRPCLoggerTests : XCTestCase {
         XCTAssertEqual(logger.buffer.count, 1, "Expected a single signal in the buffer")
     }
     
+    func testNextPutWithUserInfo() {
+        logger.start()
+        let signal = StringSignal("Hello world")
+        signal.userInfo = ["Number" : 123, "String" : "Hello", "Bool" : true]
+        logger.nextPut(signal)
+        let expectBuffer = expectation(description: "Buffering")
+        logger.queue.async {
+            expectBuffer.fulfill()
+        }
+        wait(for: [expectBuffer], timeout: 1)
+        logger.flush()
+        let list = logger.invokedPerformParametersList
+        let httpBody = String(data: list.first!.0.httpBody!, encoding: .utf8)
+        let encodedSignal = String(data: try! JSONEncoder().encode(signal), encoding: .utf8)!
+        XCTAssert(httpBody!.contains(encodedSignal))
+    }
+    
     func testFlush() {
         logger.start()
         
