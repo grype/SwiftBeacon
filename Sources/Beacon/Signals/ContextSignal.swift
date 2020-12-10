@@ -40,12 +40,8 @@ open class ContextSignal: Signal {
         try container.encode(stack.map { CallStackFrame.fromString($0) }, forKey: .stack)
     }
     
-    @objc
-    open override var longDescription: String {
-        var result = shortDescription
-        if let userInfoDescription = userInfoDescription {
-            result += "\n\(userInfoDescription)"
-        }
+    open override var debugDescription: String {
+        var result = super.debugDescription
         result += "\nStack:"
         stack.forEach { result.append(contentsOf: "\n\t\($0)") }
         return result

@@ -97,15 +97,15 @@ class WrapperSignalTests: XCTestCase {
         
         let signal = WrapperSignal(foo, userInfo: info)
         
-        let valueDescription = signal.valueDescription
-        let userInfoDescription = signal.userInfoDescription
         let description = signal.description
+        let userInfoDescription = signal.userInfoDescription
+        let debugDescription = signal.debugDescription
         
         foo.append("<CHANGED>")
         info["Bar"] = "I am foo"
         
-        XCTAssertEqual(signal.valueDescription, valueDescription, "Incorrectly captured value description")
+        XCTAssertEqual(signal.description, description, "Incorrectly captured value description")
         XCTAssertEqual(signal.userInfoDescription, userInfoDescription, "Incorrectly captured value description")
-        XCTAssertEqual(signal.description, description, "Incorrectly captured description")
+        XCTAssertEqual(signal.debugDescription, debugDescription, "Incorrectly captured description")
     }
 }

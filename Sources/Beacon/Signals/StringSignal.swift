@@ -28,8 +28,8 @@ open class StringSignal: Signal {
         case message
     }
     
-    override open var valueDescription: String? {
-        return message
+    open override var debugDescription: String {
+        return "\(super.debugDescription) \(message)"
     }
     
     open override func encode(to encoder: Encoder) throws {

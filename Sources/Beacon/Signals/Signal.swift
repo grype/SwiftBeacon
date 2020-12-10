@@ -33,7 +33,7 @@ let UniqueDeviceIdentifier: String? = nil
  (using `Signal.Source` struct) and then announces myself via relevant `Beacon` instance.
  
  */
-open class Signal : NSObject, Encodable, SignalStringConvertible {
+open class Signal : NSObject, Encodable {
     
     // MARK:- Structs
     
@@ -129,7 +129,7 @@ open class Signal : NSObject, Encodable, SignalStringConvertible {
     // MARK:- Encodable
     
     private enum CodingKeys : String , CodingKey {
-        case timestamp, source, userInfo = "properties", portableClassName = "__class"
+        case timestamp, source, userInfo = "properties", portableClassName = "__class", description, debugDescription
     }
     
     struct EncodableWrapper: Encodable {
@@ -145,6 +145,8 @@ open class Signal : NSObject, Encodable, SignalStringConvertible {
         try container.encodeIfPresent(type(of: self).portableClassName, forKey: .portableClassName)
         try container.encodeIfPresent(dateFormatter.string(from: timestamp), forKey: .timestamp)
         try container.encode(source, forKey: .source)
+        try container.encode(description, forKey: .description)
+        try container.encode(debugDescription, forKey: .debugDescription)
         if let codableInfo = userInfo as? [String : Encodable] {
             let wrapped = codableInfo.mapValues(EncodableWrapper.init(wrapped:))
             try container.encode(wrapped, forKey: .userInfo)
@@ -172,11 +174,6 @@ open class Signal : NSObject, Encodable, SignalStringConvertible {
     }
     
     @objc
-    open var valueDescription: String? {
-        return nil
-    }
-    
-    @objc
     open var userInfoDescription: String? {
         guard let userInfo = userInfo else {
             return nil
@@ -185,35 +182,23 @@ open class Signal : NSObject, Encodable, SignalStringConvertible {
     }
     
     @objc
-    open var shortDescription: String {
+    open override var description: String {
         let dateString = dateFormatter.string(from: timestamp)
         var result = "\(dateString) \(signalDescription)"
         if let sourceDescription = sourceDescription {
             result += " \(sourceDescription)"
         }
-        if let valueDescription = valueDescription {
-            result += " : \(valueDescription)"
-        }
+        result += ": \(super.description)"
         return result
-    }
-    
-    @objc
-    open var longDescription: String {
-        var result = shortDescription
-        if let userInfoDescription = userInfoDescription {
-            result += "\n\(userInfoDescription)"
-        }
-        return result
-    }
-    
-    @objc
-    open override var description: String {
-        return shortDescription
     }
     
     @objc
     open override var debugDescription: String {
-        return longDescription
+        var result = super.debugDescription
+        if let userInfoDescription = userInfoDescription {
+            result += "\n\(userInfoDescription)"
+        }
+        return result
     }
 
 }
