@@ -92,7 +92,7 @@ open class WrapperSignal: Signal {
     private var privateValueDescription: String!
     
     open override var debugDescription: String {
-        return "\(super.debugDescription) \(String(describing: privateValueDescription))"
+        return "\(super.debugDescription) \(privateValueDescription ?? "")"
     }
     
     @objc
