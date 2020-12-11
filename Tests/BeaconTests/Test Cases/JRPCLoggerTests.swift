@@ -86,7 +86,7 @@ class JRPCLoggerTests : XCTestCase {
         
         let list = logger.invokedPerformParametersList
         let httpJson = try! JSONSerialization.jsonObject(with: list.first!.0.httpBody!, options: .fragmentsAllowed) as! [String: Any]
-        let httpProperties = (httpJson["params"] as! [[String:Any]]).first!["properties"] as! [AnyHashable : AnyHashable]
+        let httpProperties = (httpJson["params"] as! [[[String:Any]]]).first!.first!["properties"] as! [AnyHashable : AnyHashable]
         XCTAssertEqual(httpProperties, signal.userInfo as! [AnyHashable : AnyHashable])
     }
     
@@ -105,7 +105,7 @@ class JRPCLoggerTests : XCTestCase {
         
         let list = logger.invokedPerformParametersList
         let httpJson = try! JSONSerialization.jsonObject(with: list.first!.0.httpBody!, options: .fragmentsAllowed) as! [String: Any]
-        let httpProperties = (httpJson["params"] as! [[String:Any]]).first!["properties"] as! [AnyHashable : AnyHashable]
+        let httpProperties = (httpJson["params"] as! [[[String:Any]]]).first!.first!["properties"] as! [AnyHashable : AnyHashable]
         XCTAssertEqual(httpProperties, signal.userInfo as! [AnyHashable : AnyHashable])
     }
     

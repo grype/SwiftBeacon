@@ -55,7 +55,7 @@ open class JRPCLogger: IntervalLogger {
             // but it's such a pain in the ass. Arguments are already encoded, they just need to be written out verbatim
             // to the resulting stream - but I couldn't figure out how to do that with JSONEncoder and Codable objects.
             // Plus, this is SOOO much less code than the Codable approach.
-            return "{\"jsonrpc\":\"\(version)\",\"id\":\(id),\"method\":\"\(method)\",\"params\":[\(args.joined(separator: ","))]}"
+            return "{\"jsonrpc\":\"\(version)\",\"id\":\(id),\"method\":\"\(method)\",\"params\":[[\(args.joined(separator: ","))]]}"
         }
         
         init(method aMethod: String, arguments args: [Data] = [Data]()) {
