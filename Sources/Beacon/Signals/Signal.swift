@@ -185,7 +185,7 @@ open class Signal : NSObject, Encodable {
     
     @objc
     open var valueDebugDescription: String? {
-        return nil
+        return valueDescription
     }
     
     @objc
