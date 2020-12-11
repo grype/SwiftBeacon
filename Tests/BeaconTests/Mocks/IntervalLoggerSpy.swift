@@ -37,33 +37,6 @@ class IntervalLoggerSpy : IntervalLogger {
             return stubbedFlushInterval
         }
     }
-    var invokedBufferSetter = false
-    var invokedBufferSetterCount = 0
-    var invokedBuffer: [Signal]?
-    var invokedBufferList = [[Signal]]()
-    var invokedBufferGetter = false
-    var invokedBufferGetterCount = 0
-    var stubbedBuffer: [Signal]! = []
-    var forwardToOriginalBuffer = true
-    override var buffer: [Signal] {
-        set {
-            invokedBufferSetter = true
-            invokedBufferSetterCount += 1
-            invokedBuffer = newValue
-            invokedBufferList.append(newValue)
-            if forwardToOriginalBuffer {
-                super.buffer = newValue
-            }
-        }
-        get {
-            invokedBufferGetter = true
-            invokedBufferGetterCount += 1
-            if forwardToOriginalBuffer {
-                return super.buffer
-            }
-            return stubbedBuffer
-        }
-    }
     var invokedQueueGetter = false
     var invokedQueueGetterCount = 0
     var stubbedQueue: DispatchQueue!
@@ -75,6 +48,33 @@ class IntervalLoggerSpy : IntervalLogger {
             return super.queue
         }
         return stubbedQueue
+    }
+    var invokedMaxBufferSizeSetter = false
+    var invokedMaxBufferSizeSetterCount = 0
+    var invokedMaxBufferSize: Int?
+    var invokedMaxBufferSizeList = [Int]()
+    var invokedMaxBufferSizeGetter = false
+    var invokedMaxBufferSizeGetterCount = 0
+    var stubbedMaxBufferSize: Int! = 0
+    var forwardToOriginalMaxBufferSize = true
+    override var maxBufferSize: Int {
+        set {
+            invokedMaxBufferSizeSetter = true
+            invokedMaxBufferSizeSetterCount += 1
+            invokedMaxBufferSize = newValue
+            invokedMaxBufferSizeList.append(newValue)
+            if forwardToOriginalMaxBufferSize {
+                super.maxBufferSize = newValue
+            }
+        }
+        get {
+            invokedMaxBufferSizeGetter = true
+            invokedMaxBufferSizeGetterCount += 1
+            if forwardToOriginalMaxBufferSize {
+                return super.maxBufferSize
+            }
+            return stubbedMaxBufferSize
+        }
     }
     var invokedFlushTimerSetter = false
     var invokedFlushTimerSetterCount = 0
@@ -195,6 +195,26 @@ class IntervalLoggerSpy : IntervalLogger {
             super.nextPutAll(signals)
             return
         }
+    }
+    var invokedEncodeSignal = false
+    var invokedEncodeSignalCount = 0
+    var invokedEncodeSignalParameters: (aSignal: Signal, Void)?
+    var invokedEncodeSignalParametersList = [(aSignal: Signal, Void)]()
+    var stubbedEncodeSignalResult: Data!
+    var forwardToOriginalEncodeSignal = false
+    var encodeBlock: ((Signal) -> Data?)?
+    override func encodeSignal(_ aSignal: Signal) -> Data? {
+        invokedEncodeSignal = true
+        invokedEncodeSignalCount += 1
+        invokedEncodeSignalParameters = (aSignal, ())
+        invokedEncodeSignalParametersList.append((aSignal, ()))
+        if let encodeBlock = encodeBlock {
+            return encodeBlock(aSignal)
+        }
+        else if forwardToOriginalEncodeSignal {
+            return super.encodeSignal(aSignal)
+        }
+        return stubbedEncodeSignalResult
     }
     var invokedFlush = false
     var invokedFlushCount = 0

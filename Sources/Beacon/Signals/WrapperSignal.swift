@@ -27,7 +27,12 @@ open class WrapperSignal: Signal {
     }
     
     private var anyValue: Any?
+    
     private var encodableValue: Encodable?
+    
+    private var privateValueDescription: String!
+    
+    private var privateUserInfoDescription: String?
     
     open override var signalName: String {
         return "📦"
@@ -89,7 +94,7 @@ open class WrapperSignal: Signal {
         }
     }
     
-    private var privateValueDescription: String!
+    // MARK:- Describing
     
     open override var debugDescription: String {
         return "\(super.debugDescription) \(privateValueDescription ?? "")"
@@ -97,16 +102,15 @@ open class WrapperSignal: Signal {
     
     @objc
     open func valueDescription(for aValue: Any) -> String {
-        if let value = aValue as? CustomDebugStringConvertible {
-            return String(reflecting: value)
-        }
-        if let value = aValue as? CustomStringConvertible {
-            return String(describing: value)
-        }
-        return "<\(String(describing: type(of: aValue))): \(Unmanaged.passUnretained(self).toOpaque())>"
+        return String(reflecting: aValue)
+//        if let value = aValue as? CustomDebugStringConvertible {
+//            return String(reflecting: value)
+//        }
+//        if let value = aValue as? CustomStringConvertible {
+//            return String(describing: value)
+//        }
+//        return "<\(String(describing: type(of: aValue))): \(Unmanaged.passUnretained(self).toOpaque())>"
     }
-    
-    private var privateUserInfoDescription: String?
     
     @objc
     open override var userInfoDescription: String? {

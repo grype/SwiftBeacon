@@ -35,7 +35,7 @@ open class IntervalLogger : SignalLogger {
     /// Maximum number of signals to store in the buffer. Older signals will be removed to accommodate new arrivals.
     @objc var maxBufferSize = 200
     
-    @objc internal var buffer = [Signal]()
+    @objc internal var buffer = [Data]()
     
     internal var flushTimer: Timer?
     
@@ -55,15 +55,32 @@ open class IntervalLogger : SignalLogger {
     
     override open func nextPut(_ aSignal: Signal) {
         queue.async {
-            self.buffer.append(aSignal)
-            self.buffer.removeFirst(max(0, self.buffer.count - self.maxBufferSize))
+            guard let data = self.encodeSignal(aSignal) else {
+                return
+            }
+            self.buffer.append(data)
+            self.fixBuffer()
         }
     }
     
     override open func nextPutAll(_ signals: [Signal]) {
         queue.async {
-            self.buffer.append(contentsOf: signals)
+            self.buffer.append(contentsOf: signals.compactMap({ (aSignal) -> Data? in
+                return self.encodeSignal(aSignal)
+            }))
+            self.fixBuffer()
         }
+    }
+    
+    private func fixBuffer() {
+        // be sure to call on `queue`
+        buffer.removeFirst(max(0, self.buffer.count - self.maxBufferSize))
+    }
+    
+    // MARK:- Encoding
+    
+    func encodeSignal(_ aSignal: Signal) -> Data? {
+        fatalError("This logger did not implement signal encoding!")
     }
     
     // MARK: - Flushing

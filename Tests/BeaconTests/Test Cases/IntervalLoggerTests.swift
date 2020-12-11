@@ -18,6 +18,9 @@ class IntervalLoggerTests : XCTestCase {
     override func setUp() {
         super.setUp()
         logger = IntervalLoggerSpy(name: "IntervalLoggerTest", interval: 1, queue: queue)
+        logger.encodeBlock = { (aSignal) -> Data? in
+            return String(describing: aSignal).data(using: .utf8)
+        }
         signals.append(contentsOf: ["First", "Second", "Third", "Fourth"].map { StringSignal($0) })
     }
     
@@ -123,7 +126,7 @@ class IntervalLoggerTests : XCTestCase {
         }
         wait(for: [expect], timeout: 1)
         XCTAssert(logger.buffer.count == 1, "Buffer should contain 1 signal")
-        XCTAssert(logger.buffer[0] === signals[1], "Buffer should contain last signal")
+        XCTAssert(logger.buffer[0] == logger.encodeSignal(signals[1]), "Buffer should contain last signal")
     }
 
 }

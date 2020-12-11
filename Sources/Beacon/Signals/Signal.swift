@@ -129,7 +129,7 @@ open class Signal : NSObject, Encodable {
     // MARK:- Encodable
     
     private enum CodingKeys : String , CodingKey {
-        case timestamp, source, userInfo = "properties", portableClassName = "__class", description, debugDescription
+        case timestamp, source, userInfo = "properties", portableClassName = "__class", description
     }
     
     struct EncodableWrapper: Encodable {
@@ -145,8 +145,7 @@ open class Signal : NSObject, Encodable {
         try container.encodeIfPresent(type(of: self).portableClassName, forKey: .portableClassName)
         try container.encodeIfPresent(dateFormatter.string(from: timestamp), forKey: .timestamp)
         try container.encode(source, forKey: .source)
-        try container.encode(description, forKey: .description)
-        try container.encode(debugDescription, forKey: .debugDescription)
+        try container.encode(debugDescription, forKey: .description)
         if let codableInfo = userInfo as? [String : Encodable] {
             let wrapped = codableInfo.mapValues(EncodableWrapper.init(wrapped:))
             try container.encode(wrapped, forKey: .userInfo)
@@ -161,11 +160,6 @@ open class Signal : NSObject, Encodable {
     // MARK:- CustomStringConvertible
     
     @objc
-    open var signalDescription: String {
-        return signalName
-    }
-    
-    @objc
     open var sourceDescription: String? {
         guard let source = source else {
             return nil
@@ -178,23 +172,45 @@ open class Signal : NSObject, Encodable {
         guard let userInfo = userInfo else {
             return nil
         }
-        return "UserInfo: \(String(reflecting: userInfo))"
+        guard let json = try? JSONSerialization.data(withJSONObject: userInfo, options: []) else {
+            return nil
+        }
+        return "\tUserInfo: \(String(data: json, encoding: .utf8)!)"
+    }
+    
+    @objc
+    open var valueDescription: String? {
+        return nil
+    }
+    
+    @objc
+    open var valueDebugDescription: String? {
+        return nil
     }
     
     @objc
     open override var description: String {
         let dateString = dateFormatter.string(from: timestamp)
-        var result = "\(dateString) \(signalDescription)"
+        var result = "\(dateString) \(signalName)"
         if let sourceDescription = sourceDescription {
             result += " \(sourceDescription)"
         }
-        result += ": \(super.description)"
+        if let valueDescription = valueDescription {
+            result += ": \(valueDescription)"
+        }
         return result
     }
     
     @objc
     open override var debugDescription: String {
-        var result = super.debugDescription
+        let dateString = dateFormatter.string(from: timestamp)
+        var result = "\(dateString) \(signalName)"
+        if let sourceDescription = sourceDescription {
+            result += " \(sourceDescription)"
+        }
+        if let valueDescription = valueDebugDescription {
+            result += ": \(valueDescription)"
+        }
         if let userInfoDescription = userInfoDescription {
             result += "\n\(userInfoDescription)"
         }

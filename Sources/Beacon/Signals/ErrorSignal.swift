@@ -47,9 +47,21 @@ open class ErrorSignal : Signal {
         }
     }
     
+    var errorDescription: String {
+        return (type(of: error) == NSError.self) ? error.localizedDescription : String(describing: error)
+    }
+    
     open override var description: String {
-        let errorDescription = (type(of: error) == NSError.self) ? error.localizedDescription : String(describing: error)
         var result = "\(super.description): \(errorDescription)"
+        stack.forEach { result.append(contentsOf: "\n\t\($0)") }
+        return result
+    }
+    
+    open override var debugDescription: String {
+        var result = "\(super.description) \(errorDescription)"
+        if let userInfoDescription = userInfoDescription {
+            result += "\n\(userInfoDescription)"
+        }
         stack.forEach { result.append(contentsOf: "\n\t\($0)") }
         return result
     }

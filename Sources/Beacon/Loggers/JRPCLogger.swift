@@ -35,18 +35,6 @@ open class JRPCLogger: IntervalLogger {
     
     // MARK: - Structs
     
-    private struct MethodArgument : Encodable {
-        var argument : Encodable
-        
-        func encode(to encoder: Encoder) throws {
-            try argument.encode(to: encoder)
-        }
-        
-        init(_ arg : Encodable) {
-            argument = arg
-        }
-    }
-    
     private struct Method : Encodable {
         static private var counter: Int = 0
         static private func nextId() -> Int {
@@ -54,27 +42,26 @@ open class JRPCLogger: IntervalLogger {
             return counter
         }
         
-        private var version = "2.0"
+        private(set) var version = "2.0"
         var id: Int
         var method: String
-        var arguments: [MethodArgument]
+        var arguments: [Data]
         
-        enum CodingKeys: String, CodingKey {
-            case version = "jsonrpc", id, method, arguments = "params"
+        var json: String {
+            let args = arguments.compactMap { (anArgument) -> String? in
+                return String(data: anArgument, encoding: .utf8)
+            }
+            // I don't want to do things this way, and would really love to use Codable approach here,
+            // but it's such a pain in the ass. Arguments are already encoded, they just need to be written out verbatim
+            // to the resulting stream - but I couldn't figure out how to do that with JSONEncoder and Codable objects.
+            // Plus, this is SOOO much less code than the Codable approach.
+            return "{\"jsonrpc\":\"\(version)\",\"id\":\(id),\"method\":\"\(method)\",\"params\":[\(args.joined(separator: ","))]}"
         }
         
-        func encode(to encoder: Encoder) throws {
-            var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(version, forKey: .version)
-            try container.encode(id, forKey: .id)
-            try container.encode(method, forKey: .method)
-            try container.encode([arguments], forKey: .arguments)
-        }
-        
-        init(method aMethod: String, arguments args: [Encodable] = [Encodable]()) {
+        init(method aMethod: String, arguments args: [Data] = [Data]()) {
             id = Method.nextId()
             method = aMethod
-            arguments = args.map { MethodArgument($0) }
+            arguments = args
         }
     }
     
@@ -106,6 +93,19 @@ open class JRPCLogger: IntervalLogger {
         fatalError("init(name:interval:queue:) has not been implemented")
     }
     
+    // MARK: - Encoding
+    
+    override func encodeSignal(_ aSignal: Signal) -> Data? {
+        let encoder = JSONEncoder()
+        do {
+            return try encoder.encode(aSignal)
+        }
+        catch {
+            print("Encoding error: \(error)")
+        }
+        return nil
+    }
+    
     // MARK: - Flushing
     
     override open var shouldFlush: Bool {
@@ -119,25 +119,23 @@ open class JRPCLogger: IntervalLogger {
     }
     
     override open func flush() {
-        let signals = buffer
-        guard let urlRequest = createUrlRequest(with: signals) else { return }
+        let buffer = self.buffer
+        guard let urlRequest = createUrlRequest(with: buffer) else { return }
         perform(urlRequest: urlRequest) { (success) in
             self.urlSessionTask = nil
             guard success else { return }
-            self.buffer.removeFirst(signals.count)
+            self.buffer.removeFirst(buffer.count)
         }
     }
     
     // MARK: - Networking
     
-    internal func createUrlRequest(with signals: [Signal]) -> URLRequest? {
-        let jrpcMethod = Method(method: method, arguments: signals)
-        let encoder = JSONEncoder()
-        guard let body = try? encoder.encode(jrpcMethod) else { return nil }
+    internal func createUrlRequest(with data: [Data]) -> URLRequest? {
+        let jrpcMethod = Method(method: method, arguments: data)
         var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.httpBody = body
+        urlRequest.httpBody = jrpcMethod.json.data(using: .utf8)
         return urlRequest
     }
     

@@ -135,13 +135,13 @@ class JRPCLoggerSpy : JRPCLogger {
     }
     var invokedBufferSetter = false
     var invokedBufferSetterCount = 0
-    var invokedBuffer: [Signal]?
-    var invokedBufferList = [[Signal]]()
+    var invokedBuffer: [Data]?
+    var invokedBufferList = [[Data]]()
     var invokedBufferGetter = false
     var invokedBufferGetterCount = 0
-    var stubbedBuffer: [Signal]! = []
+    var stubbedBuffer: [Data]! = []
     var forwardToOriginalBuffer = true
-    override var buffer: [Signal] {
+    override var buffer: [Data] {
         set {
             invokedBufferSetter = true
             invokedBufferSetterCount += 1
@@ -251,17 +251,17 @@ class JRPCLoggerSpy : JRPCLogger {
     }
     var invokedCreateUrlRequest = false
     var invokedCreateUrlRequestCount = 0
-    var invokedCreateUrlRequestParameters: (signals: [Signal], Void)?
-    var invokedCreateUrlRequestParametersList = [(signals: [Signal], Void)]()
+    var invokedCreateUrlRequestParameters: (data: [Data], Void)?
+    var invokedCreateUrlRequestParametersList = [(data: [Data], Void)]()
     var stubbedCreateUrlRequestResult: URLRequest!
     var forwardToOriginalCreateUrlRequest = true
-    override func createUrlRequest(with signals: [Signal]) -> URLRequest? {
+    override func createUrlRequest(with data: [Data]) -> URLRequest? {
         invokedCreateUrlRequest = true
         invokedCreateUrlRequestCount += 1
-        invokedCreateUrlRequestParameters = (signals, ())
-        invokedCreateUrlRequestParametersList.append((signals, ()))
+        invokedCreateUrlRequestParameters = (data, ())
+        invokedCreateUrlRequestParametersList.append((data, ()))
         if forwardToOriginalCreateUrlRequest {
-            return super.createUrlRequest(with: signals)
+            return super.createUrlRequest(with: data)
         }
         return stubbedCreateUrlRequestResult
     }
