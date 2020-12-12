@@ -172,10 +172,7 @@ open class Signal : NSObject, Encodable {
         guard let userInfo = userInfo else {
             return nil
         }
-        guard let json = try? JSONSerialization.data(withJSONObject: userInfo, options: []) else {
-            return nil
-        }
-        return "\tUserInfo: \(String(data: json, encoding: .utf8)!)"
+        return "\tUserInfo: \(String(reflecting: userInfo))"
     }
     
     @objc

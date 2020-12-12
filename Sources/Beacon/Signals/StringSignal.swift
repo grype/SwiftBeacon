@@ -28,10 +28,6 @@ open class StringSignal: Signal {
         case message
     }
     
-    open override var debugDescription: String {
-        return "\(super.debugDescription) \(message)"
-    }
-    
     open override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: StringSignal.CodingKeys.self)
