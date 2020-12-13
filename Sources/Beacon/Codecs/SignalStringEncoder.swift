@@ -23,6 +23,6 @@ open class SignalStringEncoder : SignalEncoding {
     }
     
     open func data(from aSignal: Signal) -> Data? {
-        return "\(String(describing: aSignal))\(separator)".data(using: encoding)
+        return "\(aSignal.debugDescription)\(separator)".data(using: encoding)
     }
 }
