@@ -17,18 +17,18 @@ import Foundation
 
 open class FileLogger : StreamLogger {
     
-    private(set) var url: URL?
+    open private(set) var url: URL?
     
     // Whether to rotate log file when starting.
     // This would only make sense if `wheel` is set.
-    var rotateOnStart = false
+    open var rotateOnStart = false
     
     // Optional object responsible for log rotation.
     // When provided, it will be given a change to rotate
     // current log file at two stages: when the logger is
     // started, if `rotateOnStart` is true; and before
     // writing data into the curernt log file.
-    var wheel: FileRotation?
+    open var wheel: FileRotation?
     
     public required init(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoding) {
         url = anUrl

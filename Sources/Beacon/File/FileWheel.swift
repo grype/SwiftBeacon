@@ -11,7 +11,7 @@ import Foundation
 /**
  I rotate files using a block.
  */
-public class FileWheel : FileRotation {
+open class FileWheel : FileRotation {
     
     public typealias RotationBlock = (_ url: URL) -> Bool
     
@@ -21,11 +21,11 @@ public class FileWheel : FileRotation {
     open var maxFileSize: UInt64
     
     // Block should perform log rotation and reutrn Bool value indicating whether the file was rotated.
-    var rotationBlock: RotationBlock!
+    open var rotationBlock: RotationBlock!
     
     // MARK: - Init
     
-    init(maxFileSize aSize: UInt64, block: @escaping RotationBlock) {
+    public init(maxFileSize aSize: UInt64, block: @escaping RotationBlock) {
         maxFileSize = aSize
         rotationBlock = block
     }
@@ -45,11 +45,11 @@ public class FileWheel : FileRotation {
     
     // MARK:- File (Internal)
     
-    func fileExists(at url: URL) -> Bool {
+    open func fileExists(at url: URL) -> Bool {
         return FileManager.default.fileExists(atPath: (url.path as NSString).resolvingSymlinksInPath)
     }
     
-    func fileSize(at url: URL) -> UInt64 {
+    open func fileSize(at url: URL) -> UInt64 {
         guard let fileAttributes = try? FileManager.default.attributesOfItem(atPath: url.path) else { return 0 }
         return (fileAttributes as NSDictionary).fileSize()
     }
