@@ -18,7 +18,7 @@ open class SignalStringEncoder : SignalEncoding {
     
     var separator = "\n"
     
-    init(_ anEncoding: String.Encoding) {
+    public init(_ anEncoding: String.Encoding) {
         encoding = anEncoding
     }
     
