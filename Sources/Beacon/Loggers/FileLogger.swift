@@ -54,12 +54,19 @@ open class FileLogger : StreamLogger {
     override func write(data: Data) {
         defer { super.write(data: data) }
         guard let url = url, let wheel = wheel, wheel.shouldRotate(fileAt: url, for: data) else { return }
-        
+        forceRotate()
+    }
+    
+    @discardableResult
+    open func forceRotate() -> Bool {
+        guard let wheel = wheel, let url = url else { return false }
         stream.close()
-        if wheel.rotate(fileAt: url) {
+        let didRotate = wheel.rotate(fileAt: url)
+        if didRotate {
             stream = OutputStream(url: url, append: true)!
         }
         stream.open()
+        return didRotate
     }
     
 }
