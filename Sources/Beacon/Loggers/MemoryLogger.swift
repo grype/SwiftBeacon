@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RWLock
 
 /**
  I am memory-based logger of `Signal`s.
@@ -18,21 +19,16 @@ import Foundation
 open class MemoryLogger : SignalLogger {
     @objc public static var shared = MemoryLogger(name: "MemoryLogger")
     
-    @objc open private(set) var recordings = [Signal]()
+    @objc @RWLocked open private(set) var recordings = [Signal]()
     @objc open var limit: Int = 100
     
     open override func nextPut(_ aSignal: Signal) {
-        objc_sync_enter(recordings)
-        defer { objc_sync_exit(recordings) }
-        
         recordings.append(aSignal)
         guard limit > 0, recordings.count - limit > 0 else { return }
         recordings.removeFirst(recordings.count - limit)
     }
     
     @objc open func clear() {
-        objc_sync_enter(recordings)
         recordings.removeAll()
-        objc_sync_exit(recordings)
     }
 }

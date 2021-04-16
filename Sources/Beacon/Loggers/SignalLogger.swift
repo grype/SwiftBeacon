@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RWLock
 
 /**
  I am an abstract logger of `Signal`s.
@@ -50,7 +51,7 @@ open class SignalLogger : NSObject {
     }
     
     /// Array of all observed beacons
-    private var observedBeacons = [Beacon : NSObjectProtocol]()
+    @RWLocked private var observedBeacons = [Beacon]()
     
     /// Creates a running instance
     open class func starting<T:SignalLogger>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
@@ -151,20 +152,15 @@ open class SignalLogger : NSObject {
     }
     
     internal func subscribe(to beacons: [Beacon], filter: Filter? = nil) {
-        objc_sync_enter(observedBeacons)
-        defer { objc_sync_exit(observedBeacons) }
-        
         beacons.forEach { (aBeacon) in
-            if let index = observedBeacons.index(forKey: aBeacon) {
-                aBeacon.announcer.removeObserver(observedBeacons.remove(at: index).value)
+            aBeacon.announcer.unsubscribe(self)
+            aBeacon.when(Signal.self, subscriber: self) { [weak self]  (aSignal, anAnnouncer) in
+                guard let self = self else { return }
+                guard filter?(aSignal) ?? true else { return }
+                self.process(aSignal)
             }
-            let token = aBeacon.announcer.addObserver(forName: .BeaconSignal, object: aBeacon, queue: aBeacon.queue) { [weak self] (aNotification) in
-                guard let self = self, let signal = aNotification.beaconSignal else { return }
-                guard filter == nil || filter!(signal) else { return }
-                self.process(signal)
-            }
-            observedBeacons[aBeacon] = token
         }
+        observedBeacons = beacons
         didStart()
     }
     
@@ -173,23 +169,19 @@ open class SignalLogger : NSObject {
     }
     
     internal func unsubscribe(from beacons: [Beacon]) {
-        objc_sync_enter(observedBeacons)
-        defer { objc_sync_exit(observedBeacons) }
-        
         beacons.forEach { (aBeacon) in
-            guard let token = observedBeacons[aBeacon] else { return }
-            aBeacon.announcer.removeObserver(token)
-            observedBeacons.removeValue(forKey: aBeacon)
+            aBeacon.unsubscribe(self)
+            observedBeacons.removeAll { (each) -> Bool in
+                each === aBeacon
+            }
         }
         guard observedBeacons.isEmpty else { return }
         didStop()
     }
     
     internal func unsubscribeFromAllBeacons() {
-        objc_sync_enter(observedBeacons)
-        defer { objc_sync_exit(observedBeacons) }
-        observedBeacons.forEach { (aBeacon, token) in
-            aBeacon.announcer.removeObserver(token)
+        observedBeacons.forEach { (aBeacon) in
+            aBeacon.unsubscribe(self)
         }
         observedBeacons.removeAll()
         didStop()

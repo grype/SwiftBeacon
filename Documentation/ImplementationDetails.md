@@ -1,6 +1,6 @@
 # Implementation Details
 
-At the core of the logging system is a `Beacon` object. It provides a signaling interface by which `Signal`s are transmitted to `SignalLogger`s. When a beacon object receives a signal, observing loggers are notified via its announcer (`NotificationCenter`). It is up to the logger to decide whether and how to handle a signal.
+At the core of the logging system is a `Beacon` object. It provides a signaling interface by which `Signal`s are transmitted to `SignalLogger`s. When a beacon object receives a signal, observing loggers are notified via its announcer. It is up to the logger to decide whether and how to handle a signal.
 
 Let's start by creating a console logger:
 

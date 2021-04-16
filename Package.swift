@@ -18,24 +18,25 @@ let package = Package(
             targets: ["Beacon"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
+        .package(url: "https://github.com/Quick/Nimble", from: "9.0.0"),
+        .package(url: "https://github.com/grype/SwiftAnnouncements", .branch("main")),
+        .package(url: "https://github.com/grype/RWLock-Swift", from: "1.0.0")
     ],
     targets: {
         
         var targets: [Target] = [
             .testTarget(
                 name: "BeaconTests",
-                dependencies: ["Beacon"]),
+                dependencies: ["Beacon", "Nimble", "SwiftAnnouncements"]),
         ]
         #if _runtime(_ObjC)
         targets.append(contentsOf: [
             .target(name: "BeaconObjcRuntime", dependencies: []),
-            .target(name: "Beacon", dependencies: [ "BeaconObjcRuntime" ]),
+            .target(name: "Beacon", dependencies: [ "BeaconObjcRuntime", "SwiftAnnouncements", "RWLock" ]),
         ])
         #else
         targets.append(contentsOf: [
-            .target(name: "Beacon", dependencies: [], exclude: [ "Sources/BeaconObjcRuntime" ]),
+            .target(name: "Beacon", dependencies: ["SwiftAnnouncements", "RWLock"], exclude: [ "Sources/BeaconObjcRuntime" ]),
         ])
         #endif
         return targets

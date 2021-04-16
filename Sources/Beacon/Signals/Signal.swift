@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftAnnouncements
 
 #if os(iOS) || os(tvOS)
 import UIKit
@@ -215,3 +216,5 @@ open class Signal : NSObject, Encodable {
     }
 
 }
+
+extension Signal : Announceable {}

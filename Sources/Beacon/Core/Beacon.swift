@@ -7,35 +7,35 @@
 //
 
 import Foundation
-
-extension Notification.Name {
-    public static let BeaconSignal = Notification.Name(rawValue: "BeaconSignal")
-}
+import SwiftAnnouncements
 
 
 /**
  I am the central object around signaling and provide an interface for notifying subscribed loggers with signals.
  
- I utilize NotificationCenter to post notification about the signals I receive. Subscribed loggers decide whether and how to handle a signal.
+ I utilize `Announcer` to post notification about the signals I receive. Subscribed loggers decide whether and how to handle a signal.
  
  ````
+ let beacon = Beacon()
  let logger = ConsoleLogger(named: "My Console Logger")
- logger.start(on: [aBeacon])
+ logger.start(on: [beacon])
  
- emit(on: [aBeacon])     // Emits current context signal
- emit(aSignalingObject, on: [eBeacon])   // Emits a signal associated with an object that conforms to Signaling
- emit(error: anError, on: [aBeacon])   // Emits an error signal
+ emit(on: [beacon])     // Emits current context signal
+ emit(aSignalingObject, on: [beacon])   // Emits a signal associated with an object that conforms to Signaling
+ emit(error: anError, on: [beacon])   // Emits an error signal
  
- logger.stop(on: [aBeacon])
+ logger.stop(on: [beacon])
  ````
  
  I also provide a shared general-purpose instance, as a single instance is sufficient in most cases.
- Omitting a beacon when starting a logger or emitting a signal implies this shared instance:
+ Omitting a beacon when starting a logger or emitting a signal implies this shared instance. Along with a shorthand for logging, the above can be rewritten as:
  
  ````
  let logger = ConsoleLogger(named: "My Console Logger")
  logger.run {
     emit()
+    emit(aSignalingObject)
+    emit(error: anError)
  }
  ````
  
@@ -48,20 +48,24 @@ open class Beacon : NSObject {
     
     // MARK:- Properties
     
-    internal let announcer = NotificationCenter.default
-    
-    @objc private(set) var queue: OperationQueue!
-    
-    @objc public init(queue aQueue: OperationQueue? = OperationQueue.current) {
-        queue = aQueue ?? OperationQueue.main
-    }
+    internal let announcer = Announcer()
     
     // MARK:- Announcements
 
     @objc open func signal(_ aSignal: Signal) {
-        announcer.post(name: NSNotification.Name.BeaconSignal,
-                       object: self,
-                       userInfo: [Beacon.SignalUserInfoKey: aSignal])
+        announcer.announce(aSignal)
+    }
+    
+    open func when<T: Announceable>(_ aType: T.Type, subscriber: AnyObject? = nil, do aBlock: @escaping (T, Announcer)->Void) {
+        announcer.when(aType, subscriber: subscriber, do: aBlock)
+    }
+    
+    open func remove<T: Announceable>(subscription: Subscription<T>) {
+        announcer.remove(subscription: subscription)
+    }
+    
+    open func unsubscribe(_ anObject: AnyObject) {
+        announcer.unsubscribe(anObject)
     }
     
 }

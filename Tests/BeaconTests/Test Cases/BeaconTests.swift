@@ -7,7 +7,8 @@
 //
 
 import XCTest
-import Beacon
+import Nimble
+@testable import Beacon
 
 class BeaconTest: XCTestCase {
     private var beacon: Beacon!
@@ -26,13 +27,13 @@ class BeaconTest: XCTestCase {
     
     func testSignaling() {
         beacon.signal(ContextSignal())
-        XCTAssertEqual(logger.recordings.count, 1, "Registered logger did not receive signal")
+        expect(self.logger.recordings.count) == 1
     }
     
     func testSignalingWhileStopped() {
         logger.stop()
         beacon.signal(ContextSignal())
-        XCTAssertEqual(logger.recordings.count, 0, "Registered logger did receive signal despite being stopped")
+        expect(self.logger.recordings.count) == 0
     }
     
     func testSignalingWhileFiltering() {
@@ -41,28 +42,28 @@ class BeaconTest: XCTestCase {
             return aSignal is ContextSignal
         }
         beacon.signal(WrapperSignal("Wrapped signal should be ignored"))
-        XCTAssertEqual(logger.recordings.count, 0, "WrapperSignal instances should be getting ignored")
+        expect(self.logger.recordings.count) == 0
         beacon.signal(ContextSignal())
-        XCTAssertEqual(logger.recordings.count, 1, "ContextSignal instances should pass through")
+        expect(self.logger.recordings.count) == 1
     }
     
     func testAggregationOfSingles() {
         let result = beacon + Beacon.shared
-        XCTAssertEqual(result, [beacon, Beacon.shared], "Adding two beacons should aggregate them into an array")
+        expect(result).to(equal([beacon, Beacon.shared]))
     }
     
     func testAggregationOfArraysOfBeacons() {
         let first = [Beacon(), Beacon()]
         let second = [Beacon(), Beacon()]
         let result = first + second
-        XCTAssertEqual(result, [first[0], first[1], second[0], second[1]], "Adding two arrays of beacons should result in a flat array containing their elements")
+        expect(result) == [first[0], first[1], second[0], second[1]]
     }
     
     func testMixedAggregation() {
         let first = Beacon()
         let second = [Beacon(), Beacon()]
         let result = first + second
-        XCTAssertEqual(result, [first, second[0], second[1]], "Adding beacon and array of beacons should result in a flat array containing all of them")
+        expect(result) == [first, second[0], second[1]]
     }
 
 }
