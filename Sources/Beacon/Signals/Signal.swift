@@ -31,7 +31,7 @@ let UniqueDeviceIdentifier: String? = nil
  any object and act as its signal. For everything else I am expected to be subclassed.
  
  My instances are signaled to loggers via `emit()`. Calling `emit()` captures the invocation context
- (using `Signal.Source` struct) and then announces myself via relevant `Beacon` instance.
+ (using `Signal.Source` struct) and then announces me via relevant `Beacon` instances.
  
  */
 open class Signal : NSObject, Encodable {
@@ -79,10 +79,6 @@ open class Signal : NSObject, Encodable {
     
     // MARK: Properties
     
-    public enum UserInfoKeys : String {
-        case source
-    }
-    
     /// Source where the signal was `emit()`ed from.
     private(set) var source: Source?
     
@@ -122,7 +118,14 @@ open class Signal : NSObject, Encodable {
     
     /// Emits signal to all running instances of `SignalLogger`
     private func emit(on beacons: [Beacon], source aSource: Signal.Source, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
-        userInfo = anUserInfo
+        if let anUserInfo = anUserInfo {
+            if let userInfo = userInfo {
+                self.userInfo = userInfo.merging(anUserInfo) { (_, incoming) in incoming }
+            }
+            else {
+                userInfo = anUserInfo
+            }
+        }
         source = aSource
         beacons.forEach { $0.signal(self) }
     }
