@@ -44,7 +44,6 @@ open class Beacon : NSObject {
     
     /// Shared general-purpose instance
     @objc public static var shared = Beacon()
-    @objc internal static let SignalUserInfoKey = "BeaconSignal"
     
     // MARK:- Properties
     
