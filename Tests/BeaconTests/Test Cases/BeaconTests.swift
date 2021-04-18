@@ -65,5 +65,17 @@ class BeaconTest: XCTestCase {
         let result = first + second
         expect(result) == [first, second[0], second[1]]
     }
+    
+    func testPerformance() {
+        let beacon = Beacon()
+        let logger = MemoryLogger(name: "Memory Test Logger")
+        logger.start(on: [beacon], filter: nil)
+        measure {
+            for _ in 1..<10000 {
+                Signal().emit(on: [beacon])
+            }
+        }
+        logger.stop()
+    }
 
 }
