@@ -103,13 +103,6 @@ open class WrapperSignal: Signal {
     @objc
     open func valueDescription(for aValue: Any) -> String {
         return String(reflecting: aValue)
-//        if let value = aValue as? CustomDebugStringConvertible {
-//            return String(reflecting: value)
-//        }
-//        if let value = aValue as? CustomStringConvertible {
-//            return String(describing: value)
-//        }
-//        return "<\(String(describing: type(of: aValue))): \(Unmanaged.passUnretained(self).toOpaque())>"
     }
     
     @objc
