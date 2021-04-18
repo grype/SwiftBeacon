@@ -45,20 +45,20 @@ open class WrapperSignal: Signal {
     public init(_ aValue: Encodable, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         encodableValue = aValue
         super.init()
-        userInfo = anUserInfo
-        privateValueDescription = valueDescription(for: aValue)
-        if let userInfo = anUserInfo {
-            privateUserInfoDescription = userInfoDescription(for: userInfo)
-        }
+        _init(aValue, userInfo: anUserInfo)
     }
     
     @objc public init(_ aValue: Any, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         anyValue = aValue
         super.init()
-        userInfo = anUserInfo
+        _init(aValue, userInfo: anUserInfo)
+    }
+    
+    private func _init(_ aValue: Any, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         privateValueDescription = valueDescription(for: aValue)
-        if let userInfo = anUserInfo {
-            privateUserInfoDescription = userInfoDescription(for: userInfo)
+        if let anUserInfo = anUserInfo {
+            userInfo = anUserInfo
+            privateUserInfoDescription = userInfoDescription(for: anUserInfo)
         }
     }
     
