@@ -27,9 +27,9 @@ emit(anything)
 do { try something() } catch { emit(error: error) }
 
 consoleLogger.stop()
-```
+``` 
 
-The framework uses the Observer pattern, with instances of `SignalLogger` subscribing to notifications posted on a `Beacon` object. Calling `emit()` creates an appropriate instance of `BeaconSignal` and posts it on a `Beacon` object, thus notifying observing loggers. In the above examples, a shared instance of `Beacon` is implied. However, multiple loggers and beacons can be used:
+The framework uses the Observer pattern, with `SignalLogger`s observing `Beacon`s for emitted `Signal`s. Calling `emit()` creates an appropriate instance of a `Signal` and announces it to one or more `Beacon`s. In the above examples, a shared instance of `Beacon` is implied. However, multiple loggers and beacons can be used:
 
 ```swift
 let Beacons = (
