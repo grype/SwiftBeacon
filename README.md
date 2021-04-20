@@ -84,7 +84,7 @@ do { throw(...) } catch { emit(error) }
 emit("A String")
 ```
 
-The framework provides the following types of signals and loggers:
+The framework provides the following building blocks:
 
 Signals:
 - `ContextSignal` captures execution context where it's created, including stack trace
@@ -92,10 +92,17 @@ Signals:
 - `StringSignal` for signaling strings - ala traditional logging facilities
 - `WrapperSignal` for signaling arbitrary values
 
+Custom signals can be implemented as subclasses of `SignalLogger` or `WrapperSignal`.
+
 Loggers:
-- `MemoryLogger` records signals using a FIFO pool
+- `MemoryLogger` captures emitted signals in an array
 - `ConsoleLogger` prints signals onto the console
+- `FileLogger` captures signals in a file (file rotation supported)
 - `JRPCLogger` sends signals to a JSON-RPC server (see [Beacon-Server](https://github.com/grype/Beacon-Server/) for a server implementation in Pharo)
+
+Furthermore, there are a couple of abstract loggers: 
+- `StreamLogger` writes out signals on an arbitrary `OutputStream` (e.g. `FileLogger`)
+- `IntervalLogger` provides buffered interface to writing out signals (e.g. `JRPCLogger`)
 
 The framework is designed to be lightweight and to be easily extended in order to accommodate custom types. See [Implementation Details](Documentation/ImplementationDetails.md) for more info.
 
