@@ -1,6 +1,6 @@
 SCHEME := Beacon
 
-.PHONY: default all clean build test linuxmain install-git-hooks
+.PHONY: default all clean build test linuxmain
 
 default: all 
 
@@ -17,7 +17,3 @@ test: build
 
 linuxmain:
 	swift test --generate-linuxmain
-
-install-git-hooks:
-	cp scripts/git-hooks/pre-commit.sh .git/hooks/pre-commit
-	chmod a+x .git/hooks/pre-commit
