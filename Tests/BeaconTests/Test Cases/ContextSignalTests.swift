@@ -31,4 +31,20 @@ class ContextSignalTests : XCTestCase {
         let signal = logger.recordings.first!
         expect(signal).to(beAKindOf(ContextSignal.self))
     }
+    
+    func testSymbols() {
+        emit()
+        let signal = logger.recordings.first as! ContextSignal
+        expect(signal.symbols).toNot(beEmpty())
+    }
+    
+    func testJsonSerialization() {
+        emit()
+        let signal = logger.recordings.first as! ContextSignal
+        let json = try! JSONEncoder().encode(signal)
+        let jsonObject = try! JSONSerialization.jsonObject(with: json, options: .allowFragments) as! [String: Any]
+        let symbols = jsonObject["symbols"] as! [String: [Int]]
+        expect(symbols).toNot(beNil())
+        expect(symbols) == signal.symbols
+    }
 }
