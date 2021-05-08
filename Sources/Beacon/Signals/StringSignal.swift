@@ -8,6 +8,11 @@
 
 import Foundation
 
+/**
+ I am a `Signal` that captures a string message.
+ 
+ I am used to announce arbitrary messages, ala traditional logging facilities.
+ */
 open class StringSignal: Signal {
     @objc open private(set) var message: String
     
@@ -35,12 +40,12 @@ open class StringSignal: Signal {
     }
 }
 
-/// Wraps any value into WrapperSignal and emits the resulting signal
+/// Emits `StringSignal` with specified value
 public func emit(_ value: String, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     StringSignal(value).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
-/// Wraps any value into WrapperSignal and emits the resulting signal
+/// Emits `StringSignal` with specified value
 public func emit(_ value: String, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     StringSignal(value).emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
