@@ -9,16 +9,6 @@
 import Foundation
 import MachO
 
-//struct DyldImageInfo : Codable {
-//    var name: String
-//    var address: Int
-//    var slide: Int
-//}
-//
-//func _dyld_image_info(at index: UInt32) -> DyldImageInfo {
-//    return DyldImageInfo(name: String(cString: _dyld_get_image_name(index)), address: Int(bitPattern: _dyld_get_image_header(index)), slide: _dyld_get_image_vmaddr_slide(index))
-//}
-
 /**
  I am a `Signal` that captures current context.
  
@@ -33,7 +23,6 @@ open class ContextSignal: Signal {
     
     @objc public init(stack aStack: [String] = Thread.callStackSymbols) {
         stack = aStack
-//        imageInfo = (1..<_dyld_image_count()).map { _dyld_image_info(at: $0)}
         symbols = [String: [Int]]()
         for i in 0..<_dyld_image_count() {
             let name = String(cString: _dyld_get_image_name(i))
