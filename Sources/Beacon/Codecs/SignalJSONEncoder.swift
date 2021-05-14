@@ -1,5 +1,5 @@
 //
-//  StringJSONEncoder.swift
+//  SignalJSONEncoder.swift
 //  
 //
 //  Created by Pavel Skaldin on 12/23/19.
@@ -12,12 +12,14 @@ import Foundation
 I encode Signals by trying to represent them in JSON notation.
 */
 
-open class StringJSONEncoder : SignalStringEncoder {
+open class SignalJSONEncoder : SignalStringEncoder {
     
     let encoder = JSONEncoder()
     
     open override func data(from aSignal: Signal) -> Data? {
-        return try? encoder.encode(aSignal)
+        var result = try? encoder.encode(aSignal)
+        result?.append(separator.data(using: encoding)!)
+        return result
     }
     
 }
