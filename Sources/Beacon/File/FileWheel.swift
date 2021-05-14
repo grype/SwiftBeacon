@@ -20,7 +20,7 @@ open class FileWheel : FileRotation {
     // Max file size, in bytes, that log file should not exceed
     open var maxFileSize: UInt64
     
-    // Block should perform log rotation and reutrn Bool value indicating whether the file was rotated.
+    // Block should perform log rotation and return Bool value indicating whether the file was rotated.
     open var rotationBlock: RotationBlock!
     
     // MARK: - Init

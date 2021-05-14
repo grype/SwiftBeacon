@@ -24,7 +24,7 @@ open class FileLogger : StreamLogger {
     open var rotateOnStart = false
     
     // Optional object responsible for log rotation.
-    // When provided, it will be given a change to rotate
+    // When provided, it will be given a chance to rotate
     // current log file at two stages: when the logger is
     // started, if `rotateOnStart` is true; and before
     // writing data into the curernt log file.
