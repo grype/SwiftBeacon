@@ -8,6 +8,7 @@
 
 import Foundation
 import RWLock
+import SwiftAnnouncements
 
 /**
  I am an abstract logger of `Signal`s.
@@ -122,11 +123,37 @@ open class SignalLogger : NSObject {
     }
     
     @objc internal func didStart(on beacons: [Beacon]) {
-        guard identifiesOnStart else { return }
-        identify(on: beacons)
+        MachImageMonitor.shared.announcer.when(MachImageMonitor.Announcement.self, subscriber: self) { [weak self] (announcement, _) in
+            guard let signal = self?.createSignal(for: announcement) else { return }
+            self?.nextPut(signal)
+        }
+        if MachImageMonitor.isRunning {
+            let signal = MachImageImportsSignal()
+            signal.added = MachImageMonitor.shared.images
+            nextPut(signal)
+        }
+        else {
+            // starting monitor will result in announcing pre-loaded images
+            MachImageMonitor.startMonitoring()
+        }
+        if identifiesOnStart {
+            identify(on: beacons)
+        }
+    }
+    
+    private func createSignal(for announcement: MachImageMonitor.Announcement) -> MachImageImportsSignal {
+        let signal = MachImageImportsSignal()
+        if case let .didAddImage(anImage) = announcement {
+            signal.added = [anImage]
+        }
+        else if case let .didRemoveImage(anImage) = announcement {
+            signal.removed = [anImage]
+        }
+        return signal
     }
     
     @objc internal func didStop() {
+        MachImageMonitor.shared.announcer.unsubscribe(self)
     }
     
     // MARK:- Signaling
