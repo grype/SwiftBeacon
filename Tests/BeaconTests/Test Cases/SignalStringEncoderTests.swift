@@ -17,7 +17,7 @@ class SignalStringEncoderTests : XCTestCase {
         let stream = OutputStream.toMemory()
         stream.open()
         
-        let encoder = SignalStringEncoder(.utf8)
+        let encoder = SignalStringEncoder(encoding: .utf8)
         encoder.separator = "🔅"
         var data = encoder.data(from: signals.first!)!
         let _ = data.write(on: stream)

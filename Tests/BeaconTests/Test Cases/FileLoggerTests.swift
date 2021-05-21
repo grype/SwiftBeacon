@@ -7,6 +7,8 @@
 //
 
 import XCTest
+import Nimble
+import Cuckoo
 @testable import Beacon
 
 class FileLoggerTests : XCTestCase {
@@ -15,18 +17,17 @@ class FileLoggerTests : XCTestCase {
     
     private let url = URL(fileURLWithPath: "/tmp/FileLoggerTests.log")
     
-    private var rotationCount = 0
-    
-    private let signal = StringSignal("I will force log file to overgrow")
+    private var wheel: MockFileWheel!
     
     override func setUp() {
         super.setUp()
-        initLogFile()
-        let wheel = FileWheel(maxFileSize: UInt64(10)) { (url) -> Bool in
-            self.rotationCount += 1
+        
+        wheel = MockFileWheel(when: { (_, _) -> Bool in
             return true
-        }
-        logger = FileLogger(name: "FileLoggerTests", on: url, encoder: SignalStringEncoder(.utf8))
+        }, rotate: { (_) in
+        }).withEnabledSuperclassSpy()
+        
+        logger = FileLogger(name: "FileLoggerTests", on: url, encoder: SignalStringEncoder(encoding: .utf8))
         logger.wheel = wheel
     }
     
@@ -36,45 +37,59 @@ class FileLoggerTests : XCTestCase {
         logger = nil
     }
     
-    func testLogRotation() {
-        logger.start()
-        logger.nextPut(signal)
-        XCTAssertEqual(rotationCount, 0, "Shouldn't have rotated empty file, so as to prevent accidental rotation cycle")
-        
-        logger.nextPut(signal)
-        XCTAssertEqual(rotationCount, 1, "Should have rotated file before writing out data that would exceed max configured size")
-        
-        logger.nextPut(signal)
-        XCTAssertEqual(rotationCount, 2, "Should have rotated file once more before writing out data that would exceed max configured size")
-        
-        let content = logContents()
-        XCTAssertNotNil(content, "Should have produced some content")
-        
-        XCTAssertEqual(content, [signal, signal, signal].reduce("", { (string, signal) -> String in
-            let separator = (logger.encoder as! SignalStringEncoder).separator
-            return "\(string)\(signal.description)\(separator)"
-        }))
+    func testRotates() {
+        stubForRotation(true)
+        logSignal()
+        verify(wheel, times(1)).rotate(fileAt: any())
     }
     
-    func testLogRotationOnStart() {
+    func testDoesNotRotate() {
+        stubForRotation(false)
+        logSignal()
+        verify(wheel, times(0)).rotate(fileAt: any())
+    }
+    
+    func testRotateOnStartWhenWheelShould() {
+        stubForRotation(true)
         logger.rotateOnStart = true
         logger.start()
-        XCTAssertEqual(rotationCount, 1, "Should have rotated logfile on start")
+        verify(wheel, times(1)).rotate(fileAt: any())
     }
     
-    private func initLogFile() {
-        removeLogFile()
-        FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
+    func testRotateOnStartWhenWheelShouldNot() {
+        stubForRotation(false)
+        logger.rotateOnStart = true
+        logger.start()
+        verify(wheel, times(1)).rotate(fileAt: any())
     }
     
-    private func removeLogFile() {
-        let fileManager = FileManager.default
-        guard fileManager.fileExists(atPath: url.path) else { return }
-        try! fileManager.removeItem(at: url)
+    func testDoesNotRotateOnStartWhenWheelShould() {
+        stubForRotation(true)
+        logger.rotateOnStart = false
+        logger.start()
+        verify(wheel, times(0)).rotate(fileAt: any())
     }
     
-    private func logContents() -> String? {
-        return try! String(contentsOf: url)
+    func testDoesNotRotateOnStartWhenWheelShouldNot() {
+        stubForRotation(false)
+        logger.rotateOnStart = false
+        logger.start()
+        verify(wheel, times(0)).rotate(fileAt: any())
+    }
+    
+    // MARK:- Helpers
+    
+    private func logSignal() {
+        logger.run { (aLogger) in
+            aLogger.nextPut(StringSignal("\(Date())"))
+        }
+    }
+    
+    private func stubForRotation(_ bool: Bool) {
+        stub(wheel) { (stub) in
+            when(stub.shouldRotate(fileAt: any(), for: any())).thenReturn(bool)
+            when(stub.rotate(fileAt: any())).thenDoNothing()
+        }
     }
     
 }

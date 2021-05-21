@@ -7,63 +7,55 @@
 //
 
 import XCTest
+import Cuckoo
+import Nimble
 @testable import Beacon
 
 class FileWheelTests : XCTestCase {
     
     let url = URL(fileURLWithPath: "/tmp/FileWheelTests.log")
     
-    func testInit() {
-        let wheel = FileWheel(maxFileSize: UInt64(10)) { _ in return true }
-        XCTAssertEqual(wheel.maxFileSize, UInt64(10), "Incorrectly set maxFileSize argument during init")
-        XCTAssertNotNil(wheel.rotationBlock, "Rotation block was not set during init")
+    var wheel: MockFileWheel!
+    
+    override func setUp() {
+        super.setUp()
+        wheel = MockFileWheel(when: { _,_ in true }, rotate: { _ in }).withEnabledSuperclassSpy()
     }
     
-    func testShouldRotateForZeroSize() {
-        let wheel = FileWheel(maxFileSize: UInt64(10)) { _ in return true }
-        let data = Data()
-        XCTAssertFalse(wheel.shouldRotate(fileAt: url, for: data), "Should not allow rotation for empty content")
-    }
-    
-    func testShouldRotateWhenFileDoesNotExist() {
-        let wheel = FileWheelStub(maxFileSize: UInt64(10)) { _ in return true }
-        wheel.stubbedFileExistsResult = false
-        let data = "a".data(using: .utf8)!
-        XCTAssertFalse(wheel.shouldRotate(fileAt: url, for: data), "Should not rotate when file doesn't exist")
-    }
-    
-    func testShouldRotateWhenFileExceedsMaxSize() {
-        let wheel = FileWheelStub(maxFileSize: UInt64(10)) { _ in return true }
-        wheel.stubbedFileExistsResult = true
-        wheel.stubbedFileSizeResult = UInt64(10)
-        let data = "a".data(using: .utf8)!
-        XCTAssertFalse(wheel.shouldRotate(fileAt: url, for: data), "Should not rotate when file doesn't exist")
-    }
-    
-    func testShouldRotateWhenFileWillExceedMaxSize() {
-        let wheel = FileWheelStub(maxFileSize: UInt64(10)) { _ in return true }
-        wheel.stubbedFileExistsResult = true
-        wheel.stubbedFileSizeResult = UInt64(122)
-        let data = "a".data(using: .utf8)!
-        XCTAssertFalse(wheel.shouldRotate(fileAt: url, for: data), "Should not rotate when file doesn't exist")
-    }
-    
-    func testShouldRotateWhenFileIsEmpty() {
-        let wheel = FileWheelStub(maxFileSize: UInt64()) { _ in return true }
-        wheel.stubbedFileExistsResult = true
-        wheel.stubbedFileSizeResult = UInt64(0)
-        let data = "this should overflow".data(using: .utf8)!
-        XCTAssertFalse(wheel.shouldRotate(fileAt: url, for: data), "Should not rotate when file doesn't exist")
-    }
-    
-    func testRotateInvokesBlock() {
-        var rotated: Int = 0
-        let wheel = FileWheel(maxFileSize: UInt64(10)) { _ in
-            rotated += 1
-            return true
+    override func tearDown() {
+        super.tearDown()
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: url.path) {
+            try? fileManager.removeItem(at: url)
         }
-        let _ = wheel.rotate(fileAt: url)
-        XCTAssertEqual(rotated, 1, "Rotation block should have been invoked once after calling rotate()")
+    }
+    
+    func testRotatesWhenShould() {
+        stub(wheel) { (stub) in
+            when(stub.shouldRotate(fileAt: any(), for: any())).thenReturn(true)
+            when(stub.rotate(fileAt: any())).thenDoNothing()
+        }
+        logSignal()
+        verify(wheel, times(1)).rotate(fileAt: any())
+    }
+    
+    func testDoesNotRotateWhenShouldNot() {
+        stub(wheel) { (stub) in
+            when(stub.shouldRotate(fileAt: any(), for: any())).thenReturn(false)
+            when(stub.rotate(fileAt: any())).thenDoNothing()
+        }
+        logSignal()
+        verify(wheel, times(0)).rotate(fileAt: any())
+    }
+    
+    // MARK:- Helpers
+    
+    private func logSignal() {
+        let logger = FileLogger(name: "Test logger", on: url, encoder: SignalStringEncoder(encoding: .utf8))
+        logger.wheel = wheel
+        logger.run { _ in
+            emit("Testing...")
+        }
     }
     
 }

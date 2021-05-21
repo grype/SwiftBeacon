@@ -19,5 +19,5 @@ public protocol FileRotation {
     func shouldRotate(fileAt: URL, for: Data) -> Bool
     
     // Rotates file at given URL and returns Bool indicating successful operation
-    func rotate(fileAt: URL) -> Bool
+    func rotate(fileAt: URL) throws
 }

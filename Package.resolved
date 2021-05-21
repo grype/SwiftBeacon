@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Cuckoo",
+        "repositoryURL": "https://github.com/Brightify/Cuckoo",
+        "state": {
+          "branch": null,
+          "revision": "71d7423add46808b5335a8ec4f1ddc1304c4cfbc",
+          "version": "1.5.0"
+        }
+      },
+      {
         "package": "CwlCatchException",
         "repositoryURL": "https://github.com/mattgallagher/CwlCatchException.git",
         "state": {
@@ -41,9 +50,9 @@
         "package": "SwiftAnnouncements",
         "repositoryURL": "https://github.com/grype/SwiftAnnouncements",
         "state": {
-          "branch": "main",
-          "revision": "7135166609ee78e7d1952500168b63cd3c98a62d",
-          "version": null
+          "branch": null,
+          "revision": "479f08c453c87cbd0e1f7a2914766240ab443cec",
+          "version": "1.0.1"
         }
       }
     ]

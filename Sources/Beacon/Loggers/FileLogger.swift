@@ -45,28 +45,29 @@ open class FileLogger : StreamLogger {
     
     override func didStart() {
         if rotateOnStart, let url = url, let wheel = wheel {
-            let _ = wheel.rotate(fileAt: url)
-            
+            do {
+                try wheel.rotate(fileAt: url)
+            }
+            catch {
+                print("Error: \(error)")
+            }
         }
         super.didStart()
     }
     
-    override func write(data: Data) {
-        defer { super.write(data: data) }
-        guard let url = url, let wheel = wheel, wheel.shouldRotate(fileAt: url, for: data) else { return }
-        forceRotate()
+    override func write(data: Data) throws {
+        if let url = url, let wheel = wheel, wheel.shouldRotate(fileAt: url, for: data) {
+            try forceRotate()
+        }
+        try super.write(data: data)
     }
     
-    @discardableResult
-    open func forceRotate() -> Bool {
-        guard let wheel = wheel, let url = url else { return false }
+    open func forceRotate() throws {
+        guard let wheel = wheel, let url = url else { return }
         stream.close()
-        let didRotate = wheel.rotate(fileAt: url)
-        if didRotate {
-            stream = OutputStream(url: url, append: true)!
-        }
+        try wheel.rotate(fileAt: url)
+        stream = OutputStream(url: url, append: true)!
         stream.open()
-        return didRotate
     }
     
 }

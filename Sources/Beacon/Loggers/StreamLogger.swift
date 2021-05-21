@@ -57,10 +57,15 @@ open class StreamLogger : SignalLogger {
     
     override open func nextPut(_ aSignal: Signal) {
         guard let data = encoder.data(from: aSignal) else { return }
-        write(data: data)
+        do {
+            try write(data: data)
+        }
+        catch {
+            print("Error: \(error)")
+        }
     }
     
-    func write(data: Data) {
+    func write(data: Data) throws {
         let _ = data.write(on: stream)
     }
     

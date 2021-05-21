@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+CUCKOO=$(ls -1 ~/Library/Developer/Xcode/DerivedData/SwiftBeacon-*/SourcePackages/checkouts/Cuckoo/run)
+PROJECT_NAME="Beacon"
+
+echo "CUCKOO: $CUCKOO"
+
+generate() {
+    for inputFile in $@; do
+        typeset outDir="${inputFile:s/Sources\/Beacon/Tests\/BeaconTests\/Mocks/:h}"
+        
+        # make sure we have target dir
+        test -d $outDir || mkdir -p $outDir
+
+        # generate mocks
+        ${CUCKOO} generate --download --no-header --testable "${PROJECT_NAME}" --output "${outDir}/Mock${inputFile:t}" ${inputFile}
+    done
+}
+
+generate $@
+

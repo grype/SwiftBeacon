@@ -9,48 +9,39 @@
 import Foundation
 
 /**
- I rotate files using a block.
+ I rotate files using pluggable logic.
+ 
+ When asked, I will use the `conditionBlock` to respond whether or not rotation should occur.
+ And `rotationBlock` to perform the actual rotation.
  */
 open class FileWheel : FileRotation {
     
-    public typealias RotationBlock = (_ url: URL) -> Bool
+    public typealias RotationBlock = (_ url: URL) throws -> Void
+    
+    public typealias ConditionBlock = (_ url: URL, _ data: Data) -> Bool
     
     // MARK: - Variables
     
     // Max file size, in bytes, that log file should not exceed
-    open var maxFileSize: UInt64
+    open var conditionBlock: ConditionBlock
     
     // Block should perform log rotation and return Bool value indicating whether the file was rotated.
-    open var rotationBlock: RotationBlock!
+    open var rotationBlock: RotationBlock
     
     // MARK: - Init
     
-    public init(maxFileSize aSize: UInt64, block: @escaping RotationBlock) {
-        maxFileSize = aSize
-        rotationBlock = block
+    public init(when aCondition: @escaping ConditionBlock, rotate aBlock: @escaping RotationBlock) {
+        conditionBlock = aCondition
+        rotationBlock = aBlock
     }
     
     // MARK: - Rotation
     
     open func shouldRotate(fileAt url: URL, for data: Data) -> Bool {
-        guard data.count > 0 else { return false }
-        guard fileExists(at: url) else { return false }
-        let currentSize = fileSize(at: url)
-        return currentSize > 0 && (maxFileSize < (currentSize + UInt64(data.count)))
+        return conditionBlock(url, data)
     }
     
-    open func rotate(fileAt url: URL) -> Bool {
-        return rotationBlock(url)
-    }
-    
-    // MARK:- File (Internal)
-    
-    open func fileExists(at url: URL) -> Bool {
-        return FileManager.default.fileExists(atPath: (url.path as NSString).resolvingSymlinksInPath)
-    }
-    
-    open func fileSize(at url: URL) -> UInt64 {
-        guard let fileAttributes = try? FileManager.default.attributesOfItem(atPath: url.path) else { return 0 }
-        return (fileAttributes as NSDictionary).fileSize()
+    open func rotate(fileAt url: URL) throws {
+        try rotationBlock(url)
     }
 }

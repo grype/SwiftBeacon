@@ -18,21 +18,22 @@ let package = Package(
             targets: ["Beacon"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Quick/Nimble", from: "9.0.0"),
-        .package(url: "https://github.com/grype/SwiftAnnouncements", .branch("main")),
-        .package(url: "https://github.com/grype/RWLock-Swift", from: "1.0.0")
+        .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "9.0.0")),
+        .package(url: "https://github.com/grype/SwiftAnnouncements", .upToNextMajor(from: "1.0.1")),
+        .package(url: "https://github.com/grype/RWLock-Swift", .upToNextMajor(from: "1.0.0")),
+        .package(url: "https://github.com/Brightify/Cuckoo", .upToNextMajor(from: "1.3.0"))
     ],
     targets: {
         
         var targets: [Target] = [
             .testTarget(
                 name: "BeaconTests",
-                dependencies: ["Beacon", "Nimble", "SwiftAnnouncements"]),
+                dependencies: ["Beacon", "Nimble", "SwiftAnnouncements", "Cuckoo"]),
         ]
         #if _runtime(_ObjC)
         targets.append(contentsOf: [
             .target(name: "BeaconObjcRuntime", dependencies: []),
-            .target(name: "Beacon", dependencies: [ "BeaconObjcRuntime", "SwiftAnnouncements", "RWLock" ]),
+            .target(name: "Beacon", dependencies: [ "BeaconObjcRuntime", "SwiftAnnouncements", "RWLock" ], exclude: ["Makefile", "scripts"]),
         ])
         #else
         targets.append(contentsOf: [

@@ -19,7 +19,7 @@ class SignalLoggerTests: XCTestCase {
         super.setUp()
         activeBeacon = Beacon()
         inactiveBeacon = Beacon()
-        logger = MemoryLogger(name: "test logger")
+        logger = MemoryLogger(name: "Test logger")
     }
     
     override func tearDown() {
