@@ -23,11 +23,23 @@ import Foundation
 
 open class StreamLogger : SignalLogger {
     
-    // MARK: - Variables
+    // MARK: - Properties
     
     var stream: OutputStream
     
     var encoder: SignalEncoding
+    
+    // MARK: - Instance Creation
+    
+    public class func starting<T:StreamLogger>(name aName: String, stream aStream: OutputStream, encoder anEncoder: SignalEncoding, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
+        let me = self.init(name: aName, on: aStream, encoder: anEncoder)
+        me.subscribe(to: beacons, filter: filter)
+        return me as! T
+    }
+    
+    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T : SignalLogger {
+        fatalError("Use StreamLogger.starting(name:stream:encoder:on:filter:)")
+    }
     
     // MARK: - Init
     

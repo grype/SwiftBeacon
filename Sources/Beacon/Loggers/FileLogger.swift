@@ -17,7 +17,9 @@ import Foundation
 
 open class FileLogger : StreamLogger {
     
-    open private(set) var url: URL?
+    // MARK:- Properties
+    
+    open private(set) var url: URL
     
     // Whether to rotate log file when starting.
     // This would only make sense if `wheel` is set.
@@ -29,6 +31,20 @@ open class FileLogger : StreamLogger {
     // started, if `rotateOnStart` is true; and before
     // writing data into the curernt log file.
     open var wheel: FileRotation?
+    
+    // MARK: - Instance Creation
+    
+    public class func starting<T:FileLogger>(name aName: String, url anURL: URL, encoder anEncoder: SignalEncoding, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
+        let me = self.init(name: aName, on: anURL, encoder: anEncoder)
+        me.subscribe(to: beacons, filter: filter)
+        return me as! T
+    }
+    
+    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T : SignalLogger {
+        fatalError("Use StreamLogger.starting(name:url:encoder:on:filter:)")
+    }
+    
+    // MARK:- Init
     
     public required init(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoding) {
         url = anUrl
@@ -43,8 +59,10 @@ open class FileLogger : StreamLogger {
         fatalError("Use init(name:on:encoder:) with URL instead of OutputStream")
     }
     
+    // MARK:- Starting/Stopping
+    
     override func didStart() {
-        if rotateOnStart, let url = url, let wheel = wheel {
+        if rotateOnStart, let wheel = wheel {
             do {
                 try wheel.rotate(fileAt: url)
             }
@@ -55,15 +73,17 @@ open class FileLogger : StreamLogger {
         super.didStart()
     }
     
+    // MARK:- File operations
+    
     override func write(data: Data) throws {
-        if let url = url, let wheel = wheel, wheel.shouldRotate(fileAt: url, for: data) {
+        if let wheel = wheel, wheel.shouldRotate(fileAt: url, for: data) {
             try forceRotate()
         }
         try super.write(data: data)
     }
     
     open func forceRotate() throws {
-        guard let wheel = wheel, let url = url else { return }
+        guard let wheel = wheel else { return }
         stream.close()
         try wheel.rotate(fileAt: url)
         stream = OutputStream(url: url, append: true)!
