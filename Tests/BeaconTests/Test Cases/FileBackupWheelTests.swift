@@ -63,6 +63,28 @@ class FileBackupWheelTests : XCTestCase {
         expect(self.wheel.shouldRotate(fileAt: self.url, for: data)).to(beFalse())
     }
     
+    func testReducesExcessivesBackups() {
+        wheel.fileManager.createFile(atPath: url.path, contents: nil, attributes: nil)
+        
+        try! wheel.backupFile(at: url)
+        var backups = try! wheel.backupsOfFile(at: url)
+        expect(backups.count) == 1
+        
+        wheel.fileManager.createFile(atPath: url.path, contents: nil, attributes: nil)
+        try! wheel.backupFile(at: url)
+        backups = try! wheel.backupsOfFile(at: url)
+        expect(backups.count) == 2
+        
+        wheel.fileManager.createFile(atPath: url.path, contents: nil, attributes: nil)
+        try! wheel.backupFile(at: url)
+        backups = try! wheel.backupsOfFile(at: url)
+        expect(backups.count) == 2
+        
+        backups.forEach { (aURL) in
+            try? wheel.fileManager.removeItem(at: aURL)
+        }
+    }
+    
     // MARK:- Configuring
     
     private func configureFile(exists: Bool, size: UInt64 = 0) {
