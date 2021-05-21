@@ -42,14 +42,27 @@ let Loggers = (
     console: ConsoleLogger.starting(name: "Console"),
     
     // start JSON-RPC logger on dedicated beacon
-    jrpc: JRPCLogger.starting(url: "http://localhost:4000", method: "emit", name: "JRPC", on: Beacons.shared + Beacons.rpc)
+    rpc: JRPCLogger.starting(url: "http://localhost:4000", method: "emit", name: "JRPC", on: Beacons.shared + Beacons.rpc)
+    
+    // start file logger on shared beacon
+    file: { 
+        let logger = FileLogger(name: "File", on: URL(fileURLWithPath: "/tmp/my.log"), encoder: SignalJSONEncoder(encoding: .utf8))
+        logger.wheel = FileBackupWheel(maxFileSize: 2 * 1024 * 1024, maxNumberOfBackups: 2)
+        logger.start { (aSignal) -> Bool in
+            return (aSignal as? ErrorSignal) != nil
+        }
+        return logger
+    }()
 )
 
-// emit current context on the shared beacon (handled by both loggers)
+// emits current context signal on the shared beacon; handled by console + rpc loggers
 emit()
 
-// emit current context on rpc beacon (handled by RPC logger only)
+// emits current context on the rpc beacon; handled by RPC logger only
 emit(on: Beacons.rpc)
+
+// emits error signal on the shared beacon; handled by shared + file loggers
+emit(error: someError)
 ```
 
 Signals can be augmented with arbitrary user info:
@@ -92,17 +105,19 @@ Signals:
 - `StringSignal` for signaling strings - ala traditional logging facilities
 - `WrapperSignal` for signaling arbitrary values
 
-Custom signals can be implemented as subclasses of `SignalLogger` or `WrapperSignal`.
+Custom signals are typically implemented as subclasses of either `SignalLogger` or `WrapperSignal`.
 
 Loggers:
 - `MemoryLogger` captures emitted signals in an array
 - `ConsoleLogger` prints signals onto the console
-- `FileLogger` captures signals in a file (file rotation supported)
 - `JRPCLogger` sends signals to a JSON-RPC server (see [Beacon-Server](https://github.com/grype/Beacon-Server/) for a server implementation in Pharo)
+- `FileLogger` captures signals in a file, optionally providing a couple of ways to rotate logs:
+    - `FileWheel` provides pluggable support for rotating files
+    - `FileBackupWheel` provides basic file rotation based on file size and number of backups to keep
 
 Furthermore, there are a couple of abstract loggers: 
 - `StreamLogger` writes out signals on an arbitrary `OutputStream` (e.g. `FileLogger`)
-- `IntervalLogger` provides buffered interface to writing out signals (e.g. `JRPCLogger`)
+- `IntervalLogger` provides buffered interface to writing out signals (e.g. `JRPCLogger`) 
 
 The framework is designed to be lightweight and to be easily extended in order to accommodate custom types. See [Implementation Details](Documentation/ImplementationDetails.md) for more info.
 
