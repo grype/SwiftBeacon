@@ -316,12 +316,14 @@ class JRPCLoggerSpy : JRPCLogger {
     }
     var invokedDidStart = false
     var invokedDidStartCount = 0
+    var invokedDidStartParameters: (beacons: [Beacon], Void)?
+    var invokedDidStartParametersList = [(beacons: [Beacon], Void)]()
     var forwardToOriginalDidStart = true
-    override func didStart() {
+    override func didStart(on beacons: [Beacon]) {
         invokedDidStart = true
         invokedDidStartCount += 1
         if forwardToOriginalDidStart {
-            super.didStart()
+            super.didStart(on: beacons)
             return
         }
     }

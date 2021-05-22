@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import Beacon
+@testable import Beacon
 
 class MemoryLoggerTests: XCTestCase {
     private var logger: MemoryLogger!

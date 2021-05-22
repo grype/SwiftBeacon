@@ -229,12 +229,16 @@ class IntervalLoggerSpy : IntervalLogger {
     }
     var invokedDidStart = false
     var invokedDidStartCount = 0
+    var invokedDidStartParameters: (beacons: [Beacon], Void)?
+    var invokedDidStartParametersList = [(beacons: [Beacon], Void)]()
     var forwardToOriginalDidStart = true
-    override func didStart() {
+    override func didStart(on beacons: [Beacon]) {
         invokedDidStart = true
         invokedDidStartCount += 1
+        invokedDidStartParameters = (beacons, ())
+        invokedDidStartParametersList.append((beacons, ()))
         if forwardToOriginalDidStart {
-            super.didStart()
+            super.didStart(on: beacons)
             return
         }
     }
@@ -426,6 +430,21 @@ class IntervalLoggerSpy : IntervalLogger {
         invokedUnsubscribeFromAllBeaconsCount += 1
         if forwardToOriginalUnsubscribeFromAllBeacons {
             super.unsubscribeFromAllBeacons()
+            return
+        }
+    }
+    var invokedIdentify = false
+    var invokedIdentifyCount = 0
+    var invokedIdentifyParameters: (beacons: [Beacon], Void)?
+    var invokedIdentifyParametersList = [(beacons: [Beacon], Void)]()
+    var forwardToOriginalIdentify = true
+    override func identify(on beacons: [Beacon] = [.shared]) {
+        invokedIdentify = true
+        invokedIdentifyCount += 1
+        invokedIdentifyParameters = (beacons, ())
+        invokedIdentifyParametersList.append((beacons, ()))
+        if forwardToOriginalIdentify {
+            super.identify(on: beacons)
             return
         }
     }

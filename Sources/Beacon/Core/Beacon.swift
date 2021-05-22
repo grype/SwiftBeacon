@@ -9,7 +9,6 @@
 import Foundation
 import SwiftAnnouncements
 
-
 /**
  I am the central object around signaling and provide an interface for notifying subscribed loggers with signals.
  
@@ -41,6 +40,8 @@ import SwiftAnnouncements
  
  */
 open class Beacon : NSObject {
+    
+    @objc public static var beaconVersion = "1.2.0"
     
     /// Shared general-purpose instance
     @objc public static var shared = Beacon()

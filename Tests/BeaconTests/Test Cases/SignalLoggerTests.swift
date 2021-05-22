@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import Beacon
+@testable import Beacon
 
 class SignalLoggerTests: XCTestCase {
     
@@ -20,6 +20,7 @@ class SignalLoggerTests: XCTestCase {
         activeBeacon = Beacon()
         inactiveBeacon = Beacon()
         logger = MemoryLogger(name: "Test logger")
+        logger.identifiesOnStart = false
     }
     
     override func tearDown() {
@@ -41,7 +42,6 @@ class SignalLoggerTests: XCTestCase {
     func testInitAndStart() {
         let logger: MemoryLogger = MemoryLogger.starting(name: "Another logger", on: [activeBeacon])
         XCTAssertTrue(logger.isRunning, "Logger should have been started")
-        emit(on: [activeBeacon])
         XCTAssertEqual(logger.recordings.count, 1, "Logger should have recorded one signal")
     }
     

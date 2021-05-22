@@ -17,7 +17,9 @@ class ContextSignalTests : XCTestCase {
     
     override func setUp() {
         super.setUp()
-        logger = MemoryLogger.starting(name: "BeaconTestLogger")
+        logger = MemoryLogger(name: "BeaconTestLogger")
+        logger.identifiesOnStart = false
+        logger.start()
     }
     
     override func tearDown() {

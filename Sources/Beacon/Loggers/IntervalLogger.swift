@@ -100,11 +100,13 @@ open class IntervalLogger : SignalLogger {
     
     // MARK: - Starting/Stopping
     
-    override func didStart() {
+    override func didStart(on beacons: [Beacon]) {
+        super.didStart(on: beacons)
         startFlushTimer()
     }
     
     override func didStop() {
+        super.didStop()
         stopFlushTimer()
     }
     

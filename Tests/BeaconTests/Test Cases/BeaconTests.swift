@@ -16,7 +16,9 @@ class BeaconTest: XCTestCase {
     
     override func setUp() {
         beacon = Beacon()
-        logger = MemoryLogger.starting(name: "Test Logger", on: [beacon])
+        logger = MemoryLogger(name: "Test Logger")
+        logger.identifiesOnStart = false
+        logger.start(on: [beacon])
     }
     
     override func tearDown() {
@@ -69,6 +71,7 @@ class BeaconTest: XCTestCase {
     func testPerformance() {
         let beacon = Beacon()
         let logger = MemoryLogger(name: "Memory Test Logger")
+        logger.identifiesOnStart = false
         logger.start(on: [beacon], filter: nil)
         measure {
             for _ in 1..<10000 {

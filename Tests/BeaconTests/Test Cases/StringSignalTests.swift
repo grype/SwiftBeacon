@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import Beacon
+@testable import Beacon
 
 class StringSignalTests : XCTestCase, Error {
     
@@ -17,7 +17,9 @@ class StringSignalTests : XCTestCase, Error {
     
     override func setUp() {
         super.setUp()
-        logger = MemoryLogger.starting(name: "BeaconTestLogger")
+        logger = MemoryLogger(name: "BeaconTestLogger")
+        logger.identifiesOnStart = false
+        logger.start()
     }
     
     override func tearDown() {

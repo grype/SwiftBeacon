@@ -61,7 +61,7 @@ open class FileLogger : StreamLogger {
     
     // MARK:- Starting/Stopping
     
-    override func didStart() {
+    override func didStart(on beacons: [Beacon]) {
         if rotateOnStart, let wheel = wheel {
             do {
                 try wheel.rotate(fileAt: url)
@@ -70,7 +70,7 @@ open class FileLogger : StreamLogger {
                 print("Error: \(error)")
             }
         }
-        super.didStart()
+        super.didStart(on: beacons)
     }
     
     // MARK:- File operations

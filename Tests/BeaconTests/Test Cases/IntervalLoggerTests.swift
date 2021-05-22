@@ -18,6 +18,7 @@ class IntervalLoggerTests : XCTestCase {
     override func setUp() {
         super.setUp()
         logger = IntervalLoggerSpy(name: "IntervalLoggerTest", interval: 1, queue: queue)
+        logger.identifiesOnStart = false
         logger.encodeBlock = { (aSignal) -> Data? in
             return String(describing: aSignal).data(using: .utf8)
         }

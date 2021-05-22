@@ -21,6 +21,7 @@ class StreamLoggerTests : XCTestCase {
         super.setUp()
         stream = OutputStream.toMemory()
         logger = StreamLoggerSpy(name: "Beacon-Test-File-Logger", on: stream, encoder: stringEncoder)
+        logger.identifiesOnStart = false
     }
     
     override func tearDown() {

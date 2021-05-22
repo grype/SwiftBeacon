@@ -55,8 +55,8 @@ open class StreamLogger : SignalLogger {
     
     // MARK: - Starting/Stopping
     
-    override func didStart() {
-        super.didStart()
+    override func didStart(on beacons: [Beacon]) {
+        super.didStart(on: beacons)
         stream.open()
     }
     

@@ -50,13 +50,15 @@ open class SignalLogger : NSObject {
         return !observedBeacons.isEmpty
     }
     
+    @objc var identifiesOnStart = true
+    
     /// Array of all observed beacons
     @RWLocked private var observedBeacons = [Beacon]()
     
     /// Creates a running instance
     open class func starting<T:SignalLogger>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(name: aName)
-        me.subscribe(to: beacons, filter: filter)
+        me.start(on: beacons, filter: filter)
         return me as! T
     }
     
@@ -119,7 +121,9 @@ open class SignalLogger : NSObject {
         unsubscribeFromAllBeacons()
     }
     
-    @objc internal func didStart() {
+    @objc internal func didStart(on beacons: [Beacon]) {
+        guard identifiesOnStart else { return }
+        identify(on: beacons)
     }
     
     @objc internal func didStop() {
@@ -161,7 +165,7 @@ open class SignalLogger : NSObject {
             }
         }
         observedBeacons = beacons
-        didStart()
+        didStart(on: beacons)
     }
     
     internal func unsubscribe(from aBeacon: Beacon) {
@@ -185,6 +189,12 @@ open class SignalLogger : NSObject {
         }
         observedBeacons.removeAll()
         didStop()
+    }
+    
+    // MARK:- Identifying
+    
+    open func identify(on beacons: [Beacon] = [.shared]) {
+        IdentitySignal().emit(on: beacons)
     }
     
     // MARK:- CustomStringConvertible
