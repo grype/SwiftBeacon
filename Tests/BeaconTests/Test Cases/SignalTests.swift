@@ -16,7 +16,7 @@ class SignalTests : XCTestCase, Error {
     override func setUp() {
         super.setUp()
         logger = MemoryLogger(name: "BeaconTestLogger")
-        logger.identifiesOnStart = false
+        logger.beForTesting()
         logger.start()
     }
     
@@ -93,7 +93,7 @@ class SignalTests : XCTestCase, Error {
     @inline(__always) private func perform(across count: Int, block: ()->Void) {
         let loggers: [MemoryLogger] = (1...count).map {
             let logger = MemoryLogger(name: "\($0)")
-            logger.identifiesOnStart = false
+            logger.beForTesting()
             return logger
         }
         block()

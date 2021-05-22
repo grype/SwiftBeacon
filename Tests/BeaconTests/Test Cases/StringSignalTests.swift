@@ -18,7 +18,7 @@ class StringSignalTests : XCTestCase, Error {
     override func setUp() {
         super.setUp()
         logger = MemoryLogger(name: "BeaconTestLogger")
-        logger.identifiesOnStart = false
+        logger.beForTesting()
         logger.start()
     }
     

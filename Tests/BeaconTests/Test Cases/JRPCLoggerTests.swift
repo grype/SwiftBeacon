@@ -23,7 +23,7 @@ class JRPCLoggerTests : XCTestCase {
     override func setUp() {
         super.setUp()
         logger = JRPCLoggerSpy(url: url, method: "emit", name: JRPCLoggerTests.QueueName, interval: interval, queue: queue)
-        logger.identifiesOnStart = false
+        logger.beForTesting()
     }
     
     override func tearDown() {

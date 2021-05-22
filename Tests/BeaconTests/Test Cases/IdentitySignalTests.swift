@@ -16,6 +16,7 @@ class IdentitySignalTests : XCTestCase {
     override func setUp() {
         super.setUp()
         logger = MemoryLogger(name: "BeaconTestLogger")
+        logger.tracksMachImageImports = false
         logger.start()
     }
     

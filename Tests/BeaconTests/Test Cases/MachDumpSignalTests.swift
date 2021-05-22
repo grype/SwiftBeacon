@@ -23,7 +23,10 @@ class MachDumpSignalTests : XCTestCase {
     
     func testLogsImage() {
         MachImageMonitor.startMonitoring()
-        expect(self.logger.recordings.count) == Int(MachImage.loadedImageCount)
+        let found = logger.recordings.map { ($0 as! MachImageImportsSignal).added!.count }.reduce(into: 0) { (total, value) in
+            total += value
+        }
+        expect(found) == Int(MachImage.loadedImageCount)
     }
     
 }

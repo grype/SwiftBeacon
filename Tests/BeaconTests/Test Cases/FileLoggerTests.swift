@@ -29,7 +29,7 @@ class FileLoggerTests : XCTestCase {
         
         logger = FileLogger(name: "FileLoggerTests", on: url, encoder: SignalStringEncoder(encoding: .utf8))
         logger.wheel = wheel
-        logger.identifiesOnStart = false
+        logger.beForTesting()
     }
     
     override func tearDown() {

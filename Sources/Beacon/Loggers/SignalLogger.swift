@@ -53,6 +53,8 @@ open class SignalLogger : NSObject {
     
     @objc var identifiesOnStart = true
     
+    @objc var tracksMachImageImports = true
+    
     /// Array of all observed beacons
     @RWLocked private var observedBeacons = [Beacon]()
     
@@ -123,18 +125,8 @@ open class SignalLogger : NSObject {
     }
     
     @objc internal func didStart(on beacons: [Beacon]) {
-        MachImageMonitor.shared.announcer.when(MachImageMonitor.Announcement.self, subscriber: self) { [weak self] (announcement, _) in
-            guard let signal = self?.createSignal(for: announcement) else { return }
-            self?.nextPut(signal)
-        }
-        if MachImageMonitor.isRunning {
-            let signal = MachImageImportsSignal()
-            signal.added = MachImageMonitor.shared.images
-            nextPut(signal)
-        }
-        else {
-            // starting monitor will result in announcing pre-loaded images
-            MachImageMonitor.startMonitoring()
+        if tracksMachImageImports {
+            startTrackingMachImageImports()
         }
         if identifiesOnStart {
             identify(on: beacons)
@@ -150,6 +142,25 @@ open class SignalLogger : NSObject {
             signal.removed = [anImage]
         }
         return signal
+    }
+    
+    private func startTrackingMachImageImports() {
+        // Start monitoring if we haven't yet. This will subscribe to updates using a callback,
+        // which will then be fired for each image already loaded.
+        // Note that since no logger has had a chance to start observing announcements, these callbacks
+        // won't amount to any signals being emitted. This is why we do this first and then, immediately after,
+        // start observing for announcements.
+        // This will always emit at least one signal with all of the loaded images.
+        if !MachImageMonitor.isRunning {
+            MachImageMonitor.startMonitoring()
+        }
+        MachImageMonitor.shared.announcer.when(MachImageMonitor.Announcement.self, subscriber: self) { [weak self] (announcement, _) in
+            guard let signal = self?.createSignal(for: announcement) else { return }
+            self?.nextPut(signal)
+        }
+        let signal = MachImageImportsSignal()
+        signal.added = MachImageMonitor.shared.images
+        nextPut(signal)
     }
     
     @objc internal func didStop() {

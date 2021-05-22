@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Nimble
 @testable import Beacon
 
 class SignalLoggerTests: XCTestCase {
@@ -20,7 +21,7 @@ class SignalLoggerTests: XCTestCase {
         activeBeacon = Beacon()
         inactiveBeacon = Beacon()
         logger = MemoryLogger(name: "Test logger")
-        logger.identifiesOnStart = false
+        logger.beForTesting()
     }
     
     override func tearDown() {
@@ -29,45 +30,39 @@ class SignalLoggerTests: XCTestCase {
     }
     
     func testInit() {
-        XCTAssertFalse(logger.isRunning, "Logger shouldn't be running after basic instantiation")
+        expect(self.logger.isRunning).to(beFalse())
     }
     
     func testStart() {
         logger.start(on: [activeBeacon])
-        XCTAssertTrue(logger.isRunning, "Logger should be running when start()ed")
+        expect(self.logger.isRunning).to(beTrue())
+        expect(self.logger.recordings.count) == 0
         emit(on: [activeBeacon])
-        XCTAssertEqual(logger.recordings.count, 1, "Logger should have recorded one signal")
+        expect(self.logger.recordings.count) == 1
     }
     
     func testInitAndStart() {
         let logger: MemoryLogger = MemoryLogger.starting(name: "Another logger", on: [activeBeacon])
-        XCTAssertTrue(logger.isRunning, "Logger should have been started")
-        XCTAssertEqual(logger.recordings.count, 1, "Logger should have recorded one signal")
+        logger.beForTesting()
+        expect(logger.isRunning).to(beTrue())
+        expect(logger.recordings.count) == 2
     }
     
     func testStartStop() {
         logger.start()
         logger.stop()
-        XCTAssertFalse(logger.isRunning, "Logger should not be running after calling stop()")
+        expect(self.logger.isRunning).to(beFalse())
     }
     
-    func testStop() {
+    func testStartStopOnBeacon() {
         logger.start(on: [activeBeacon])
         logger.stop(on: [activeBeacon])
+        expect(self.logger.isRunning).to(beFalse())
     }
     
     func testStopAll() {
         logger.stop()
-        XCTAssertFalse(logger.isRunning, "Logger should not be running after calling stop()")
-    }
-    
-    func testStartOnBeacon() {
-        logger.start(on: [activeBeacon])
-        XCTAssertTrue(logger.isRunning, "Logger should be running after start(on:)")
-        emit(on: [activeBeacon])
-        XCTAssertEqual(logger.recordings.count, 1, "Logger should have recorded one signal")
-        emit(on: [inactiveBeacon])
-        XCTAssertEqual(logger.recordings.count, 1, "Logger should not have recorded signals emitted on irrelevant beacon")
+        expect(self.logger.isRunning).to(beFalse())
     }
     
     func testFilter() {
@@ -75,34 +70,34 @@ class SignalLoggerTests: XCTestCase {
             return aSignal is ErrorSignal
         }
         emit(on: [activeBeacon])
-        XCTAssertEqual(logger.recordings.count, 0, "Logger shouldn't have logged irrelevant signal")
+        expect(self.logger.recordings.count) == 0
         do {
             throw NSError(domain: String(describing: type(of: self)), code: 0, userInfo: nil)
         }
         catch {
             emit(error: error, on: [activeBeacon, inactiveBeacon])
         }
-        XCTAssertEqual(logger.recordings.count, 1, "Logger should have logged exactly one error signal")
+        expect(self.logger.recordings.count) == 1
     }
     
     func testRunDuring() {
         logger.run(on: [activeBeacon]) { _ in
-            XCTAssertTrue(logger.isRunning, "Logger should have been started for running a block")
+            expect(self.logger.isRunning).to(beTrue())
             emit(on: [activeBeacon])
-            XCTAssertEqual(logger.recordings.count, 1, "Logger should have logged exactly one signal")
+            expect(self.logger.recordings.count) == 1
         }
-        XCTAssertFalse(logger.isRunning, "Logger should have been stopped aftter running a block")
-        XCTAssertEqual(logger.recordings.count, 1, "Logger should still have one recording")
+        expect(self.logger.isRunning).to(beFalse())
+        expect(self.logger.recordings.count) == 1
     }
     
     func testRunForSignals() {
         logger.run(for: [ErrorSignal.self, WrapperSignal.self], on: [activeBeacon]) { (_) in
-            XCTAssertTrue(logger.isRunning, "Logger should have been started for running a block")
+            expect(self.logger.isRunning).to(beTrue())
             emit(on: [activeBeacon])
-            XCTAssertEqual(self.logger.recordings.count, 0, "Logger logged a signal it was supposed to ignore")
+            expect(self.logger.recordings.count) == 0
             
             emit(1, on: [activeBeacon])
-            XCTAssertEqual(logger.recordings.count, 1, "Logger should have logged wrapper signal")
+            expect(self.logger.recordings.count) == 1
             
             do {
                 throw NSError(domain: String(describing: type(of: self)), code: 0, userInfo: nil)
@@ -110,24 +105,24 @@ class SignalLoggerTests: XCTestCase {
             catch {
                 emit(error: error, on: [activeBeacon])
             }
-            XCTAssertEqual(logger.recordings.count, 2, "Logger should have logged error signal")
+            expect(self.logger.recordings.count) == 2
         }
-        XCTAssertFalse(logger.isRunning, "Logger should have stopped after running for duration of a run-block")
+        expect(self.logger.isRunning).to(beFalse())
     }
     
     func testMultipleBeaconSubscription() {
         logger.start(on: [activeBeacon, inactiveBeacon])
-        XCTAssertTrue(logger.isRunning, "Logger should be running when started with multiple beacons")
+        expect(self.logger.isRunning).to(beTrue())
         emit(on: [activeBeacon, inactiveBeacon])
-        XCTAssertEqual(logger.recordings.count, 2, "Logger should have recorded signal as many times as its subscribed beacons")
+        expect(self.logger.recordings.count) == 2
     }
     
     func testMultipleSubscriptionsToSameBeacon() {
         logger.start(on: [activeBeacon])
         logger.start(on: [activeBeacon])
-        XCTAssertTrue(logger.isRunning, "Logger should be running after starting on the same beacon")
+        expect(self.logger.isRunning).to(beTrue())
         emit(on: [activeBeacon])
-        XCTAssertEqual(logger.recordings.count, 1, "Logger should have recorded one signal despite being started multiple times on the same beacon")
+        expect(self.logger.recordings.count) == 1
     }
     
     func testMultipleSubscriptionsToSameBeaconWithDifferentFilters() {
@@ -137,15 +132,15 @@ class SignalLoggerTests: XCTestCase {
         logger.start(on: [activeBeacon]) { (aSignal) -> Bool in
             return aSignal is ErrorSignal
         }
-        XCTAssertTrue(logger.isRunning, "Logger should be running after starting on the same beacon")
+        expect(self.logger.isRunning).to(beTrue())
         emit(on: [activeBeacon])
-        XCTAssertEqual(logger.recordings.count, 0, "Logger should not have recorded context signal after it was re-subscribed to the same beacon with different filter")
+        expect(self.logger.recordings.count) == 0
         do {
             throw NSError(domain: String(describing: type(of: self)), code: 0, userInfo: nil)
         }
         catch {
             emit(error: error, on: [activeBeacon])
-            XCTAssertEqual(logger.recordings.count, 1, "Logger should have recorded error signal b/c due to re-subscription with error-filtering function")
+            expect(self.logger.recordings.count) == 1
         }
     }
 }
