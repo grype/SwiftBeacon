@@ -232,7 +232,7 @@ open class SignalLogger : NSObject {
     // MARK:- Identifying
     
     open func identify(on beacons: [Beacon] = [.shared]) {
-        IdentitySignal().emit(on: beacons)
+        nextPut(IdentitySignal())
     }
     
     // MARK:- CustomStringConvertible
