@@ -52,11 +52,15 @@ open class MachImageMonitor {
     // MARK:- Adding/Removing Images
     
     private func didAddImage(_ aHeader: UnsafePointer<mach_header>) {
-        let index = UInt32(images.count)
-        guard let image = MachImage(at: index),
-              image.address == Int(bitPattern: aHeader)
-        else {
+        let startIndex = UInt32(images.count)
+        guard let index = (startIndex..<_dyld_image_count()).first(where: { (anIndex) -> Bool in
+            _dyld_get_image_header(anIndex) == aHeader
+        }) else {
             print("Could not find added image at: \(String(describing: aHeader))")
+            return
+        }
+        guard let image = MachImage(at: index) else {
+            print("Could not create MachImage description at: \(String(describing: aHeader))")
             return
         }
         images.append(image)
