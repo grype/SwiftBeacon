@@ -24,6 +24,16 @@ import SwiftAnnouncements
  - Override `nextPutAll(_:)` if special care is needed when handling multiple signals.
  - Override `description` for customizing my description.
  
+ # Identifying a client
+ 
+ It may be beneficial to identify the client whenever the logger starts. Especially when utilizing a logger in production, on remote machines. There exists a special `IdentifySignal` that captures particulars about the machine. I can be configured to emit that signal when it is started via `identifiesOnStart`.
+ 
+ # Tracking framework loading
+ 
+ It may be beneficial to track when MachO images are being loaded - this happens whenever a framework gets loaded. Doing so will help with symbolication of stack traces, when working with binaries with stripped symbols. Crashlogs automatically capture this information, but emitting an error or context signals, doesn't really provide all the particulars needed to symbolicate the stack trace.
+ 
+ For that reason, I can be configured to track image un-/loading via the `tracksMachImageImports` property. When true, I will emit `MachOImageImportsSignal` whenever an image is loaded or unloaded, and I will also emit a signal with all of the already loaded images whenever I am started.
+ 
  - See Also: `ConsoleLogger`, `MemoryLogger`
  */
 open class SignalLogger : NSObject {
@@ -51,9 +61,9 @@ open class SignalLogger : NSObject {
         return !observedBeacons.isEmpty
     }
     
-    @objc var identifiesOnStart = true
+    @objc var identifiesOnStart = false
     
-    @objc var tracksMachImageImports = true
+    @objc var tracksMachImageImports = false
     
     /// Array of all observed beacons
     @RWLocked private var observedBeacons = [Beacon]()

@@ -45,7 +45,7 @@ class SignalLoggerTests: XCTestCase {
         let logger: MemoryLogger = MemoryLogger.starting(name: "Another logger", on: [activeBeacon])
         logger.beForTesting()
         expect(logger.isRunning).to(beTrue())
-        expect(logger.recordings.count) == 2
+        expect(logger.recordings.count) == 0
     }
     
     func testStartStop() {

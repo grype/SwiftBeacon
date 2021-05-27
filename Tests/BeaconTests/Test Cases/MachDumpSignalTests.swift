@@ -18,6 +18,7 @@ class MachDumpSignalTests : XCTestCase {
         super.setUp()
         logger = MemoryLogger(name: "BeaconTestLogger")
         logger.identifiesOnStart = false
+        logger.tracksMachImageImports = true
         logger.start()
     }
     
