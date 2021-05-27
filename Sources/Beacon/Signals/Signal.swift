@@ -40,11 +40,11 @@ open class Signal : NSObject, Encodable {
     
     /// Used to capture `emit()` invocation context
     public struct Source : CustomStringConvertible, Codable {
-        var identifier: String? = UniqueDeviceIdentifier
-        var module: String?
-        var fileName: String
-        var line: Int
-        var functionName: String?
+        public var identifier: String? = UniqueDeviceIdentifier
+        public var module: String?
+        public var fileName: String
+        public var line: Int
+        public var functionName: String?
         
         public init(origin anOrigin: String?, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
             module = anOrigin
@@ -80,7 +80,7 @@ open class Signal : NSObject, Encodable {
     // MARK: Properties
     
     /// Source where the signal was `emit()`ed from.
-    private(set) var source: Source?
+    private(set) public var source: Source?
     
     /// User info data passed along by the signaler. 
     @objc open var userInfo: [AnyHashable : Any]?

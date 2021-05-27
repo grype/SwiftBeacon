@@ -17,9 +17,9 @@ open class IdentitySignal : Signal {
     
     // MARK:- Properties
     
-    var beaconVersion: String { Beacon.beaconVersion }
+    public var beaconVersion: String { Beacon.beaconVersion }
     
-    lazy var systemInfo: SystemInfo = { SystemInfo.current }()
+    lazy public var systemInfo: SystemInfo = { SystemInfo.current }()
     
     // MARK:- Signal
     
