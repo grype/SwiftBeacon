@@ -61,9 +61,9 @@ open class SignalLogger : NSObject {
         return !observedBeacons.isEmpty
     }
     
-    @objc var identifiesOnStart = false
+    @objc open var identifiesOnStart = false
     
-    @objc var tracksMachImageImports = false
+    @objc open var tracksMachImageImports = false
     
     /// Array of all observed beacons
     @RWLocked private var observedBeacons = [Beacon]()
