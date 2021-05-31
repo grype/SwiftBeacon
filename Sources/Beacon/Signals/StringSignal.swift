@@ -29,6 +29,12 @@ open class StringSignal: Signal {
         return "RemoteStringSignal"
     }
     
+    open override var valueDescription: String? {
+        return message
+    }
+    
+    // MARK:- Codable
+    
     private enum CodingKeys : String , CodingKey {
         case message
     }
