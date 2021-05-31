@@ -36,6 +36,13 @@ open class IdentitySignal : Signal {
         case systemInfo = "info"
     }
     
+    open override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(beaconVersion, forKey: .beaconVersion)
+        try container.encode(systemInfo, forKey: .systemInfo)
+    }
+    
     // MARK:- Describing
     
     open override var valueDescription: String? { "Beacon/\(beaconVersion) (\(systemInfo))" }
