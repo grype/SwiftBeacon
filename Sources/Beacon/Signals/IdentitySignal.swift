@@ -37,7 +37,7 @@ open class IdentitySignal : Signal {
     
     // MARK:- Describing
     
-    open override var valueDescription: String? { "Beacon \(beaconVersion); \(systemInfo)" }
+    open override var valueDescription: String? { "Beacon/\(beaconVersion) (\(systemInfo))" }
     
 }
 

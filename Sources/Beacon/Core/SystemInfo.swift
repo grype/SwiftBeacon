@@ -37,11 +37,11 @@ public struct SystemInfo : Encodable, CustomStringConvertible {
     }()
     
     public var description: String {
-        var result = [name, model, arch].compactMap { $0 }.joined(separator: " ")
+        var result = [name, model, arch].compactMap { $0 }.joined(separator: "; ")
         if result.isEmpty {
             result = "Unknown"
         }
-        return "SystemInfo: \(result)"
+        return result
     }
     
     private static func sysctlString(for key: String) -> String {
