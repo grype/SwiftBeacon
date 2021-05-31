@@ -32,7 +32,8 @@ open class IdentitySignal : Signal {
     // MARK:- Codable
     
     private enum CodingKeys : String , CodingKey {
-        case beaconVersion, systemInfo
+        case beaconVersion = "version"
+        case systemInfo = "info"
     }
     
     // MARK:- Describing
