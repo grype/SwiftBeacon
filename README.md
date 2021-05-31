@@ -1,5 +1,7 @@
 # Beacon
 
+[![CI](https://github.com/grype/SwiftBeacon/actions/workflows/swift.yml/badge.svg)](https://github.com/grype/SwiftBeacon/actions/workflows/swift.yml)
+
 Implementation of [Beacon](https://github.com/pharo-project/pharo-beacon) structured logging framework in Swift. The framework distinguishes itself from traditional logging systems by allowing logging of arbitrary objects/values and doing away with log levels in favor of filtering by object/value types. For introductory information on Beacon, see http://www.humane-assessment.com/blog/beacon.
 
 ## Installing
