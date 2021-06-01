@@ -164,10 +164,13 @@ open class SignalLogger : NSObject {
         if !MachImageMonitor.isRunning {
             MachImageMonitor.startMonitoring()
         }
+        
         MachImageMonitor.shared.announcer.when(MachImageMonitor.Announcement.self, subscriber: self) { [weak self] (announcement, _) in
             guard let signal = self?.createSignal(for: announcement) else { return }
-            self?.nextPut(signal)
+            self?.nextPut(signal.sourcedFromHere())
         }
+        
+        // Explicitly capture and log list of known images as being added
         let signal = MachImageImportsSignal()
         signal.added = MachImageMonitor.shared.images
         nextPut(signal.sourcedFromHere())
