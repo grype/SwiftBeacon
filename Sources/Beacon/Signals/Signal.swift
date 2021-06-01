@@ -130,6 +130,11 @@ open class Signal : NSObject, Encodable {
         beacons.forEach { $0.signal(self) }
     }
     
+    @objc open func sourcedFromHere(fileName: String = #file, line: Int = #line, functionName: String = #function) -> Self {
+        source = Signal.Source(origin: bundleName, fileName: fileName, line: line, functionName: functionName)
+        return self
+    }
+    
     // MARK:- Encodable
     
     private enum CodingKeys : String , CodingKey {
