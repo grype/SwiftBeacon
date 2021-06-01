@@ -170,7 +170,7 @@ open class SignalLogger : NSObject {
         }
         let signal = MachImageImportsSignal()
         signal.added = MachImageMonitor.shared.images
-        nextPut(signal)
+        nextPut(signal.sourcedFromHere())
     }
     
     @objc internal func didStop() {
