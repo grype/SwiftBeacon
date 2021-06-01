@@ -21,15 +21,16 @@ public struct SystemInfo : Encodable, CustomStringConvertible {
     
     public static var current: SystemInfo = {
         let info = NXGetLocalArchInfo()
-        let arch = String(utf8String: (info?.pointee.description)!)!
         
         #if os(macOS)
+        let arch = String(utf8String: (info?.pointee.description)!)!
         let processInfo = ProcessInfo.processInfo
         let model = sysctlString(for: "hw.model")
         return SystemInfo(name: processInfo.operatingSystemVersionString, model: model, arch: arch)
         #elseif canImport(UIKit)
+        let model = String(utf8String: (info?.pointee.description)!)!
         let device = UIDevice.current
-        let model = sysctlString(for: "hw.machine")
+        let arch = sysctlString(for: "hw.machine")
         return SystemInfo(name: "\(device.systemName) \(device.systemVersion)", model: model, arch: arch)
         #else
         return SystemInfo()
