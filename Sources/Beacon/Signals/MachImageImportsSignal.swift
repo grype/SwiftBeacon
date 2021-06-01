@@ -29,6 +29,13 @@ open class MachImageImportsSignal : Signal {
         case added, removed
     }
     
+    open override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(added, forKey: .added)
+        try container.encodeIfPresent(removed, forKey: .removed)
+    }
+    
     // MARK:- Describing
     
     open override var valueDescription: String? {
