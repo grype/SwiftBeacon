@@ -134,7 +134,20 @@ Furthermore, there are a couple of abstract loggers:
 
 ### Stack Symbolication 
 
-A few signals, namely `ErrorSignal` and `ContextSignal`, capture stack traces that lead to the emission of the signal. In some cases, the binary may have its symbols stripped, and those stack traces will need to be symbolicated in order to make any sense of them. To help with that, Beacon uses a combination of `IdentitySignal` and `MachImageImportsSignal`. The former captures the current running environment - operating system and processor architecture, while the latter captures insertion and removal of MachO images whenever the binary loads or unloads external frameworks. Armed with both the architecture and load addresses of the binary and its dependencies it is possible to symbolicate those stack traces with a tool like `atos`.
+A few signals, namely `ErrorSignal` and `ContextSignal`, capture stack traces that lead to the emission of the signal. In some cases, the binary may have its symbols stripped, and those stack traces will need to be symbolicated in order to make any sense of them. To help with that, Beacon uses two special signals: `IdentitySignal` and `MachImageImportsSignal`. The former captures the current running environment - operating system and processor architecture, while the latter captures insertion and removal of MachO images whenever the binary loads or unloads external frameworks. Armed with both the architecture and load addresses of the binary and its dependencies it is possible to symbolicate those stack traces with a tool like `atos`.
+
+It may be helpful to emit those signals as soon as a logger starts:
+
+```
+let consoleLogger = ConsoleLogger.starting(name: "Console")
+
+// Will emit IdentitySignal when started
+console.logger.identifiesOnStart = true
+
+// Will emit MachImageImportsSignal for all loaded MachO images when started 
+// and then track subsequently loaded and unloaded images 
+console.logger.tracksMachImageImports = true 
+```
 
 
 ## Objective-C
