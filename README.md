@@ -2,7 +2,10 @@
 
 [![CI](https://github.com/grype/SwiftBeacon/actions/workflows/swift.yml/badge.svg)](https://github.com/grype/SwiftBeacon/actions/workflows/swift.yml)
 
-Implementation of [Beacon](https://github.com/pharo-project/pharo-beacon) structured logging framework in Swift. The framework distinguishes itself from traditional logging systems by allowing logging of arbitrary objects/values and doing away with log levels in favor of filtering by object/value types. For introductory information on Beacon, see http://www.humane-assessment.com/blog/beacon.
+Implementation of [Beacon](https://github.com/pharo-project/pharo-beacon) structured logging framework in Swift. The framework distinguishes itself from traditional logging systems by allowing logging of arbitrary objects/values and doing away with log levels in favor of filtering by object/value types. For introduction, see http://www.humane-assessment.com/blog/beacon.
+
+The framework is designed to be lightweight and to be easily extended in order to accommodate custom types. See [Implementation Details](Documentation/ImplementationDetails.md) for more info.
+
 
 ## Installing
 
@@ -111,6 +114,8 @@ Signals:
 - `ErrorSignal` captures an error and a stack trace that lead to it
 - `StringSignal` for signaling strings - ala traditional logging facilities
 - `WrapperSignal` for signaling arbitrary values
+- `IdentitySignal` for signaling information about Beacon itself - such as version, current platform, architecture, etc
+- `MachImageImportsSignal` for signaling addition and removal of MachO images - this is mainly to help with stack symbolication
 
 Custom signals are typically implemented as subclasses of either `SignalLogger` or `WrapperSignal`.
 
@@ -126,7 +131,11 @@ Furthermore, there are a couple of abstract loggers:
 - `StreamLogger` writes out signals on an arbitrary `OutputStream` (e.g. `FileLogger`)
 - `IntervalLogger` provides buffered interface to writing out signals (e.g. `JRPCLogger`) 
 
-The framework is designed to be lightweight and to be easily extended in order to accommodate custom types. See [Implementation Details](Documentation/ImplementationDetails.md) for more info.
+
+### Stack Symbolication 
+
+A few signals, namely `ErrorSignal` and `ContextSignal`, capture stack traces that lead to the emission of the signal. In some cases, the binary may have its symbols stripped, and those stack traces will need to be symbolicated in order to make any sense of them. To help with that, Beacon uses a combination of `IdentitySignal` and `MachImageImportsSignal`. The former captures the current running environment - operating system and processor architecture, while the latter captures insertion and removal of MachO images whenever the binary loads or unloads external frameworks. Armed with both the architecture and load addresses of the binary and its dependencies it is possible to symbolicate those stack traces with a tool like `atos`.
+
 
 ## Objective-C
 
