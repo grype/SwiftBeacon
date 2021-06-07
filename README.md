@@ -40,30 +40,35 @@ let Beacons = (
 )
 
 let Loggers = (
-    // start console logger on shared beacon - no need to provide it as argument
+    // Start console logger on shared beacon - no need to provide it as argument
     console: ConsoleLogger.starting(name: "Console"),
     
-    // start JSON-RPC logger on dedicated beacon
+    // Start JSON-RPC logger on shared and dedicated RPC beacons
     rpc: JRPCLogger.starting(url: "http://localhost:4000", method: "emit", name: "JRPC", on: Beacons.shared + Beacons.rpc)
     
-    // start file logger on shared beacon
+    // Start file logger on shared beacon, logging only errors, 
+    // capturing them in JSON format, rotating files before they reach 2Mb, 
+    // keeping at most 2 backups of log files
     file: { 
         let logger = FileLogger(name: "File", on: URL(fileURLWithPath: "/tmp/my.log"), encoder: SignalJSONEncoder(encoding: .utf8))
         logger.wheel = FileBackupWheel(maxFileSize: 2 * 1024 * 1024, maxNumberOfBackups: 2)
         logger.start { (aSignal) -> Bool in
-            return (aSignal as? ErrorSignal) != nil
+            return aSignal is ErrorSignal
         }
         return logger
     }()
 )
 
-// emits current context signal on the shared beacon; handled by console + rpc loggers
+// Emits current context signal, which captures current call stack, on the shared beacon
+// This is handled by console + rpc loggers
 emit()
 
-// emits current context on the rpc beacon; handled by RPC logger only
+// Emits current context on the rpc beacon
+// This is handled by RPC logger only
 emit(on: Beacons.rpc)
 
-// emits error signal on the shared beacon; handled by shared + file loggers
+// Emits error signal on the shared beacon
+// This is handled by shared + file loggers
 emit(error: someError)
 ```
 
