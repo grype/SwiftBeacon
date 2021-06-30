@@ -46,7 +46,7 @@ open class SignalLogger : NSObject {
     
     /// Block of code for evaluating during momentary runs
     ///
-    /// @See `run(during:)`
+    /// - See: `run(during:)`
     public typealias RunBlock = (SignalLogger)->Void
     
     // MARK:- Properties
