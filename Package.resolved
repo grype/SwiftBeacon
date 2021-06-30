@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/grype/SwiftAnnouncements",
         "state": {
           "branch": null,
-          "revision": "479f08c453c87cbd0e1f7a2914766240ab443cec",
-          "version": "1.0.1"
+          "revision": "30446e4babfcf0021d4664ab3df2cdf52f2dd300",
+          "version": "1.0.2"
         }
       }
     ]
