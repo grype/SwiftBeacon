@@ -33,7 +33,7 @@ let package = Package(
         #if _runtime(_ObjC)
         targets.append(contentsOf: [
             .target(name: "BeaconObjcRuntime", dependencies: []),
-            .target(name: "Beacon", dependencies: [ "BeaconObjcRuntime", "SwiftAnnouncements", "RWLock" ], exclude: ["Makefile", "scripts"]),
+            .target(name: "Beacon", dependencies: [ "BeaconObjcRuntime", "SwiftAnnouncements", "RWLock" ]),
         ])
         #else
         targets.append(contentsOf: [
