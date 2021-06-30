@@ -177,3 +177,4 @@ BeaconEmitSignal(signal, on: arrayOfBeacons, userInfo: aUserInfoDictionary)
 ## Xcode Goodies
 
 To simplify creation of custom signal classes, there exists a code snippet that can be added to Xcode's snippet library. You will find it in [Xcode/Snippets/MakeSignal.swift](Xcode/Snippets/MakeSignal.swift)
+
