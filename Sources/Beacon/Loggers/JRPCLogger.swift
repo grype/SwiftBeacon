@@ -95,8 +95,13 @@ open class JRPCLogger: IntervalLogger {
     
     // MARK: - Encoding
     
-    override func encodeSignal(_ aSignal: Signal) -> Data? {
+    var encoder: JSONEncoder = {
         let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }()
+    
+    override func encodeSignal(_ aSignal: Signal) -> Data? {
         do {
             return try encoder.encode(aSignal)
         }

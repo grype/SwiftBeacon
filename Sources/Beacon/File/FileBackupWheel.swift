@@ -32,11 +32,7 @@ open class FileBackupWheel : FileRotation {
     
     open var fileManager: FileManager = FileManager.default
     
-    open var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
-        return dateFormatter
-    }()
+    open var dateFormatter: DateFormatter = .beaconFileFormatter
     
     // MARK:- Init
     
