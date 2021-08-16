@@ -21,23 +21,23 @@ let package = Package(
         .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "9.0.0")),
         .package(url: "https://github.com/grype/SwiftAnnouncements", .upToNextMajor(from: "1.0.2")),
         .package(url: "https://github.com/grype/RWLock-Swift", .upToNextMajor(from: "1.0.0")),
-        .package(url: "https://github.com/Brightify/Cuckoo", .upToNextMajor(from: "1.3.0"))
+        .package(url: "https://github.com/Brightify/Cuckoo", .upToNextMajor(from: "1.3.0")),
+        .package(url: "https://github.com/Flight-School/AnyCodable", .upToNextMajor(from: "0.5.0"))
     ],
     targets: {
-        
         var targets: [Target] = [
             .testTarget(
                 name: "BeaconTests",
-                dependencies: ["Beacon", "Nimble", "SwiftAnnouncements", "Cuckoo"]),
+                dependencies: ["Beacon", "Nimble", "SwiftAnnouncements", "Cuckoo", "AnyCodable"]),
         ]
         #if _runtime(_ObjC)
         targets.append(contentsOf: [
             .target(name: "BeaconObjcRuntime", dependencies: []),
-            .target(name: "Beacon", dependencies: [ "BeaconObjcRuntime", "SwiftAnnouncements", "RWLock" ]),
+            .target(name: "Beacon", dependencies: [ "BeaconObjcRuntime", "SwiftAnnouncements", "RWLock", "AnyCodable" ]),
         ])
         #else
         targets.append(contentsOf: [
-            .target(name: "Beacon", dependencies: ["SwiftAnnouncements", "RWLock"], exclude: [ "Sources/BeaconObjcRuntime" ]),
+            .target(name: "Beacon", dependencies: ["SwiftAnnouncements", "RWLock", "AnyCodable"], exclude: [ "Sources/BeaconObjcRuntime" ]),
         ])
         #endif
         return targets
