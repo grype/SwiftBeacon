@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AnyCodable
 
 /**
  I am a `Signal` that captures an error.
@@ -39,7 +40,7 @@ open class ErrorSignal : Signal {
         var container = encoder.container(keyedBy: ErrorSignal.CodingKeys.self)
         try container.encode(stack.map { CallStackFrame.fromString($0) }, forKey: .stack)
         if let encodableError = error as? Encodable {
-            let wrapped = EncodableWrapper.init(wrapped:encodableError)
+            let wrapped = AnyEncodable(encodableError)
             try container.encode(wrapped, forKey: .error)
         }
         else {

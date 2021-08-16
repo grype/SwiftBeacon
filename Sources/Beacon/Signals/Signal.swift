@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftAnnouncements
+import AnyCodable
 
 #if os(iOS) || os(tvOS)
 import UIKit
@@ -141,14 +142,6 @@ open class Signal : NSObject, Encodable {
         case timestamp, source, userInfo = "properties", portableClassName = "__class", description
     }
     
-    struct EncodableWrapper: Encodable {
-        let wrapped: Encodable
-
-        func encode(to encoder: Encoder) throws {
-            try self.wrapped.encode(to: encoder)
-        }
-    }
-    
     open func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Signal.CodingKeys.self)
         try container.encodeIfPresent(type(of: self).portableClassName, forKey: .portableClassName)
@@ -156,12 +149,12 @@ open class Signal : NSObject, Encodable {
         try container.encode(source, forKey: .source)
         try container.encode(debugDescription, forKey: .description)
         if let codableInfo = userInfo as? [String : Encodable] {
-            let wrapped = codableInfo.mapValues(EncodableWrapper.init(wrapped:))
+            let wrapped = codableInfo.mapValues(AnyEncodable.init)
             try container.encode(wrapped, forKey: .userInfo)
         }
         // Swift is great!
         else if let codableInfo = (userInfo as? [String : AnyHashable]) as? [String : Encodable] {
-            let wrapped = codableInfo.mapValues(EncodableWrapper.init(wrapped:))
+            let wrapped = codableInfo.mapValues(AnyEncodable.init)
             try container.encode(wrapped, forKey: .userInfo)
         }
     }
