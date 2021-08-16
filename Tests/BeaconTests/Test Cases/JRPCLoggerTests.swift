@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import Beacon
+import AnyCodable
 
 class JRPCLoggerTests : XCTestCase {
     static private var QueueName = "JRPCLoggerTests"
@@ -94,8 +95,8 @@ class JRPCLoggerTests : XCTestCase {
     func testNextPutWrapperWithUserInfo() {
         logger.start()
         let obj = SampleObject()
-        let signal = WrapperSignal(obj, userInfo: ["Number" : 123, "String" : "Hello", "Bool" : true])
-        signal.userInfo = ["Number" : 123, "String" : "Hello", "Bool" : true]
+        let date = Date()
+        let signal = WrapperSignal(obj, userInfo: ["Number" : 123, "String" : "Hello", "Bool" : true, "Date" : date])
         logger.nextPut(signal)
         let expectBuffer = expectation(description: "Buffering")
         logger.queue.async {
@@ -107,7 +108,9 @@ class JRPCLoggerTests : XCTestCase {
         let list = logger.invokedPerformParametersList
         let httpJson = try! JSONSerialization.jsonObject(with: list.first!.0.httpBody!, options: .fragmentsAllowed) as! [String: Any]
         let httpProperties = (httpJson["params"] as! [[[String:Any]]]).first!.first!["properties"] as! [AnyHashable : AnyHashable]
-        XCTAssertEqual(httpProperties, signal.userInfo as! [AnyHashable : AnyHashable])
+        let signalJson = try! logger.encoder.encode(AnyEncodable(signal.userInfo))
+        let signalProperties = try! JSONSerialization.jsonObject(with: signalJson, options: .fragmentsAllowed) as! [AnyHashable : AnyHashable]
+        XCTAssertEqual(httpProperties, signalProperties)
     }
     
     func testFlush() {

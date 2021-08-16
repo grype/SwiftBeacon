@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SampleObject : Encodable {
+class SampleObject : Codable {
     
     var string: String?
     
@@ -19,12 +19,15 @@ class SampleObject : Encodable {
     
     var bool: Bool?
     
+    var date: Date?
+    
     init() {
         string = "I am a string"
         int = 123
         float = 123.234
         double = 234.345
         bool = true
+        date = Date()
     }
     
 }
