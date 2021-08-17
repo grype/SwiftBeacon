@@ -27,6 +27,16 @@ open class JRPCLogger: IntervalLogger {
     /// JRPC Method to call
     @objc open private(set) var method: String!
     
+    /// Formatter for encoding dates. This will be passed to the `Signal` before encoding it.
+    @objc open lazy var dateFormatter: DateFormatter = .beaconSignalFormatter
+    
+    /// JSONEncoder for encoding signals.
+    open lazy var encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        return encoder
+    }()
+    
     // MARK: - Variables (private)
     
     internal var urlSessionTask: URLSessionTask?
@@ -94,12 +104,6 @@ open class JRPCLogger: IntervalLogger {
     }
     
     // MARK: - Encoding
-    
-    var encoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        return encoder
-    }()
     
     override func encodeSignal(_ aSignal: Signal) -> Data? {
         do {

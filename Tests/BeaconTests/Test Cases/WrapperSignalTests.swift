@@ -71,7 +71,8 @@ class WrapperSignalTests: XCTestCase {
         let userInfo: [String : String] = ["Hello" : "World"]
         let signal = WrapperSignal(self, userInfo: userInfo)
         
-        let encoder = JSONEncoder()
+        let logger = JRPCLogger(url: URL(string: "http://example.com")!, method: "emit", name: "Test JRPC Logger")
+        let encoder = logger.encoder
         let data = try? encoder.encode(signal)
         XCTAssertTrue(data != nil, "Failed to encode WrappedSignal with encodable user info")
         print(String(data: data!, encoding: .utf8)!)
@@ -82,7 +83,7 @@ class WrapperSignalTests: XCTestCase {
         XCTAssertTrue(decodedValue!["targetType"] as? String == String(describing: type(of: self)), "Incorrectly encoded local value type")
         
         let dateString = decodedValue!["timestamp"] as! String
-        let dateFormatter = signal.dateFormatter
+        let dateFormatter = logger.dateFormatter
         let date = dateFormatter.date(from: dateString)
         XCTAssertTrue(date != nil, "Failed to decode timestamp")
         XCTAssertLessThanOrEqual(abs(signal.timestamp.timeIntervalSince(date!)), 1, "Incorrectly encoded value type")

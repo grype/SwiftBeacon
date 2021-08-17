@@ -99,7 +99,8 @@ open class Signal : NSObject, Encodable {
     
     // MARK: Properties - Private
     
-    @objc open lazy var dateFormatter: DateFormatter = .beaconSignalFormatter
+    ///
+    @objc open lazy var descriptionDateFormatter: DateFormatter = .beaconSignalFormatter
     
     @objc private(set) lazy var bundleName: String? = {
         return Bundle.main.infoDictionary?["CFBundleName"] as? String
@@ -141,7 +142,7 @@ open class Signal : NSObject, Encodable {
     open func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Signal.CodingKeys.self)
         try container.encodeIfPresent(type(of: self).portableClassName, forKey: .portableClassName)
-        try container.encodeIfPresent(dateFormatter.string(from: timestamp), forKey: .timestamp)
+        try container.encodeIfPresent(timestamp, forKey: .timestamp)
         try container.encode(source, forKey: .source)
         try container.encode(debugDescription, forKey: .description)
         if let codableInfo = userInfo as? [String : Encodable] {
@@ -185,7 +186,7 @@ open class Signal : NSObject, Encodable {
     
     @objc
     open override var description: String {
-        let dateString = dateFormatter.string(from: timestamp)
+        let dateString = descriptionDateFormatter.string(from: timestamp)
         var result = "\(dateString) \(signalName)"
         if let sourceDescription = sourceDescription {
             result += " \(sourceDescription)"
@@ -198,7 +199,7 @@ open class Signal : NSObject, Encodable {
     
     @objc
     open override var debugDescription: String {
-        let dateString = dateFormatter.string(from: timestamp)
+        let dateString = descriptionDateFormatter.string(from: timestamp)
         var result = "\(dateString) \(signalName)"
         if let sourceDescription = sourceDescription {
             result += " \(sourceDescription)"
