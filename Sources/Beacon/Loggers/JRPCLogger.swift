@@ -28,7 +28,7 @@ open class JRPCLogger: IntervalLogger {
     @objc open private(set) var method: String!
     
     /// Formatter for encoding dates. This will be passed to the `Signal` before encoding it.
-    @objc open lazy var dateFormatter: DateFormatter = .beaconSignalFormatter
+    @objc open lazy var dateFormatter: DateFormatter = .init(format: .iso8601)
     
     /// JSONEncoder for encoding signals.
     open lazy var encoder: JSONEncoder = {

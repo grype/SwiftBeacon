@@ -100,7 +100,7 @@ open class Signal : NSObject, Encodable {
     // MARK: Properties - Private
     
     ///
-    @objc open lazy var descriptionDateFormatter: DateFormatter = .beaconSignalFormatter
+    @objc open lazy var descriptionDateFormatter: DateFormatter = .init(format: .iso8601)
     
     @objc private(set) lazy var bundleName: String? = {
         return Bundle.main.infoDictionary?["CFBundleName"] as? String

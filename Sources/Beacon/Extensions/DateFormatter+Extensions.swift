@@ -11,17 +11,13 @@ import Foundation
 extension DateFormatter {
     
     public enum BeaconFormat : String {
-        case file = "yyyy-MM-dd-HH-mm-ss"
-        case signal = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
+        case fullSortable = "yyyy-MM-dd-HH-mm-ss"
+        case iso8601 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
     }
     
     public convenience init(format: BeaconFormat) {
         self.init()
         dateFormat = format.rawValue
     }
-    
-    @objc public static var beaconSignalFormatter: DateFormatter { DateFormatter(format: .signal) }
-    
-    @objc public static var beaconFileFormatter: DateFormatter { DateFormatter(format: .file) }
     
 }
