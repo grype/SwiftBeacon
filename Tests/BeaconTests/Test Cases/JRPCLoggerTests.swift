@@ -108,7 +108,8 @@ class JRPCLoggerTests : XCTestCase {
         let list = logger.invokedPerformParametersList
         let httpJson = try! JSONSerialization.jsonObject(with: list.first!.0.httpBody!, options: .fragmentsAllowed) as! [String: Any]
         let httpProperties = (httpJson["params"] as! [[[String:Any]]]).first!.first!["properties"] as! [AnyHashable : AnyHashable]
-        let signalJson = try! logger.encoder.encode(AnyEncodable(signal.userInfo))
+        let jsonEncoder = (logger.encoder as! SignalJSONEncoder).encoder
+        let signalJson = try! jsonEncoder.encode(AnyEncodable(signal.userInfo))
         let signalProperties = try! JSONSerialization.jsonObject(with: signalJson, options: .fragmentsAllowed) as! [AnyHashable : AnyHashable]
         XCTAssertEqual(httpProperties, signalProperties)
     }

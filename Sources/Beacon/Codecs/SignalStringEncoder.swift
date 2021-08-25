@@ -22,7 +22,7 @@ open class SignalStringEncoder : SignalEncoding {
         encoding = anEncoding
     }
     
-    open func data(from aSignal: Signal) -> Data? {
+    open func encode(_ aSignal: Signal) -> Data? {
         return "\(aSignal.debugDescription)\(separator)".data(using: encoding)
     }
 }

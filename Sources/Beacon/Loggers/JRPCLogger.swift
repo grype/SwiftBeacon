@@ -27,15 +27,8 @@ open class JRPCLogger: IntervalLogger {
     /// JRPC Method to call
     @objc open private(set) var method: String!
     
-    /// Formatter for encoding dates. This will be passed to the `Signal` before encoding it.
-    @objc open lazy var dateFormatter: DateFormatter = .init(format: .iso8601)
-    
     /// JSONEncoder for encoding signals.
-    open lazy var encoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .formatted(dateFormatter)
-        return encoder
-    }()
+    var encoder: SignalEncoding = SignalJSONEncoder(encoding: .utf8)
     
     // MARK: - Variables (private)
     
@@ -106,13 +99,7 @@ open class JRPCLogger: IntervalLogger {
     // MARK: - Encoding
     
     override func encodeSignal(_ aSignal: Signal) -> Data? {
-        do {
-            return try encoder.encode(aSignal)
-        }
-        catch {
-            print("Encoding error: \(error)")
-        }
-        return nil
+        return encoder.encode(aSignal)
     }
     
     // MARK: - Flushing

@@ -15,5 +15,5 @@ import Foundation
  */
 
 @objc public protocol SignalEncoding {
-    func data(from aSignal: Signal) -> Data?
+    func encode(_ aSignal: Signal) -> Data?
 }

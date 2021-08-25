@@ -14,12 +14,23 @@ I encode Signals by trying to represent them in JSON notation.
 
 open class SignalJSONEncoder : SignalStringEncoder {
     
-    let encoder = JSONEncoder()
+    /// Formatter for encoding dates. This will be passed to the `Signal` before encoding it.
+    @objc open lazy var dateFormatter: DateFormatter = .init(format: .iso8601)
     
-    open override func data(from aSignal: Signal) -> Data? {
-        var result = try? encoder.encode(aSignal)
-        result?.append(separator.data(using: encoding)!)
-        return result
+    open lazy var encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        return encoder
+    }()
+    
+    open override func encode(_ aSignal: Signal) -> Data? {
+        do {
+            return try encoder.encode(aSignal)
+        }
+        catch {
+            print("Encoding error: \(error)")
+        }
+        return nil
     }
     
 }
