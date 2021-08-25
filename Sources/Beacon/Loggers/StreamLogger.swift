@@ -27,11 +27,11 @@ open class StreamLogger : SignalLogger {
     
     var stream: OutputStream
     
-    var encoder: SignalEncoding
+    var encoder: SignalEncoder
     
     // MARK: - Instance Creation
     
-    public class func starting<T:StreamLogger>(name aName: String, stream aStream: OutputStream, encoder anEncoder: SignalEncoding, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
+    public class func starting<T:StreamLogger>(name aName: String, stream aStream: OutputStream, encoder anEncoder: SignalEncoder, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(name: aName, on: aStream, encoder: anEncoder)
         me.subscribe(to: beacons, filter: filter)
         return me as! T
@@ -43,7 +43,7 @@ open class StreamLogger : SignalLogger {
     
     // MARK: - Init
     
-    public required init(name aName: String, on aStream: OutputStream, encoder anEncoder: SignalEncoding) {
+    public required init(name aName: String, on aStream: OutputStream, encoder anEncoder: SignalEncoder) {
         stream = aStream
         encoder = anEncoder
         super.init(name: aName)
@@ -68,8 +68,8 @@ open class StreamLogger : SignalLogger {
     // MARK: - Logging
     
     override open func nextPut(_ aSignal: Signal) {
-        guard let data = encoder.encode(aSignal) else { return }
         do {
+            let data = try encoder.encode(aSignal)
             try write(data: data)
         }
         catch {

@@ -73,18 +73,15 @@ class WrapperSignalTests: XCTestCase {
         
         let logger = JRPCLogger(url: URL(string: "http://example.com")!, method: "emit", name: "Test JRPC Logger")
         let encoder = logger.encoder
-        let data = encoder.encode(signal)
-        XCTAssertTrue(data != nil, "Failed to encode WrappedSignal with encodable user info")
-        print(String(data: data!, encoding: .utf8)!)
+        let data = try! encoder.encode(signal)
         
-        let decodedValue = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any]
+        let decodedValue = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String : Any]
         XCTAssertTrue(decodedValue != nil, "Failed to decode encoded WrappedSignal")
         XCTAssertTrue(decodedValue!["__class"] as? String == WrapperSignal.portableClassName, "Incorrectly encoded remote value type")
         XCTAssertTrue(decodedValue!["targetType"] as? String == String(describing: type(of: self)), "Incorrectly encoded local value type")
         
         let dateString = decodedValue!["timestamp"] as! String
-        let dateFormatter = (logger.encoder as! SignalJSONEncoder).dateFormatter
-        let date = dateFormatter.date(from: dateString)
+        let date = DateFormatter(format: .iso8601).date(from: dateString)
         XCTAssertTrue(date != nil, "Failed to decode timestamp")
         XCTAssertLessThanOrEqual(abs(signal.timestamp.timeIntervalSince(date!)), 1, "Incorrectly encoded value type")
         

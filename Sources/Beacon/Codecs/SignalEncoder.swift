@@ -1,5 +1,5 @@
 //
-//  SignalEncoding.swift
+//  SignalEncoder.swift
 //  
 //
 //  Created by Pavel Skaldin on 12/23/19.
@@ -14,6 +14,8 @@ import Foundation
  My implementors are objects that encode Signals onto a stream as a means of logging them.
  */
 
-@objc public protocol SignalEncoding {
-    func encode(_ aSignal: Signal) -> Data?
+public protocol SignalEncoder {
+    func encode<T>(_ value: T) throws -> Data where T : Encodable
 }
+
+extension JSONEncoder : SignalEncoder {}

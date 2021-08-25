@@ -23,14 +23,8 @@ open class SignalJSONEncoder : SignalStringEncoder {
         return encoder
     }()
     
-    open override func encode(_ aSignal: Signal) -> Data? {
-        do {
-            return try encoder.encode(aSignal)
-        }
-        catch {
-            print("Encoding error: \(error)")
-        }
-        return nil
+    public override func encode<T>(_ value: T) throws -> Data where T : Encodable {
+        return try encoder.encode(value)
     }
     
 }

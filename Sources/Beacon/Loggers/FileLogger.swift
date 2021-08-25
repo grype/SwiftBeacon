@@ -34,7 +34,7 @@ open class FileLogger : StreamLogger {
     
     // MARK: - Instance Creation
     
-    public class func starting<T:FileLogger>(name aName: String, url anURL: URL, encoder anEncoder: SignalEncoding, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
+    public class func starting<T:FileLogger>(name aName: String, url anURL: URL, encoder anEncoder: SignalEncoder, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(name: aName, on: anURL, encoder: anEncoder)
         me.subscribe(to: beacons, filter: filter)
         return me as! T
@@ -46,7 +46,7 @@ open class FileLogger : StreamLogger {
     
     // MARK:- Init
     
-    public required init(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoding) {
+    public required init(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoder) {
         url = anUrl
         super.init(name: aName, on: OutputStream(url: anUrl, append: true)!, encoder: anEncoder)
     }
@@ -55,7 +55,7 @@ open class FileLogger : StreamLogger {
         fatalError("Use init(name:on:encoder:) to instantiate")
     }
     
-    public required init(name aName: String, on aStream: OutputStream, encoder anEncoder: SignalEncoding) {
+    public required init(name aName: String, on aStream: OutputStream, encoder anEncoder: SignalEncoder) {
         fatalError("Use init(name:on:encoder:) with URL instead of OutputStream")
     }
     

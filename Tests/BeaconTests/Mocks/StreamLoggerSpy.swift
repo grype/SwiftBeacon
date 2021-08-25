@@ -39,13 +39,13 @@ class StreamLoggerSpy : StreamLogger {
     }
     var invokedEncoderSetter = false
     var invokedEncoderSetterCount = 0
-    var invokedEncoder: SignalEncoding?
-    var invokedEncoderList = [SignalEncoding]()
+    var invokedEncoder: SignalEncoder?
+    var invokedEncoderList = [SignalEncoder]()
     var invokedEncoderGetter = false
     var invokedEncoderGetterCount = 0
-    var stubbedEncoder: SignalEncoding!
+    var stubbedEncoder: SignalEncoder!
     var forwardToOriginalEncoder = true
-    override var encoder: SignalEncoding {
+    override var encoder: SignalEncoder {
         set {
             invokedEncoderSetter = true
             invokedEncoderSetterCount += 1

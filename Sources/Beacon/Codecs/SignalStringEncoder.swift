@@ -12,7 +12,11 @@ import Foundation
  I encode Signals using their description property.
  */
 
-open class SignalStringEncoder : SignalEncoding {
+open class SignalStringEncoder : SignalEncoder {
+
+    enum Errors : String, Error {
+        case unknown = "Unknown error"
+    }
     
     var encoding : String.Encoding
     
@@ -22,7 +26,20 @@ open class SignalStringEncoder : SignalEncoding {
         encoding = anEncoding
     }
     
-    open func encode(_ aSignal: Signal) -> Data? {
-        return "\(aSignal.debugDescription)\(separator)".data(using: encoding)
+    public func encode<T>(_ value: T) throws -> Data where T : Encodable {
+        var encoded: String
+        if let describable = value as? CustomDebugStringConvertible {
+            encoded = "\(describable.debugDescription)\(separator)"
+        }
+        else if let describable = value as? CustomStringConvertible {
+            encoded = "\(describable.description)\(separator)"
+        }
+        else {
+            encoded = "\(String(describing: value))\(separator)"
+        }
+        guard let data = encoded.data(using: encoding) else {
+            throw Errors.unknown
+        }
+        return data
     }
 }
