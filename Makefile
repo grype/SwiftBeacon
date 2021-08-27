@@ -17,3 +17,6 @@ test: build
 
 linuxmain:
 	swift test --generate-linuxmain
+
+mocks:
+	egrep -il "\@available\([^)]+message: *\"mocked\" *\)" Sources/Beacon/**/*.swift | xargs ./scripts/generate-mocks
