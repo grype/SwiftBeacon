@@ -4,6 +4,8 @@ import Cuckoo
 import Foundation
 
 
+@available(*, message: "mocked")
+
 public class MockFileWheel: FileWheel, Cuckoo.ClassMock {
     
     public typealias MocksType = FileWheel
@@ -77,16 +79,16 @@ public class MockFileWheel: FileWheel, Cuckoo.ClassMock {
     
     
     
-    public override func shouldRotate(fileAt url: URL, for data: Data) -> Bool {
+    public override func shouldRotate(fileAt url: URL) -> Bool {
         
-    return cuckoo_manager.call("shouldRotate(fileAt: URL, for: Data) -> Bool",
-            parameters: (url, data),
-            escapingParameters: (url, data),
+    return cuckoo_manager.call("shouldRotate(fileAt: URL) -> Bool",
+            parameters: (url),
+            escapingParameters: (url),
             superclassCall:
                 
-                super.shouldRotate(fileAt: url, for: data)
+                super.shouldRotate(fileAt: url)
                 ,
-            defaultCall: __defaultImplStub!.shouldRotate(fileAt: url, for: data))
+            defaultCall: __defaultImplStub!.shouldRotate(fileAt: url))
         
     }
     
@@ -102,6 +104,21 @@ public class MockFileWheel: FileWheel, Cuckoo.ClassMock {
                 super.rotate(fileAt: url)
                 ,
             defaultCall: __defaultImplStub!.rotate(fileAt: url))
+        
+    }
+    
+    
+    
+    public override func rotateIfNeeded(fileAt url: URL) throws {
+        
+    return try cuckoo_manager.callThrows("rotateIfNeeded(fileAt: URL) throws",
+            parameters: (url),
+            escapingParameters: (url),
+            superclassCall:
+                
+                super.rotateIfNeeded(fileAt: url)
+                ,
+            defaultCall: __defaultImplStub!.rotateIfNeeded(fileAt: url))
         
     }
     
@@ -124,14 +141,19 @@ public class MockFileWheel: FileWheel, Cuckoo.ClassMock {
 	    }
 	    
 	    
-	    func shouldRotate<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(fileAt url: M1, for data: M2) -> Cuckoo.ClassStubFunction<(URL, Data), Bool> where M1.MatchedType == URL, M2.MatchedType == Data {
-	        let matchers: [Cuckoo.ParameterMatcher<(URL, Data)>] = [wrap(matchable: url) { $0.0 }, wrap(matchable: data) { $0.1 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockFileWheel.self, method: "shouldRotate(fileAt: URL, for: Data) -> Bool", parameterMatchers: matchers))
+	    func shouldRotate<M1: Cuckoo.Matchable>(fileAt url: M1) -> Cuckoo.ClassStubFunction<(URL), Bool> where M1.MatchedType == URL {
+	        let matchers: [Cuckoo.ParameterMatcher<(URL)>] = [wrap(matchable: url) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockFileWheel.self, method: "shouldRotate(fileAt: URL) -> Bool", parameterMatchers: matchers))
 	    }
 	    
 	    func rotate<M1: Cuckoo.Matchable>(fileAt url: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(URL)> where M1.MatchedType == URL {
 	        let matchers: [Cuckoo.ParameterMatcher<(URL)>] = [wrap(matchable: url) { $0 }]
 	        return .init(stub: cuckoo_manager.createStub(for: MockFileWheel.self, method: "rotate(fileAt: URL) throws", parameterMatchers: matchers))
+	    }
+	    
+	    func rotateIfNeeded<M1: Cuckoo.Matchable>(fileAt url: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(URL)> where M1.MatchedType == URL {
+	        let matchers: [Cuckoo.ParameterMatcher<(URL)>] = [wrap(matchable: url) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockFileWheel.self, method: "rotateIfNeeded(fileAt: URL) throws", parameterMatchers: matchers))
 	    }
 	    
 	}
@@ -161,15 +183,21 @@ public class MockFileWheel: FileWheel, Cuckoo.ClassMock {
 	
 	    
 	    @discardableResult
-	    func shouldRotate<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable>(fileAt url: M1, for data: M2) -> Cuckoo.__DoNotUse<(URL, Data), Bool> where M1.MatchedType == URL, M2.MatchedType == Data {
-	        let matchers: [Cuckoo.ParameterMatcher<(URL, Data)>] = [wrap(matchable: url) { $0.0 }, wrap(matchable: data) { $0.1 }]
-	        return cuckoo_manager.verify("shouldRotate(fileAt: URL, for: Data) -> Bool", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    func shouldRotate<M1: Cuckoo.Matchable>(fileAt url: M1) -> Cuckoo.__DoNotUse<(URL), Bool> where M1.MatchedType == URL {
+	        let matchers: [Cuckoo.ParameterMatcher<(URL)>] = [wrap(matchable: url) { $0 }]
+	        return cuckoo_manager.verify("shouldRotate(fileAt: URL) -> Bool", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
 	    }
 	    
 	    @discardableResult
 	    func rotate<M1: Cuckoo.Matchable>(fileAt url: M1) -> Cuckoo.__DoNotUse<(URL), Void> where M1.MatchedType == URL {
 	        let matchers: [Cuckoo.ParameterMatcher<(URL)>] = [wrap(matchable: url) { $0 }]
 	        return cuckoo_manager.verify("rotate(fileAt: URL) throws", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
+	    func rotateIfNeeded<M1: Cuckoo.Matchable>(fileAt url: M1) -> Cuckoo.__DoNotUse<(URL), Void> where M1.MatchedType == URL {
+	        let matchers: [Cuckoo.ParameterMatcher<(URL)>] = [wrap(matchable: url) { $0 }]
+	        return cuckoo_manager.verify("rotateIfNeeded(fileAt: URL) throws", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
 	    }
 	    
 	}
@@ -201,11 +229,15 @@ public class FileWheelStub: FileWheel {
     
 
     
-    public override func shouldRotate(fileAt url: URL, for data: Data) -> Bool  {
+    public override func shouldRotate(fileAt url: URL) -> Bool  {
         return DefaultValueRegistry.defaultValue(for: (Bool).self)
     }
     
     public override func rotate(fileAt url: URL) throws  {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+    public override func rotateIfNeeded(fileAt url: URL) throws  {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
