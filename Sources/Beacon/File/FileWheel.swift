@@ -20,14 +20,15 @@ open class FileWheel : FileRotation {
     
     public typealias RotationBlock = (_ url: URL) throws -> Void
     
-    public typealias ConditionBlock = (_ url: URL, _ data: Data) -> Bool
+    public typealias ConditionBlock = (_ url: URL) -> Bool
     
     // MARK: - Variables
     
-    // Max file size, in bytes, that log file should not exceed
+    /// Condition that needs to be met before rotation file can be rotated.
+    /// The block takes file URL and expected to return true if file at that location needs to be rotated.
     open var conditionBlock: ConditionBlock
     
-    // Block should perform log rotation and return Bool value indicating whether the file was rotated.
+    /// Block that performs actual file rotation.
     open var rotationBlock: RotationBlock
     
     // MARK: - Init
@@ -39,11 +40,21 @@ open class FileWheel : FileRotation {
     
     // MARK: - Rotation
     
-    open func shouldRotate(fileAt url: URL, for data: Data) -> Bool {
-        return conditionBlock(url, data)
+    /// Answer whether file at given URL should be rotated.
+    open func shouldRotate(fileAt url: URL) -> Bool {
+        return conditionBlock(url)
     }
     
+    
+    /// Rotates file at given URL or throws an error indicating why rotation failed.
     open func rotate(fileAt url: URL) throws {
         try rotationBlock(url)
     }
+    
+    /// Rotate file at given URL if it should be rotated.
+    open func rotateIfNeeded(fileAt url: URL) throws {
+        guard shouldRotate(fileAt: url) else { return }
+        try rotate(fileAt: url)
+    }
+    
 }

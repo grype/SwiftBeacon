@@ -26,27 +26,24 @@ open class StreamLogger : SignalLogger {
     
     // MARK: - Properties
     
-    var stream: OutputStream
-    
-    var encoder: SignalEncoder
+    private(set) var writer: EncodedStreamSignalWriter
     
     // MARK: - Instance Creation
     
-    public class func starting<T:StreamLogger>(name aName: String, stream aStream: OutputStream, encoder anEncoder: SignalEncoder, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
-        let me = self.init(name: aName, on: aStream, encoder: anEncoder)
+    public class func starting<T:StreamLogger>(name aName: String, writer aWriter: EncodedStreamSignalWriter, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
+        let me = self.init(name: aName, writer: aWriter)
         me.subscribe(to: beacons, filter: filter)
         return me as! T
     }
     
     override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T : SignalLogger {
-        fatalError("Use StreamLogger.starting(name:stream:encoder:on:filter:)")
+        fatalError("Use StreamLogger.starting(name:writer:on:filter:)")
     }
     
     // MARK: - Init
     
-    public required init(name aName: String, on aStream: OutputStream, encoder anEncoder: SignalEncoder) {
-        stream = aStream
-        encoder = anEncoder
+    public required init(name aName: String, writer aWriter: EncodedStreamSignalWriter) {
+        writer = aWriter
         super.init(name: aName)
     }
     
@@ -58,28 +55,23 @@ open class StreamLogger : SignalLogger {
     
     override func didStart(on beacons: [Beacon]) {
         super.didStart(on: beacons)
-        stream.open()
+        writer.open()
     }
     
     override func didStop() {
         super.didStop()
-        stream.close()
+        writer.close()
     }
     
     // MARK: - Logging
     
     override open func nextPut(_ aSignal: Signal) {
         do {
-            let data = try encoder.encode(aSignal)
-            try write(data: data)
+            try writer.write(aSignal)
         }
         catch {
-            print("Error: \(error)")
+            print("Error writing signal: \(error)")
         }
-    }
-    
-    func write(data: Data) throws {
-        let _ = data.write(on: stream)
     }
     
 }

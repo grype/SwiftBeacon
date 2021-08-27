@@ -21,14 +21,30 @@ public class EncodedStreamSignalWriter : SignalWriter {
     
     open var separator: Data?
     
+    // MARK:- Init
+    
     public init(on aStream: OutputStream, encoder anEncoder: SignalEncoder) {
         stream = aStream
         encoder = anEncoder
     }
+    
+    // MARK:- Opening/Closing
+    
+    func open() {
+        stream.open()
+    }
+    
+    func close() {
+        stream.close()
+    }
+    
+    
+    // MARK:- Writing
     
     open func write(_ aSignal: Signal) throws {
         let data = try encoder.encode(aSignal)
         data.write(on: stream)
         separator?.write(on: stream)
     }
+    
 }

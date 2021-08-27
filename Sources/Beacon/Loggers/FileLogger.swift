@@ -36,7 +36,7 @@ open class FileLogger : StreamLogger {
     // MARK: - Instance Creation
     
     public class func starting<T:FileLogger>(name aName: String, url anURL: URL, encoder anEncoder: SignalEncoder, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
-        let me = self.init(name: aName, on: anURL, encoder: anEncoder)
+        let me = self.init(name: aName, on: anURL, encoder: anEncoder)!
         me.subscribe(to: beacons, filter: filter)
         return me as! T
     }
@@ -47,17 +47,22 @@ open class FileLogger : StreamLogger {
     
     // MARK:- Init
     
-    public required init(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoder) {
+    public required init?(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoder) {
         url = anUrl
-        super.init(name: aName, on: OutputStream(url: anUrl, append: true)!, encoder: anEncoder)
+        guard let stream = OutputStream(url: anUrl, append: true) else {
+            print("Error creating output stream on \(anUrl)")
+            return nil
+        }
+        let writer = EncodedStreamSignalWriter(on: stream, encoder: anEncoder)
+        super.init(name: aName, writer: writer)
     }
     
     @objc public required init(name aName: String) {
         fatalError("Use init(name:on:encoder:) to instantiate")
     }
     
-    public required init(name aName: String, on aStream: OutputStream, encoder anEncoder: SignalEncoder) {
-        fatalError("Use init(name:on:encoder:) with URL instead of OutputStream")
+    public required init(name aName: String, writer aWriter: EncodedStreamSignalWriter) {
+        fatalError("init(name:writer:) has not been implemented")
     }
     
     // MARK:- Starting/Stopping
@@ -74,21 +79,28 @@ open class FileLogger : StreamLogger {
         super.didStart(on: beacons)
     }
     
-    // MARK:- File operations
+    // MARK:- Logging
     
-    override func write(data: Data) throws {
-        if let wheel = wheel, wheel.shouldRotate(fileAt: url, for: data) {
-            try forceRotate()
+    open override func nextPut(_ aSignal: Signal) {
+        if wheel?.shouldRotate(fileAt: url) ?? false {
+            do {
+                try forceRotate()
+            }
+            catch {
+                print("Error rotating file \(url): \(error)")
+            }
         }
-        try super.write(data: data)
+        super.nextPut(aSignal)
     }
+    
+    // MARK:- File
     
     open func forceRotate() throws {
         guard let wheel = wheel else { return }
-        stream.close()
+        writer.close()
         try wheel.rotate(fileAt: url)
-        stream = OutputStream(url: url, append: true)!
-        stream.open()
+        writer.stream = OutputStream(url: url, append: true)!
+        writer.open()
     }
     
 }

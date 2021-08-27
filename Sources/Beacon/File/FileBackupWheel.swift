@@ -45,11 +45,10 @@ open class FileBackupWheel : FileRotation {
     
     // MARK:- Rotating
     
-    open func shouldRotate(fileAt url: URL, for data: Data) -> Bool {
-        guard data.count > 0 else { return false }
+    open func shouldRotate(fileAt url: URL) -> Bool {
         guard fileExists(at: url) else { return false }
         let currentSize = fileSize(at: url)
-        return currentSize > 0 && (maxFileSize < (currentSize + UInt64(data.count)))
+        return currentSize > 0 && (maxFileSize <= currentSize)
     }
     
     // Rotates file at given URL and returns Bool indicating successful operation
