@@ -9,10 +9,13 @@
 import Foundation
 
 extension Data {
+    
+    @discardableResult
     func write(on stream: OutputStream) -> Int {
         withUnsafeBytes { (bytes) in
             guard let buffer = bytes.baseAddress?.assumingMemoryBound(to: UInt8.self) else { return 0 }
             return stream.write(buffer, maxLength: count)
         }
     }
+    
 }

@@ -15,7 +15,5 @@ import Foundation
  */
 
 public protocol SignalEncoder {
-    func encode<T>(_ value: T) throws -> Data where T : Encodable
+    func encode(_ aSignal: Signal) throws -> Data
 }
-
-extension JSONEncoder : SignalEncoder {}

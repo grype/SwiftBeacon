@@ -13,7 +13,7 @@ class StreamLoggerTests : XCTestCase {
     
     private var logger: StreamLoggerSpy!
     
-    private let stringEncoder = SignalStringEncoder(encoding: .utf8)
+    private let stringEncoder = SignalDescriptionEncoder(encoding: .utf8)
     
     private var stream: OutputStream!
     

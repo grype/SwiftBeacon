@@ -28,11 +28,7 @@ open class JRPCLogger: IntervalLogger {
     @objc open private(set) var method: String!
     
     /// JSONEncoder for encoding signals.
-    var encoder: SignalEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .formatted(DateFormatter(format: .iso8601))
-        return encoder
-    }()
+    var encoder: SignalEncoder = JSONSignalEncoder()
     
     // MARK: - Variables (private)
     

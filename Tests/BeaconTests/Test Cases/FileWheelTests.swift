@@ -51,7 +51,7 @@ class FileWheelTests : XCTestCase {
     // MARK:- Helpers
     
     private func logSignal() {
-        let logger = FileLogger(name: "Test logger", on: url, encoder: SignalStringEncoder(encoding: .utf8))
+        let logger = FileLogger(name: "Test logger", on: url, encoder: SignalDescriptionEncoder(encoding: .utf8))
         logger.wheel = wheel
         logger.tracksMachImageImports = false
         logger.identifiesOnStart = false

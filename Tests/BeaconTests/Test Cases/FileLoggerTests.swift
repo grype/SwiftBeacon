@@ -27,7 +27,7 @@ class FileLoggerTests : XCTestCase {
         }, rotate: { (_) in
         }).withEnabledSuperclassSpy()
         
-        logger = FileLogger(name: "FileLoggerTests", on: url, encoder: SignalStringEncoder(encoding: .utf8))
+        logger = FileLogger(name: "FileLoggerTests", on: url, encoder: SignalDescriptionEncoder(encoding: .utf8))
         logger.wheel = wheel
         logger.beForTesting()
     }
