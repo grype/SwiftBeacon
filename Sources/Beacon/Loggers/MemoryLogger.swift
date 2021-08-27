@@ -16,6 +16,8 @@ import RWLock
  I am mostly useful for debugging at run time.
  
  */
+
+@available(*, message: "mocked")
 open class MemoryLogger : SignalLogger {
     @objc public static var shared = MemoryLogger(name: "MemoryLogger")
     

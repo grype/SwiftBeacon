@@ -15,6 +15,7 @@ import Foundation
  One such mechanism is support for file rotation.
  */
 
+@available(*, message: "mocked")
 open class FileLogger : StreamLogger {
     
     // MARK:- Properties

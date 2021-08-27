@@ -39,6 +39,8 @@ import SwiftAnnouncements
  ````
  
  */
+
+@available(*, message: "mocked")
 open class Beacon : NSObject {
     
     @objc public static var beaconVersion = "1.2.0"

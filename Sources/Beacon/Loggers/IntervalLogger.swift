@@ -22,6 +22,8 @@ import Foundation
  logger.nextPut(StringSignal("test"))
  
  */
+
+@available(*, message: "mocked")
 open class IntervalLogger : SignalLogger {
     
     // MARK: - Variables

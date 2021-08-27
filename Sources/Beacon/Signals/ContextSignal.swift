@@ -15,6 +15,8 @@ import MachO
  I am used for announcing a particular point in the code. Simply call `emit()`, without
  any arguments...
  */
+
+@available(*, message: "mocked")
 open class ContextSignal: Signal {
     
     @objc open var stack: [String]

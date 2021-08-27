@@ -14,6 +14,8 @@ import Foundation
  When asked, I will use the `conditionBlock` to respond whether or not rotation should occur.
  And `rotationBlock` to perform the actual rotation.
  */
+
+@available(*, message: "mocked")
 open class FileWheel : FileRotation {
     
     public typealias RotationBlock = (_ url: URL) throws -> Void

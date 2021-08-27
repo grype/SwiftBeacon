@@ -14,6 +14,8 @@ import Foundation
  I mimic traditional loggers by simply printing out descriptions of the signals I receive.
  I can also indicate periods of inactivity via `markedInactivityPeriod`.
  */
+
+@available(*, message: "mocked")
 open class ConsoleLogger : SignalLogger {
     
     // MARK: - Instance Creation

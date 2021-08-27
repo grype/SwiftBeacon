@@ -21,6 +21,7 @@ import Foundation
  logger.nextPut(StringSignal("Hello world"))
  */
 
+@available(*, message: "mocked")
 open class StreamLogger : SignalLogger {
     
     // MARK: - Properties

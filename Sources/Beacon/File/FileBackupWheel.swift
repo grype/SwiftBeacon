@@ -23,6 +23,8 @@ import Foundation
  if wheel.shouldRotate(fileAt: URL(fileURLWithPath: "/tmp/foo.log"))
  ```
  */
+
+@available(*, message: "mocked")
 open class FileBackupWheel : FileRotation {
     
     // Max file size, in bytes, that log file should not exceed

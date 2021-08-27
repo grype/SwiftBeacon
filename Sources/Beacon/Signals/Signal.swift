@@ -35,6 +35,8 @@ let UniqueDeviceIdentifier: String? = nil
  (using `Signal.Source` struct) and then announces me via relevant `Beacon` instances.
  
  */
+
+@available(*, message: "mocked")
 open class Signal : NSObject, Encodable {
     
     // MARK:- Structs

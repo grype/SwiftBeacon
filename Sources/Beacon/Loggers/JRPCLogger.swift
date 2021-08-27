@@ -17,6 +17,8 @@ import Foundation
  to that point, and I refrain from making additional network requests until
  I am finished with the current one.
  */
+
+@available(*, message: "mocked")
 open class JRPCLogger: IntervalLogger {
     
     // MARK: - Variables

@@ -13,6 +13,8 @@ import Foundation
  
  By default I capture Beacon version. Feel free to extend me...
  */
+
+@available(*, message: "mocked")
 open class IdentitySignal : Signal {
     
     // MARK:- Properties
