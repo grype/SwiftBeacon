@@ -7,23 +7,32 @@
 //
 
 import XCTest
-@testable import Beacon
 import AnyCodable
+import Cuckoo
+import Nimble
+@testable import Beacon
 
 class JRPCLoggerTests : XCTestCase {
+    
     static private var QueueName = "JRPCLoggerTests"
+    
     var interval: TimeInterval = 1
-    var logger: JRPCLoggerSpy!
+    
+    var logger: MockJRPCLogger!
+    
     var url = URL(string: "https://example.com/emit")!
+    
     var queue = DispatchQueue(label: JRPCLoggerTests.QueueName,
                               qos: .default,
                               attributes: DispatchQueue.Attributes(),
                               autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
                               target: nil)
     
+    // MARK:- Setup/Teardown
+    
     override func setUp() {
         super.setUp()
-        logger = JRPCLoggerSpy(url: url, method: "emit", name: JRPCLoggerTests.QueueName, interval: interval, queue: queue)
+        logger = MockJRPCLogger(url: url, method: "emit", name: JRPCLoggerTests.QueueName, interval: interval, queue: queue).withEnabledSuperclassSpy()
         logger.beForTesting()
     }
     
@@ -33,120 +42,125 @@ class JRPCLoggerTests : XCTestCase {
         logger = nil
     }
     
-    // MARK: - Test Cases
+    // MARK: - Tests
     
     func testInit() {
-        XCTAssertEqual(logger.name, String(describing: type(of: self)), "Logger isn't named by init param")
-        XCTAssertEqual(logger.queue, queue, "Logger didn't init with correct queue")
-        XCTAssertFalse(logger.isRunning, "Logger is starting after init")
-        XCTAssertEqual(logger.url, url, "Logger has incorrect url after init")
-        XCTAssertFalse(logger.flushTimer?.isValid ?? false, "Flush timer shouldn't be running after init")
-        XCTAssertNil(logger.urlSessionTask, "URLSessionTask should be nil after init")
-        XCTAssertNil(logger.lastCompletionDate, "LastCompletionDate should be nil after init")
+        let logger = self.logger!
+        expect(logger.name).to(equal(String(describing: type(of: self))))
+        expect(logger.queue).to(equal(queue))
+        expect(logger.isRunning).to(beFalse())
+        expect(logger.url).to(equal(url))
+        expect(logger.flushTimer?.isValid ?? false).to(beFalse())
+        expect(logger.urlSessionTask).to(beNil())
+        expect(logger.lastCompletionDate).to(beNil())
     }
     
     func testStart() {
+        let logger = self.logger!
         logger.start()
-        XCTAssertTrue(logger.isRunning, "Logger should be running after start()")
-        XCTAssertTrue(logger.flushTimer?.isValid ?? false, "Flush timer should be valid after start()")
-        XCTAssertNil(logger.urlSessionTask, "URLSessionTask should be nil after init")
-        XCTAssertNil(logger.lastCompletionDate, "LastCompletionDate should be nil after init")
+        expect(logger.isRunning).to(beTrue())
+        expect(logger.flushTimer?.isValid ?? false).to(beTrue())
+        expect(logger.urlSessionTask).to(beNil())
+        expect(logger.lastCompletionDate).to(beNil())
     }
     
     func testStop() {
+        let logger = self.logger!
         logger.start()
         logger.stop()
-        XCTAssertFalse(logger.isRunning, "Logger should be running after start()")
-        XCTAssertFalse(logger.flushTimer?.isValid ?? false, "Flush timer should be valid after start()")
-        XCTAssertNil(logger.urlSessionTask, "URLSessionTask should be nil after init")
-        XCTAssertNil(logger.lastCompletionDate, "LastCompletionDate should be nil after init")
+        expect(logger.isRunning).to(beFalse())
+        expect(logger.flushTimer?.isValid ?? false).to(beFalse())
+        expect(logger.urlSessionTask).to(beNil())
+        expect(logger.lastCompletionDate).to(beNil())
     }
     
     func testNextPut() {
+        let logger = self.logger!
         logger.start()
         logger.nextPut(StringSignal("Hello world"))
-        
-        let expectBuffer = expectation(description: "Buffering")
-        logger.queue.async {
-            expectBuffer.fulfill()
-        }
-        wait(for: [expectBuffer], timeout: 1)
-        XCTAssertEqual(logger.buffer.count, 1, "Expected a single signal in the buffer")
+        expect(logger.buffer.count).toEventually(equal(1))
     }
     
     func testNextPutStringWithUserInfo() {
+        let logger = self.logger!
         logger.start()
         let signal = StringSignal("Hello world")
         signal.userInfo = ["Number" : 123, "String" : "Hello", "Bool" : true]
         logger.nextPut(signal)
-        let expectBuffer = expectation(description: "Buffering")
-        logger.queue.async {
-            expectBuffer.fulfill()
+        
+        waitUntil { done in
+            logger.queue.async {
+                done()
+            }
         }
-        wait(for: [expectBuffer], timeout: 1)
         logger.flush()
         
-        let list = logger.invokedPerformParametersList
-        let httpJson = try! JSONSerialization.jsonObject(with: list.first!.0.httpBody!, options: .fragmentsAllowed) as! [String: Any]
+        let argumentCaptor = ArgumentCaptor<URLRequest>()
+        verify(logger).perform(urlRequest: argumentCaptor.capture(), completion: any())
+        let httpJson = try! JSONSerialization.jsonObject(with: argumentCaptor.value!.httpBody!, options: .fragmentsAllowed) as! [String: Any]
         let httpProperties = (httpJson["params"] as! [[[String:Any]]]).first!.first!["properties"] as! [AnyHashable : AnyHashable]
-        XCTAssertEqual(httpProperties, signal.userInfo as! [AnyHashable : AnyHashable])
+        expect(httpProperties).to(equal((signal.userInfo as! [AnyHashable : AnyHashable])))
     }
     
     func testNextPutWrapperWithUserInfo() {
+        let logger = self.logger!
         logger.start()
         let obj = SampleObject()
         let date = Date()
         let signal = WrapperSignal(obj, userInfo: ["Number" : 123, "String" : "Hello", "Bool" : true, "Date" : date])
         logger.nextPut(signal)
-        let expectBuffer = expectation(description: "Buffering")
-        logger.queue.async {
-            expectBuffer.fulfill()
-        }
-        wait(for: [expectBuffer], timeout: 1)
-        logger.flush()
         
-        let list = logger.invokedPerformParametersList
-        let httpJson = try! JSONSerialization.jsonObject(with: list.first!.0.httpBody!, options: .fragmentsAllowed) as! [String: Any]
+        waitUntil { done in
+            logger.queue.async {
+                logger.flush()
+            }
+        }
+        
+        let argumentCaptor = ArgumentCaptor<URLRequest>()
+        verify(logger).perform(urlRequest: argumentCaptor.capture(), completion: any())
+        let httpJson = try! JSONSerialization.jsonObject(with: argumentCaptor.value!.httpBody!, options: .fragmentsAllowed) as! [String: Any]
         let httpProperties = (httpJson["params"] as! [[[String:Any]]]).first!.first!["properties"] as! [AnyHashable : AnyHashable]
         let jsonEncoder = (logger.encoder as! JSONEncoder)
         let signalJson = try! jsonEncoder.encode(AnyEncodable(signal.userInfo))
         let signalProperties = try! JSONSerialization.jsonObject(with: signalJson, options: .fragmentsAllowed) as! [AnyHashable : AnyHashable]
-        XCTAssertEqual(httpProperties, signalProperties)
+        expect(httpProperties).to(equal(signalProperties))
     }
     
     func testFlush() {
+        let logger = self.logger!
         logger.start()
         
-        XCTAssertEqual(logger.invokedFlushCount, 0, "Should have invoked flush only once")
-        XCTAssertEqual(logger.invokedCreateUrlRequestCount, 0, "Should have created URL Request only once")
-        XCTAssertEqual(logger.invokedPerformCount, 0, "Should have performed URL Request only oince after flush")
+        verify(logger, times(0)).flush()
+        verify(logger, times(0)).createUrlRequest(with: any())
+        verify(logger, times(0)).perform(urlRequest: any(), completion: any())
         
         logger.nextPut(StringSignal("Hello world"))
         
-        let expectFlush = expectation(description: "Flushing")
-        logger.queue.asyncAfter(deadline: .now() + logger.flushInterval + 0.1) {
-            expectFlush.fulfill()
+        waitUntil { done in
+            logger.queue.asyncAfter(deadline: .now() + logger.flushInterval + 0.1) {
+                done()
+            }
         }
-        wait(for: [expectFlush], timeout: logger.flushInterval + 0.2)
         
-        XCTAssertEqual(logger.invokedFlushCount, 1, "Should have invoked flush only once")
-        XCTAssertEqual(logger.invokedCreateUrlRequestCount, 1, "Should have created URL Request only once")
-        XCTAssertEqual(logger.invokedPerformCount, 1, "Should have performed URL Request only oince after flush")
+        verify(logger, times(1)).flush()
+        verify(logger, times(1)).createUrlRequest(with: any())
+        verify(logger, times(1)).perform(urlRequest: any(), completion: any())
     }
     
     func testLoggingSringError() {
+        let logger = self.logger!
         logger.start()
         
         logger.nextPut(ErrorSignal(error: "Test error" as Error))
-        let expectFlush = expectation(description: "Flushing")
-        logger.queue.asyncAfter(deadline: .now() + logger.flushInterval + 0.1) {
-            expectFlush.fulfill()
+        waitUntil { done in
+            logger.queue.asyncAfter(deadline: .now() + logger.flushInterval + 0.1) {
+                done()
+            }
         }
-        wait(for: [expectFlush], timeout: logger.flushInterval + 0.2)
         
-        XCTAssertEqual(logger.invokedFlushCount, 1, "Should have invoked flush only once")
-        XCTAssertEqual(logger.invokedCreateUrlRequestCount, 1, "Should have created URL Request only once")
-        XCTAssertEqual(logger.invokedPerformCount, 1, "Should have performed URL Request only oince after flush")
+        verify(logger, times(1)).flush()
+        verify(logger, times(1)).createUrlRequest(with: any())
+        verify(logger, times(1)).perform(urlRequest: any(), completion: any())
     }
     
 }

@@ -231,7 +231,7 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
                 
                 super.sourcedFromHere(fileName: fileName, line: line, functionName: functionName)
                 ,
-            defaultCall: __defaultImplStub!.sourcedFromHere(fileName: fileName, line: line, functionName: functionName))
+            defaultCall: __defaultImplStub!.sourcedFromHere(fileName: fileName, line: line, functionName: functionName)) as! Self
         
     }
     

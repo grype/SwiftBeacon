@@ -19,7 +19,7 @@ class FileWheelTests : XCTestCase {
     
     override func setUp() {
         super.setUp()
-        wheel = MockFileWheel(when: { _,_ in true }, rotate: { _ in }).withEnabledSuperclassSpy()
+        wheel = MockFileWheel(when: { _ in true }, rotate: { _ in }).withEnabledSuperclassSpy()
     }
     
     override func tearDown() {
@@ -32,7 +32,7 @@ class FileWheelTests : XCTestCase {
     
     func testRotatesWhenShould() {
         stub(wheel) { (stub) in
-            when(stub.shouldRotate(fileAt: any(), for: any())).thenReturn(true)
+            when(stub.shouldRotate(fileAt: any())).thenReturn(true)
             when(stub.rotate(fileAt: any())).thenDoNothing()
         }
         logSignal()
@@ -41,7 +41,7 @@ class FileWheelTests : XCTestCase {
     
     func testDoesNotRotateWhenShouldNot() {
         stub(wheel) { (stub) in
-            when(stub.shouldRotate(fileAt: any(), for: any())).thenReturn(false)
+            when(stub.shouldRotate(fileAt: any())).thenReturn(false)
             when(stub.rotate(fileAt: any())).thenDoNothing()
         }
         logSignal()
@@ -51,7 +51,7 @@ class FileWheelTests : XCTestCase {
     // MARK:- Helpers
     
     private func logSignal() {
-        let logger = FileLogger(name: "Test logger", on: url, encoder: SignalDescriptionEncoder(encoding: .utf8))
+        let logger = FileLogger(name: "Test logger", on: url, encoder: SignalDescriptionEncoder(encoding: .utf8))!
         logger.wheel = wheel
         logger.tracksMachImageImports = false
         logger.identifiesOnStart = false

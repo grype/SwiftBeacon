@@ -29,38 +29,33 @@ class FileBackupWheelTests : XCTestCase {
     }
     
     func testShouldRotateForZeroSize() {
-        let data = Data()
-        XCTAssertFalse(wheel.shouldRotate(fileAt: url, for: data), "Should not allow rotation for empty content")
+        XCTAssertFalse(wheel.shouldRotate(fileAt: url), "Should not allow rotation for empty content")
     }
     
     func testShouldNotRotateWhenFileDoesNotExist() {
         configureFile(exists: false)
-        let data = "a".data(using: .utf8)!
-        expect(self.wheel.shouldRotate(fileAt: self.url, for: data)).to(beFalse())
+        expect(self.wheel.shouldRotate(fileAt: self.url)).to(beFalse())
     }
     
     func testShouldRotateWhenFileExceedsMaxSize() {
         configureFile(exists: true, size: maxSize)
-        let data = "a".data(using: .utf8)!
-        expect(self.wheel.shouldRotate(fileAt: self.url, for: data)).to(beTrue())
+        expect(self.wheel.shouldRotate(fileAt: self.url)).to(beTrue())
     }
     
     func testShouldRotateWhenFileWillExceedMaxSize() {
         configureFile(exists: true, size: maxSize+1)
-        let data = "a".data(using: .utf8)!
-        expect(self.wheel.shouldRotate(fileAt: self.url, for: data)).to(beTrue())
+        expect(self.wheel.shouldRotate(fileAt: self.url)).to(beTrue())
     }
     
     func testShouldNotRotateWhenFileWillNotExceedMaxSize() {
         let data = "a".data(using: .utf8)!
         configureFile(exists: true, size: maxSize-UInt64(data.count+1))
-        expect(self.wheel.shouldRotate(fileAt: self.url, for: data)).to(beFalse())
+        expect(self.wheel.shouldRotate(fileAt: self.url)).to(beFalse())
     }
     
     func testShouldRotateWhenFileIsEmpty() {
         configureFile(exists: true, size: 0)
-        let data = "this should overflow".data(using: .utf8)!
-        expect(self.wheel.shouldRotate(fileAt: self.url, for: data)).to(beFalse())
+        expect(self.wheel.shouldRotate(fileAt: self.url)).to(beFalse())
     }
     
     func testReducesExcessivesBackups() {

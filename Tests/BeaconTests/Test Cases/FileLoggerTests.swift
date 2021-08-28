@@ -22,7 +22,7 @@ class FileLoggerTests : XCTestCase {
     override func setUp() {
         super.setUp()
         
-        wheel = MockFileWheel(when: { (_, _) -> Bool in
+        wheel = MockFileWheel(when: { _ -> Bool in
             return true
         }, rotate: { (_) in
         }).withEnabledSuperclassSpy()
@@ -88,7 +88,7 @@ class FileLoggerTests : XCTestCase {
     
     private func stubForRotation(_ bool: Bool) {
         stub(wheel) { (stub) in
-            when(stub.shouldRotate(fileAt: any(), for: any())).thenReturn(bool)
+            when(stub.shouldRotate(fileAt: any())).thenReturn(bool)
             when(stub.rotate(fileAt: any())).thenDoNothing()
         }
     }

@@ -7,39 +7,58 @@
 //
 
 import XCTest
+import Cuckoo
+import Nimble
 @testable import Beacon
 
 class StreamLoggerTests : XCTestCase {
     
-    private var logger: StreamLoggerSpy!
+    private var logger: MockStreamLogger!
     
-    private let stringEncoder = SignalDescriptionEncoder(encoding: .utf8)
+    private var writer: MockEncodedStreamSignalWriter!
     
-    private var stream: OutputStream!
+    private var encoder: SignalDescriptionEncoder { writer.encoder as! SignalDescriptionEncoder }
+    
+    private var stream: OutputStream { writer.stream }
+    
+    private var separator: String? {
+        guard let separator = writer.separator else { return nil }
+        return String(data: separator, encoding: encoder.encoding)
+    }
+    
+    // MARK:- Setup/Teardown
     
     override func setUp() {
         super.setUp()
-        stream = OutputStream.toMemory()
-        logger = StreamLoggerSpy(name: "Beacon-Test-File-Logger", on: stream, encoder: stringEncoder)
+        writer = MockEncodedStreamSignalWriter(on: OutputStream.toMemory(), encoder: SignalDescriptionEncoder(encoding: .utf8))
+        writer.separator = "\n".data(using: encoder.encoding)
+        logger = MockStreamLogger(name: "Beacon-Test-File-Logger", writer: writer).withEnabledSuperclassSpy()
         logger.beForTesting()
     }
     
     override func tearDown() {
         super.tearDown()
-        stream.close()
-        stream = nil
         logger.stop()
         logger = nil
     }
+    
+    // MARK: - Helpers
+    
+    private func streamContents() -> String? {
+        guard let data = stream.property(forKey: .dataWrittenToMemoryStreamKey) as? Data else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+    
+    // MARK:- Tests
     
     func testNextPut() {
         logger.start()
         let signal = StringSignal("Hello world")
         logger.nextPut(signal)
         let result = streamContents()
-        XCTAssertNotNil(result, "Failed to fetch data from log file")
+        expect(result).toNot(beNil())
         if let result = result {
-            XCTAssertEqual(result, "\(signal.description)\(stringEncoder.separator)", "Logged signal isn't the same as its description")
+            expect(result).to(equal("\(signal.description)\(separator!)"))
         }
     }
     
@@ -64,18 +83,11 @@ class StreamLoggerTests : XCTestCase {
         let result = streamContents()
         XCTAssertNotNil(result, "Failed to fetch data from log file")
         if let result = result {
-            let gotSorted = result.components(separatedBy: stringEncoder.separator).filter { !$0.isEmpty }.sorted()
+            let gotSorted = result.components(separatedBy: separator!).filter { !$0.isEmpty }.sorted()
             let expectSorted = signals.map { String(describing: $0) }.sorted()
             XCTAssertEqual(gotSorted.count, signals.count, "Inconsistent number of entries logged")
             XCTAssertEqual(gotSorted, expectSorted, "Logged signal isn't the same as its description")
         }
-    }
-    
-    // MARK: - Helpers
-    
-    private func streamContents() -> String? {
-        guard let data = stream.property(forKey: .dataWrittenToMemoryStreamKey) as? Data else { return nil }
-        return String(data: data, encoding: .utf8)
     }
     
 }
