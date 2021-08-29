@@ -19,7 +19,7 @@ public class EncodedStreamSignalWriter : SignalWriter {
     
     open var stream: OutputStream
     
-    open var separator: Data?
+    open var separator: Data = .init()
     
     // MARK:- Init
     
@@ -30,11 +30,11 @@ public class EncodedStreamSignalWriter : SignalWriter {
     
     // MARK:- Opening/Closing
     
-    func open() {
+    open func open() {
         stream.open()
     }
     
-    func close() {
+    open func close() {
         stream.close()
     }
     
@@ -44,7 +44,7 @@ public class EncodedStreamSignalWriter : SignalWriter {
     open func write(_ aSignal: Signal) throws {
         let data = try encoder.encode(aSignal)
         data.write(on: stream)
-        separator?.write(on: stream)
+        separator.write(on: stream)
     }
     
 }
