@@ -22,7 +22,7 @@ class StreamLoggerTests : XCTestCase {
     private var stream: OutputStream { writer.stream }
     
     private var separator: String? {
-        guard let separator = writer.separator else { return nil }
+        let separator = writer.separator
         return String(data: separator, encoding: encoder.encoding)
     }
     
@@ -30,15 +30,15 @@ class StreamLoggerTests : XCTestCase {
     
     override func setUp() {
         super.setUp()
-        writer = MockEncodedStreamSignalWriter(on: OutputStream.toMemory(), encoder: SignalDescriptionEncoder(encoding: .utf8))
-        writer.separator = "\n".data(using: encoder.encoding)
+        writer = MockEncodedStreamSignalWriter(on: OutputStream.toMemory(), encoder: SignalDescriptionEncoder(encoding: .utf8)).withEnabledSuperclassSpy()
+        writer.separator = "\n".data(using: encoder.encoding)!
         logger = MockStreamLogger(name: "Beacon-Test-File-Logger", writer: writer).withEnabledSuperclassSpy()
         logger.beForTesting()
     }
     
     override func tearDown() {
         super.tearDown()
-        logger.stop()
+        logger?.stop()
         logger = nil
     }
     

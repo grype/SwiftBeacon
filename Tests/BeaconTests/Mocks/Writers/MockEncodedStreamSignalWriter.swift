@@ -75,7 +75,7 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
     
     
     
-    public override var separator: Data? {
+    public override var separator: Data {
         get {
             return cuckoo_manager.getter("separator",
                 superclassCall:
@@ -165,7 +165,7 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
 	    }
 	    
 	    
-	    var separator: Cuckoo.ClassToBeStubbedOptionalProperty<MockEncodedStreamSignalWriter, Data> {
+	    var separator: Cuckoo.ClassToBeStubbedProperty<MockEncodedStreamSignalWriter, Data> {
 	        return .init(manager: cuckoo_manager, name: "separator")
 	    }
 	    
@@ -210,7 +210,7 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
 	    }
 	    
 	    
-	    var separator: Cuckoo.VerifyOptionalProperty<Data> {
+	    var separator: Cuckoo.VerifyProperty<Data> {
 	        return .init(manager: cuckoo_manager, name: "separator", callMatcher: callMatcher, sourceLocation: sourceLocation)
 	    }
 	    
@@ -260,9 +260,9 @@ public class EncodedStreamSignalWriterStub: EncodedStreamSignalWriter {
     }
     
     
-    public override var separator: Data? {
+    public override var separator: Data {
         get {
-            return DefaultValueRegistry.defaultValue(for: (Data?).self)
+            return DefaultValueRegistry.defaultValue(for: (Data).self)
         }
         
         set { }

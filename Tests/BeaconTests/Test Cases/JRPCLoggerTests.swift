@@ -110,9 +110,10 @@ class JRPCLoggerTests : XCTestCase {
         let signal = WrapperSignal(obj, userInfo: ["Number" : 123, "String" : "Hello", "Bool" : true, "Date" : date])
         logger.nextPut(signal)
         
-        waitUntil { done in
+        waitUntil(timeout: DispatchTimeInterval.seconds(Int(logger.flushInterval + 0.1))) { done in
             logger.queue.async {
                 logger.flush()
+                done()
             }
         }
         
@@ -120,8 +121,8 @@ class JRPCLoggerTests : XCTestCase {
         verify(logger).perform(urlRequest: argumentCaptor.capture(), completion: any())
         let httpJson = try! JSONSerialization.jsonObject(with: argumentCaptor.value!.httpBody!, options: .fragmentsAllowed) as! [String: Any]
         let httpProperties = (httpJson["params"] as! [[[String:Any]]]).first!.first!["properties"] as! [AnyHashable : AnyHashable]
-        let jsonEncoder = (logger.encoder as! JSONEncoder)
-        let signalJson = try! jsonEncoder.encode(AnyEncodable(signal.userInfo))
+        let jsonEncoder = (logger.encoder as! JSONSignalEncoder)
+        let signalJson = try! jsonEncoder.encoder.encode(AnyEncodable(signal.userInfo))
         let signalProperties = try! JSONSerialization.jsonObject(with: signalJson, options: .fragmentsAllowed) as! [AnyHashable : AnyHashable]
         expect(httpProperties).to(equal(signalProperties))
     }
@@ -136,7 +137,7 @@ class JRPCLoggerTests : XCTestCase {
         
         logger.nextPut(StringSignal("Hello world"))
         
-        waitUntil { done in
+        waitUntil(timeout: .seconds(Int(logger.flushInterval + 1))) { done in
             logger.queue.asyncAfter(deadline: .now() + logger.flushInterval + 0.1) {
                 done()
             }
@@ -152,7 +153,7 @@ class JRPCLoggerTests : XCTestCase {
         logger.start()
         
         logger.nextPut(ErrorSignal(error: "Test error" as Error))
-        waitUntil { done in
+        waitUntil(timeout: .seconds(Int(logger.flushInterval + 1))) { done in
             logger.queue.asyncAfter(deadline: .now() + logger.flushInterval + 0.1) {
                 done()
             }

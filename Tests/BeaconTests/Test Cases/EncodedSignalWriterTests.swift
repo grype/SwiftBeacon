@@ -15,8 +15,6 @@ class EncodedSignalWriterTests : XCTestCase {
     
     private var writer: MockEncodedStreamSignalWriter!
     
-    private var stream: OutputStream { writer.stream }
-    
     private var encoder: SignalDescriptionEncoder { writer.encoder as! SignalDescriptionEncoder }
     
     // MARK:- Utilities
@@ -29,18 +27,19 @@ class EncodedSignalWriterTests : XCTestCase {
     
     override func setUp() {
         super.setUp()
-        writer = MockEncodedStreamSignalWriter(on: OutputStream.toMemory(), encoder: SignalDescriptionEncoder(encoding: .utf8))
-        writer.separator = "\n".data(using: .utf8)
+        writer = MockEncodedStreamSignalWriter(on: OutputStream.toMemory(), encoder: SignalDescriptionEncoder(encoding: .utf8)).withEnabledSuperclassSpy()
+        writer.separator = "\n".data(using: .utf8)!
     }
     
-    func testEncode() {
-        let signal = ContextSignal()
+    func testWrite() {
+        let signal = StringSignal("testWrite")
+        writer.open()
         try! writer.write(signal)
         let output = contents(of: writer.stream, encoding: encoder.encoding)
         var expectedOutput = try! encoder.encode(signal)
-        expectedOutput.append(writer.separator!)
+        expectedOutput.append(writer.separator)
         expect(output).to(equal(expectedOutput))
-        stream.close()
+        writer.close()
     }
     
 }

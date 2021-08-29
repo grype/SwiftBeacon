@@ -21,6 +21,10 @@ class IntervalLoggerTests : XCTestCase {
         super.setUp()
         logger = MockIntervalLogger(name: "IntervalLoggerTest", interval: 1, queue: queue).withEnabledSuperclassSpy()
         logger.beForTesting()
+        stub(logger) { stub in
+            when(stub.encodeSignal(any())).thenReturn(Data())
+            when(stub.flush()).thenDoNothing()
+        }
         signals.append(contentsOf: ["First", "Second", "Third", "Fourth"].map { StringSignal($0) })
     }
     
@@ -76,7 +80,11 @@ class IntervalLoggerTests : XCTestCase {
         
         logger.nextPut(signals[1])
         expect(logger.buffer.count).toEventually(equal(2))
-        
+        waitUntil(timeout: DispatchTimeInterval.seconds(Int(logger.flushInterval) + 1)) { done in
+            logger.queue.asyncAfter(deadline: .now()+logger.flushInterval + 0.1) {
+                done()
+            }
+        }
         verify(logger, times(1)).flush()
     }
     
