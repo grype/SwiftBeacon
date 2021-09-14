@@ -6,6 +6,4 @@ Use Xcode to build. There's also a Makefile that collects various build and test
 
 ## Testing
 
-Use [Swift Mock Generator For Xcode](https://github.com/seanhenry/SwiftMockGeneratorForXcode) to help with generating mocks.
-
-When writing new classes that need to be mocked for testing, include `@available(*, message: "mocked")` in that file and run `make mocks`.
+This project uses `Cuckoo` for mocking. Run `make mocks` to generate mocks. The list of files to generate mocks from is taken from `Mock.files`.
