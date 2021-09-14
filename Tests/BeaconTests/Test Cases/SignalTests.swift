@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Nimble
 @testable import Beacon
 
 class SignalTests : XCTestCase, Error {
@@ -31,18 +32,19 @@ class SignalTests : XCTestCase, Error {
     
     func testEmitContextSignal() {
         emit()
-        XCTAssertEqual(logger.recordings.count, 1, "Context did not signal")
+        let logger = self.logger!
+        expect(logger.recordings.count) == 1
         let signal = logger.recordings.first!
-        XCTAssertTrue(type(of: signal) == ContextSignal.self, "emit() does not produce ContextSignal")
+        expect(type(of: signal) == ContextSignal.self).to(beTrue())
     }
     
     func testEmitStringSignal() {
         let value = 123
         emit(value)
-        XCTAssertEqual(logger.recordings.count, 1, "String did not signal")
+        expect(self.logger.recordings.count) == 1
         let signal = logger.recordings.first as? WrapperSignal
-        XCTAssertNotNil(signal, "emit() does not produce ContextSignal")
-        XCTAssertEqual(signal!.value as? Int, value, "StringSignal did not capture emitting string")
+        expect(signal).toNot(beNil())
+        expect(signal!.value as? Int) == value
     }
     
     func testErrorSignal() {
@@ -50,37 +52,37 @@ class SignalTests : XCTestCase, Error {
         catch {
             emit(error: error)
         }
-        XCTAssertEqual(logger.recordings.count, 1, "Error did not signal")
+        expect(self.logger.recordings.count) == 1
         let signal = logger.recordings.first as? ErrorSignal
-        XCTAssertNotNil(signal, "emit() does not produce ErrorSignal")
+        expect(signal).toNot(beNil())
     }
     
     func testOptionalErrorSignal() {
         let err: Error? = nil
         emit(error: err)
-        XCTAssertEqual(logger.recordings.count, 1, "Error did not signal")
+        expect(self.logger.recordings.count) == 1
         let signal = logger.recordings.first as? ContextSignal
-        XCTAssertNotNil(signal, "emit() does not produce ContextSignal")
+        expect(signal).toNot(beNil())
     }
     
     func testWrapperSignal() {
         emit(self)
-        XCTAssertEqual(logger.recordings.count, 1, "WrapperSignal did not signal")
+        expect(self.logger.recordings.count) == 1
         let signal = logger.recordings.first as? WrapperSignal
-        XCTAssertNotNil(signal, "emit() does not produce WrapperSignal")
-        XCTAssertEqual(signal?.value as? SignalTests, self, "WrapperSignal did not capture its target")
+        expect(signal).toNot(beNil())
+        expect(signal?.value as? SignalTests) == self
     }
     
     func testEmitFromMainThread() {
-        let expect = expectation(description: "Waiting for emit from main thread")
-        DispatchQueue.main.async {
-            emit(self)
-            expect.fulfill()
+        waitUntil { done in
+            DispatchQueue.main.async {
+                emit(self)
+                done()
+            }
         }
-        wait(for: [expect], timeout: 1)
         let signal = logger.recordings.first as? WrapperSignal
-        XCTAssertNotNil(signal, "emit() does not produce WrapperSignal")
-        XCTAssertEqual(signal?.value as? SignalTests, self, "WrapperSignal did not capture its target")
+        expect(signal).toNot(beNil())
+        expect(signal?.value as? SignalTests) == self
     }
     
     func testEmitPerformance() {

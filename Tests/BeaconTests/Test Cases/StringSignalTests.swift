@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Nimble
 @testable import Beacon
 
 class StringSignalTests : XCTestCase, Error {
@@ -29,34 +30,37 @@ class StringSignalTests : XCTestCase, Error {
     
     func testEmitStringOnly() {
         emit(message)
-        XCTAssertNotNil(logger.recordings.first, "emit() did not produce an artifact")
+        let logger = self.logger!
+        expect(logger.recordings.first).toNot(beNil())
         let signal = logger.recordings.first!
-        XCTAssertTrue(type(of: signal) == StringSignal.self, "emit() did not produce StringSignal")
+        expect(type(of: signal) == StringSignal.self).to(beTrue())
         let stringSignal = signal as! StringSignal
-        XCTAssertEqual(stringSignal.message, message, "emit() produce StringSignal without matching message")
-        XCTAssertNil(stringSignal.userInfo, "emit() resulted in incorrect userInfo")
+        expect(stringSignal.message).to(equal(message))
+        expect(stringSignal.userInfo).to(beNil())
     }
     
     func testEmitStringWithUserInfo() {
         let userInfo: [String:String] = ["Hello" : "hello, hello...", "Is There" : "Anybody Out There"]
         emit(message, userInfo: userInfo)
+        let logger = self.logger!
         let signal = logger.recordings.first!
-        XCTAssertTrue(type(of: signal) == StringSignal.self, "emit() did not produce StringSignal")
+        expect(type(of: signal) == StringSignal.self).to(beTrue())
         let stringSignal = signal as! StringSignal
-        XCTAssertEqual(stringSignal.message, message, "emit() produce StringSignal without matching message")
-        XCTAssertEqual(stringSignal.userInfo as? [String:String], userInfo, "emit() resulted in incorrect userInfo")
-        XCTAssertNotNil(stringSignal.userInfoDescription, "StringSignal with userInfo should have some userInfoDescription")
+        expect(stringSignal.message).to(equal(message))
+        expect(stringSignal.userInfo as? [String:String]).to(equal(userInfo))
+        expect(stringSignal.userInfoDescription).toNot(beNil())
     }
     
     func testStringSignalDescription() {
         let userInfo: [String:String] = ["Hello" : "hello, hello...", "Is There" : "Anybody Out There"]
         emit(message, userInfo: userInfo)
+        let logger = self.logger!
         let stringSignal = logger.recordings.first as! StringSignal
         print(stringSignal.description)
-        XCTAssertNotNil(stringSignal.sourceDescription, "StringSignal with userInfo should have some userInfoDescription")
-        XCTAssertNotNil(stringSignal.userInfoDescription, "StringSignal with userInfo should have some userInfoDescription")
-        XCTAssertFalse(stringSignal.description.contains(stringSignal.userInfoDescription!))
+        expect(stringSignal.sourceDescription).toNot(beNil())
+        expect(stringSignal.userInfoDescription).toNot(beNil())
+        expect(stringSignal.description.contains(stringSignal.userInfoDescription!)).to(beFalse())
         print(stringSignal.debugDescription)
-        XCTAssertTrue(stringSignal.debugDescription.contains(stringSignal.userInfoDescription!))
+        expect(stringSignal.debugDescription.contains(stringSignal.userInfoDescription!)).to(beTrue())
     }
 }

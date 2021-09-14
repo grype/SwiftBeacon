@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Nimble
 @testable import Beacon
 
 class WrapperSignalTests: XCTestCase {
@@ -17,7 +18,7 @@ class WrapperSignalTests: XCTestCase {
         let value = TestObject()
         let signal = WrapperSignal(value)
         let val = signal.value as? TestObject
-        XCTAssertTrue(val != nil, "Failed to wrap \(type(of: value))")
+        expect(val).toNot(beNil())
     }
     
     func testWrappingNSObject() {
@@ -26,32 +27,32 @@ class WrapperSignalTests: XCTestCase {
         let value = TestObject()
         let signal = WrapperSignal(value)
         let val = signal.value as? TestObject
-        XCTAssertTrue(val != nil, "Failed to wrap \(type(of: value))")
-        XCTAssertTrue(val == value, "Incorrectly wrapped \(type(of: value))")
+        expect(val).toNot(beNil())
+        expect(val) == value
     }
     
     func testWrappingString() {
         let value = "Hello World"
         let signal = WrapperSignal(value)
         let val = signal.value as? String
-        XCTAssertTrue(val != nil, "Failed to wrap \(type(of: value))")
-        XCTAssertTrue(val == value, "Incorrectly wrapped \(type(of: value))")
+        expect(val).toNot(beNil())
+        expect(val) == value
     }
     
     func testWrappingInt() {
         let value = 123
         let signal = WrapperSignal(value)
         let val = signal.value as? Int
-        XCTAssertTrue(val != nil, "Failed to wrap \(type(of: value))")
-        XCTAssertTrue(val == value, "Incorrectly wrapped \(type(of: value))")
+        expect(val).toNot(beNil())
+        expect(val) == value
     }
     
     func testWrappingBool() {
         let value = true
         let signal = WrapperSignal(value)
         let val = signal.value as? Bool
-        XCTAssertTrue(val != nil, "Failed to wrap \(type(of: value))")
-        XCTAssertTrue(val == value, "Incorrectly wrapped \(type(of: value))")
+        expect(val).toNot(beNil())
+        expect(val) == value
     }
     
     func testWrappingWithUserInfo() {
@@ -59,12 +60,12 @@ class WrapperSignalTests: XCTestCase {
         let signal = WrapperSignal(self, userInfo: userInfo)
         
         let value = signal.value as? WrapperSignalTests
-        XCTAssertTrue(value != nil, "Failed to wrap value")
-        XCTAssertTrue(value == self, "Incorrectly wrapped value")
+        expect(value).toNot(beNil())
+        expect(value) == self
         
         let info = signal.userInfo as? [String : String]
-        XCTAssertTrue(info != nil, "Failed to wrap userInfo")
-        XCTAssertTrue(info == userInfo, "Incorrectly wrapped userInfo")
+        expect(info).toNot(beNil())
+        expect(info) == userInfo
     }
     
     func testJSONEncoding() {
@@ -76,17 +77,17 @@ class WrapperSignalTests: XCTestCase {
         let data = try! encoder.encode(signal)
         
         let decodedValue = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String : Any]
-        XCTAssertTrue(decodedValue != nil, "Failed to decode encoded WrappedSignal")
-        XCTAssertTrue(decodedValue!["__class"] as? String == WrapperSignal.portableClassName, "Incorrectly encoded remote value type")
-        XCTAssertTrue(decodedValue!["targetType"] as? String == String(describing: type(of: self)), "Incorrectly encoded local value type")
+        expect(decodedValue).toNot(beNil())
+        expect(decodedValue!["__class"] as? String == WrapperSignal.portableClassName).to(beTrue())
+        expect(decodedValue!["targetType"] as? String == String(describing: type(of: self))).to(beTrue())
         
         let dateString = decodedValue!["timestamp"] as! String
         let date = DateFormatter(format: .iso8601).date(from: dateString)
-        XCTAssertTrue(date != nil, "Failed to decode timestamp")
-        XCTAssertLessThanOrEqual(abs(signal.timestamp.timeIntervalSince(date!)), 1, "Incorrectly encoded value type")
+        expect(date).toNot(beNil())
+        expect(abs(signal.timestamp.timeIntervalSince(date!))).to(beLessThanOrEqualTo(1))
         
         let properties = decodedValue!["properties"] as? [String : String]
-        XCTAssertTrue(properties == userInfo, "Incorrectly encoded userInfo")
+        expect(properties) == userInfo
     }
     
     func testInTimeDescription() {
@@ -102,8 +103,8 @@ class WrapperSignalTests: XCTestCase {
         foo.append("<CHANGED>")
         info["Bar"] = "I am foo"
         
-        XCTAssertEqual(signal.description, description, "Incorrectly captured value description")
-        XCTAssertEqual(signal.userInfoDescription, userInfoDescription, "Incorrectly captured value description")
-        XCTAssertEqual(signal.debugDescription, debugDescription, "Incorrectly captured description")
+        expect(signal.description) == description
+        expect(signal.userInfoDescription) == userInfoDescription
+        expect(signal.debugDescription) == debugDescription
     }
 }
