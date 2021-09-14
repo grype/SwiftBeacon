@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.ClassMock {
     
     public typealias MocksType = EncodedStreamSignalWriter

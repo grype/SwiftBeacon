@@ -6,7 +6,6 @@ import Foundation
 import SwiftAnnouncements
 
 
-
 public class MockSignal: Signal, Cuckoo.ClassMock {
     
     public typealias MocksType = Signal

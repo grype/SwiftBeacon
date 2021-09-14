@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
     
     public typealias MocksType = JRPCLogger

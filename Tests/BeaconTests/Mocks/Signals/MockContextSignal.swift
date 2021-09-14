@@ -5,7 +5,6 @@ import Foundation
 import MachO
 
 
-
 public class MockContextSignal: ContextSignal, Cuckoo.ClassMock {
     
     public typealias MocksType = ContextSignal

@@ -5,7 +5,6 @@ import Foundation
 import SwiftAnnouncements
 
 
-
 public class MockBeacon: Beacon, Cuckoo.ClassMock {
     
     public typealias MocksType = Beacon

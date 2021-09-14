@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMock {
     
     public typealias MocksType = MachImageImportsSignal

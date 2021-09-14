@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockJSONSignalEncoder: JSONSignalEncoder, Cuckoo.ClassMock {
     
     public typealias MocksType = JSONSignalEncoder

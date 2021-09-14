@@ -5,7 +5,6 @@ import AnyCodable
 import Foundation
 
 
-
 public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
     
     public typealias MocksType = ErrorSignal

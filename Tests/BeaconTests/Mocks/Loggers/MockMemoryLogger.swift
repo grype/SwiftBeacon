@@ -5,7 +5,6 @@ import Foundation
 import RWLock
 
 
-
 public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
     
     public typealias MocksType = MemoryLogger

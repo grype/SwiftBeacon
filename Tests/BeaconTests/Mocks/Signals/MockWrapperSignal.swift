@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockWrapperSignal: WrapperSignal, Cuckoo.ClassMock {
     
     public typealias MocksType = WrapperSignal

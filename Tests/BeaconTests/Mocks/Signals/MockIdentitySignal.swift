@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
     
     public typealias MocksType = IdentitySignal

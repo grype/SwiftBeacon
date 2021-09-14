@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
     
     public typealias MocksType = StreamLogger

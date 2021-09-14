@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
     
     public typealias MocksType = FileLogger

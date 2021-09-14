@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockSignalDescriptionEncoder: SignalDescriptionEncoder, Cuckoo.ClassMock {
     
     public typealias MocksType = SignalDescriptionEncoder

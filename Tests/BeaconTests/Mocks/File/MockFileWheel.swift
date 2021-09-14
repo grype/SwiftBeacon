@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockFileWheel: FileWheel, Cuckoo.ClassMock {
     
     public typealias MocksType = FileWheel

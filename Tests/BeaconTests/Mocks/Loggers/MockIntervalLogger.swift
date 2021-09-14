@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-
 public class MockIntervalLogger: IntervalLogger, Cuckoo.ClassMock {
     
     public typealias MocksType = IntervalLogger
