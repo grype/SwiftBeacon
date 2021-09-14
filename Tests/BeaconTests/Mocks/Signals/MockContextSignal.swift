@@ -5,7 +5,6 @@ import Foundation
 import MachO
 
 
-@available(*, message: "mocked")
 
 public class MockContextSignal: ContextSignal, Cuckoo.ClassMock {
     

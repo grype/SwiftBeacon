@@ -6,7 +6,6 @@ import Foundation
 import SwiftAnnouncements
 
 
-@available(*, message: "mocked")
 
 public class MockSignal: Signal, Cuckoo.ClassMock {
     

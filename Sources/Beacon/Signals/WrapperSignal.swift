@@ -18,7 +18,6 @@ import Foundation
  Swift mechanism - by value or reference, depending on the type of value.
  */
 
-@available(*, message: "mocked")
 open class WrapperSignal: Signal {
     /// Wrapped value
     @objc open var value: Any {

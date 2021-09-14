@@ -16,7 +16,6 @@ import MachO
  any arguments...
  */
 
-@available(*, message: "mocked")
 open class ContextSignal: Signal {
     
     @objc open var stack: [String]

@@ -5,7 +5,6 @@ import Foundation
 import RWLock
 
 
-@available(*, message: "mocked")
 
 public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
     

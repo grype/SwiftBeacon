@@ -4,7 +4,6 @@ import Cuckoo
 import Foundation
 
 
-@available(*, message: "mocked")
 
 public class MockWrapperSignal: WrapperSignal, Cuckoo.ClassMock {
     

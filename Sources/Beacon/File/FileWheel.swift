@@ -15,7 +15,6 @@ import Foundation
  And `rotationBlock` to perform the actual rotation.
  */
 
-@available(*, message: "mocked")
 open class FileWheel : FileRotation {
     
     public typealias RotationBlock = (_ url: URL) throws -> Void

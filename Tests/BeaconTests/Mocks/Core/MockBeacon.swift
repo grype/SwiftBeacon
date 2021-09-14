@@ -5,7 +5,6 @@ import Foundation
 import SwiftAnnouncements
 
 
-@available(*, message: "mocked")
 
 public class MockBeacon: Beacon, Cuckoo.ClassMock {
     

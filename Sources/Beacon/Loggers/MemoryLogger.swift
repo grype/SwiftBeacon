@@ -17,7 +17,6 @@ import RWLock
  
  */
 
-@available(*, message: "mocked")
 open class MemoryLogger : SignalLogger {
     @objc public static var shared = MemoryLogger(name: "MemoryLogger")
     

@@ -18,7 +18,6 @@ import Foundation
  I am finished with the current one.
  */
 
-@available(*, message: "mocked")
 open class JRPCLogger: IntervalLogger {
     
     // MARK: - Variables

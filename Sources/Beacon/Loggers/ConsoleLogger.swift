@@ -15,7 +15,6 @@ import Foundation
  I can also indicate periods of inactivity via `markedInactivityPeriod`.
  */
 
-@available(*, message: "mocked")
 open class ConsoleLogger : SignalLogger {
     
     // MARK: - Instance Creation

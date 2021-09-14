@@ -5,7 +5,6 @@ import AnyCodable
 import Foundation
 
 
-@available(*, message: "mocked")
 
 public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
     

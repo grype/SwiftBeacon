@@ -12,7 +12,6 @@ import Foundation
  I am a `Signal` that captures currently loaded Mach images
  */
 
-@available(*, message: "mocked")
 open class MachImageImportsSignal : Signal {
     
     var added: [MachImage]?

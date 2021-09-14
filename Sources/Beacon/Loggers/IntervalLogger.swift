@@ -23,7 +23,6 @@ import Foundation
  
  */
 
-@available(*, message: "mocked")
 open class IntervalLogger : SignalLogger {
     
     // MARK: - Variables

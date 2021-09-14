@@ -14,7 +14,6 @@ import Foundation
  I am used to announce arbitrary messages, ala traditional logging facilities.
  */
 
-@available(*, message: "mocked")
 open class StringSignal: Signal {
     @objc open private(set) var message: String
     

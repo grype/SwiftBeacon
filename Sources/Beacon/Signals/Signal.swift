@@ -21,7 +21,6 @@ import AnyCodable
  
  */
 
-@available(*, message: "mocked")
 open class Signal : NSObject, Encodable {
     
     // MARK:- Structs

@@ -12,7 +12,6 @@ import Foundation
  I encode Signals using their description property.
  */
 
-@available(*, message: "mocked")
 open class SignalDescriptionEncoder : SignalEncoder {
 
     public enum Errors : String, Error {

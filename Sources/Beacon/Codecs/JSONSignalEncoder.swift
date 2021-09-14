@@ -12,7 +12,6 @@ import Foundation
 I encode Signals by trying to represent them in JSON notation.
 */
 
-@available(*, message: "mocked")
 open class JSONSignalEncoder : SignalEncoder {
     
     open lazy var encoder: JSONEncoder = {

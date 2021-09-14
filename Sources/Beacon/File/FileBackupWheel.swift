@@ -24,7 +24,6 @@ import Foundation
  ```
  */
 
-@available(*, message: "mocked")
 open class FileBackupWheel : FileRotation {
     
     // Max file size, in bytes, that log file should not exceed

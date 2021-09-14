@@ -12,7 +12,6 @@ import Foundation
  I encode `Signals` onto an `OutputStream`
  */
 
-@available(*, message: "mocked")
 public class EncodedStreamSignalWriter : SignalWriter {
     
     open var encoder: SignalEncoder
