@@ -25,4 +25,7 @@ open class JSONSignalEncoder : SignalEncoder {
         return try encoder.encode(aSignal)
     }
     
+    public init() {
+    }
+    
 }
