@@ -42,7 +42,7 @@ import SwiftAnnouncements
 
 open class Beacon : NSObject {
     
-    @objc public static var beaconVersion = "1.3.0"
+    @objc public static var beaconVersion = "2.0.3"
     
     /// Shared general-purpose instance
     @objc public static var shared = Beacon()
