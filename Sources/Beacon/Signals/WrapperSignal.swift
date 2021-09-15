@@ -67,16 +67,6 @@ open class WrapperSignal: Signal {
         case value = "target", valueType = "targetType"
     }
     
-    private struct ValueWrapper : Encodable {
-        private var value : Encodable
-        init(_ aValue: Encodable) {
-            value = aValue
-        }
-        func encode(to encoder: Encoder) throws {
-            try value.encode(to: encoder)
-        }
-    }
-    
     open override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         
@@ -84,10 +74,7 @@ open class WrapperSignal: Signal {
         
         try container.encode(String(describing: type(of: value)), forKey: .valueType)
         
-        if let value = encodableValue {
-            try container.encode(ValueWrapper(value), forKey: .value)
-        }
-        else if let value = value as? CustomDebugStringConvertible {
+        if let value = value as? CustomDebugStringConvertible {
             try container.encode(value.debugDescription, forKey: .value)
         }
         else {
