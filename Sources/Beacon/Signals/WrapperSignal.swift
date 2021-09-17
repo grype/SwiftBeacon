@@ -13,9 +13,7 @@ import Foundation
  
  Simply call `emit(anything)` to emit me, and I'll capture the argument in my `value` property.
  
- - Important: Be mindful of what you're asking me to wrap. I'll check to see if the value I am wrapping conforms
- to NSCopying, and if so, I'll store a copy of the value. Otherwise I'll capture the value using regular
- Swift mechanism - by value or reference, depending on the type of value.
+ - Important: Be mindful of what you're asking me to wrap. If the value is mutable, it may mutate by the time it is logged. Especially when using `IntervalLogger`s.
  */
 
 open class WrapperSignal: Signal {
