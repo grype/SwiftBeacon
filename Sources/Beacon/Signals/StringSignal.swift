@@ -49,11 +49,12 @@ open class StringSignal: Signal {
 
 /// Emits `StringSignal` with specified value
 public func emit(_ value: String, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    StringSignal(value).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+    emit(value, on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
 /// Emits `StringSignal` with specified value
 public func emit(_ value: String, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    guard willLog(type: StringSignal.self, on: beacons) else { return }
     StringSignal(value).emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 

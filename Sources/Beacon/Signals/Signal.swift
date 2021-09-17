@@ -92,6 +92,34 @@ open class Signal : NSObject, Encodable {
         return Bundle.main.infoDictionary?["CFBundleName"] as? String
     }()
     
+    
+    // MARK:- Filtering
+    
+    struct Constraint<T:Signal> {
+        var `type`: T.Type
+        var logger: SignalLogger?
+        var beacon: Beacon?
+        func applies(to aType: T.Type, logger aLogger: SignalLogger?, beacon aBeacon: Beacon?) -> Bool {
+            return (type == aType || aType.isSubclass(of: type)) && (logger == nil || logger === aLogger) && (beacon == nil || beacon === beacon)
+        }
+    }
+    
+    static var constraints: [Constraint] = .init()
+    
+    open class func isEnabled(for aLogger: SignalLogger?, on aBeacon: Beacon) -> Bool {
+        return !constraints.contains { $0.applies(to: self, logger: aLogger, beacon: aBeacon) }
+    }
+    
+    open class func disable(loggingTo aLogger: SignalLogger?, on aBeacon: Beacon?) {
+        guard !constraints.contains(where: { $0.applies(to: self, logger: aLogger, beacon: aBeacon) }) else { return }
+        constraints.append(Constraint(type: self, logger: aLogger, beacon: aBeacon))
+    }
+    
+    open class func enable(loggingTo aLogger: SignalLogger?, on aBeacon: Beacon?) {
+        constraints.removeAll { $0.applies(to: self, logger: aLogger, beacon: aBeacon) }
+    }
+    
+    
     // MARK:- Emitting
     
     /// Emits signal to all running instances of `SignalLogger`
@@ -201,4 +229,17 @@ open class Signal : NSObject, Encodable {
 
 }
 
+// MARK:- Extensions
+
 extension Signal : Announceable {}
+
+
+// MARK:- Globals
+
+/// Returns whether signals of given type will be logged if emitted on given beacons
+public func willLog<T:Signal>(type aSignalType: T.Type, on beacons: [Beacon]) -> Bool {
+    guard let _ = beacons.first(where: { aBeacon in
+        aBeacon.logsSignals(ofType: aSignalType)
+    }) else { return false }
+    return true
+}

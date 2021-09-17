@@ -49,25 +49,6 @@ class BeaconTest: XCTestCase {
         expect(self.logger.recordings.count) == 1
     }
     
-    func testAggregationOfSingles() {
-        let result = beacon + Beacon.shared
-        expect(result).to(equal([beacon, Beacon.shared]))
-    }
-    
-    func testAggregationOfArraysOfBeacons() {
-        let first = [Beacon(), Beacon()]
-        let second = [Beacon(), Beacon()]
-        let result = first + second
-        expect(result) == [first[0], first[1], second[0], second[1]]
-    }
-    
-    func testMixedAggregation() {
-        let first = Beacon()
-        let second = [Beacon(), Beacon()]
-        let result = first + second
-        expect(result) == [first, second[0], second[1]]
-    }
-    
     func testPerformance() {
         let beacon = Beacon()
         let logger = MemoryLogger(name: "Memory Test Logger")
