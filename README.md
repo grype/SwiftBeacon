@@ -107,6 +107,27 @@ do { throw(...) } catch { emit(error) }
 emit("A String")
 ```
 
+Handling of individual signal types is also possible:
+
+```swift
+let firstLogger = ConsoleLogger.starting(name: "Console error logger"))
+let secondLogger = ConsoleLogger.starting(name: "Console error logger"))
+
+// will disable handling of `StringSignal`s by `secondLogger` regardless of what Beacon the signal came from.
+StringSignal.disable(loggingTo aLogger: secondLogger, on aBeacon: nil)
+
+emit("Will only be logged by firstLogger")
+
+// will re-enable handling of StringSignal across all loggers and beacons
+StringSignal.enable(loggingTo aLogger: nil, on aBeacon: nil)
+
+emit("Will be logged by both loggers")
+```
+
+This approach to filtering avoids having to construct actual `Signal`s during `emit()`, which can be benefitial when e.g. emitting `Encodable` values using `WrapperSignal`, which would encode the value at the time of construction. In other words, if the type of a signal isn't going to be handles by any logger - why bother constructing the signals?
+
+##  Components
+
 The framework provides the following building blocks:
 
 Signals:
