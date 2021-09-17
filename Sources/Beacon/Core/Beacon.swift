@@ -71,10 +71,12 @@ open class Beacon : NSObject {
     
 }
 
+@available(*, deprecated)
 public func +(lhs: Beacon, rhs: Beacon) -> [Beacon] {
     return [lhs, rhs]
 }
 
+@available(*, deprecated)
 public func +(lhs: [Beacon], rhs: Beacon) -> [Beacon] {
     var result = [Beacon]()
     result.append(contentsOf: lhs)
@@ -82,6 +84,7 @@ public func +(lhs: [Beacon], rhs: Beacon) -> [Beacon] {
     return result
 }
 
+@available(*, deprecated)
 public func +(lhs: Beacon, rhs: [Beacon]) -> [Beacon] {
     var result = [Beacon]()
     result.append(lhs)
@@ -89,6 +92,7 @@ public func +(lhs: Beacon, rhs: [Beacon]) -> [Beacon] {
     return result
 }
 
+@available(*, deprecated)
 public func +(lhs: [Beacon], rhs: [Beacon]) -> [Beacon] {
     var result = [Beacon]()
     result.append(contentsOf: lhs)
