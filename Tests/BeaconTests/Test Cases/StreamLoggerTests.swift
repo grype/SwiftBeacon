@@ -78,7 +78,7 @@ class StreamLoggerTests : XCTestCase {
                 expectations[i].fulfill()
             }
         }
-        wait(for: expectations, timeout: 3, enforceOrder: false)
+        wait(for: expectations, timeout: 2, enforceOrder: false)
         
         let result = streamContents()
         XCTAssertNotNil(result, "Failed to fetch data from log file")
