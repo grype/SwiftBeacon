@@ -30,6 +30,8 @@ class SignalTests : XCTestCase, Error {
         throw self
     }
     
+    // MARK:- Emitting various signals
+    
     func testEmitContextSignal() {
         emit()
         let logger = self.logger!
@@ -73,6 +75,8 @@ class SignalTests : XCTestCase, Error {
         expect(signal?.value as? SignalTests) == self
     }
     
+    // MARK:- Threading
+    
     func testEmitFromMainThread() {
         waitUntil { done in
             DispatchQueue.main.async {
@@ -84,6 +88,8 @@ class SignalTests : XCTestCase, Error {
         expect(signal).toNot(beNil())
         expect(signal?.value as? SignalTests) == self
     }
+    
+    // MARK:- Performance
     
     func testEmitPerformance() {
         measure {
