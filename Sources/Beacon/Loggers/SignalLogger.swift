@@ -75,7 +75,7 @@ open class SignalLogger : NSObject {
         return me as! T
     }
     
-    // MARK:- Init/Deinit
+    // MARK:- Initialization
     
     @objc public required init(name aName: String) {
         name = aName
@@ -84,6 +84,7 @@ open class SignalLogger : NSObject {
     deinit {
         stop()
     }
+    
     
     // MARK:- Starting/Stopping
     
@@ -143,39 +144,6 @@ open class SignalLogger : NSObject {
         }
     }
     
-    private func createSignal(for announcement: MachImageMonitor.Announcement) -> MachImageImportsSignal {
-        let signal = MachImageImportsSignal()
-        if case let .didAddImage(anImage) = announcement {
-            signal.added = [anImage]
-        }
-        else if case let .didRemoveImage(anImage) = announcement {
-            signal.removed = [anImage]
-        }
-        return signal
-    }
-    
-    private func startTrackingMachImageImports() {
-        // Start monitoring if we haven't yet. This will subscribe to updates using a callback,
-        // which will then be fired for each image already loaded.
-        // Note that since no logger has had a chance to start observing announcements, these callbacks
-        // won't amount to any signals being emitted. This is why we do this first and then, immediately after,
-        // start observing for announcements.
-        // This will always emit at least one signal with all of the loaded images.
-        if !MachImageMonitor.isRunning {
-            MachImageMonitor.startMonitoring()
-        }
-        
-        MachImageMonitor.shared.announcer.when(MachImageMonitor.Announcement.self, subscriber: self) { [weak self] (announcement, _) in
-            guard let signal = self?.createSignal(for: announcement) else { return }
-            self?.nextPut(signal.sourcedFromHere())
-        }
-        
-        // Explicitly capture and log list of known images as being added
-        let signal = MachImageImportsSignal()
-        signal.added = MachImageMonitor.shared.images
-        nextPut(signal.sourcedFromHere())
-    }
-    
     @objc internal func didStop() {
         MachImageMonitor.shared.announcer.unsubscribe(self)
     }
@@ -200,7 +168,7 @@ open class SignalLogger : NSObject {
         nextPut(signal)
     }
     
-    // MARK:- Un/Subscribing
+    // MARK:- Subscribing
     
     internal func subscribe(to aBeacon: Beacon, filter: Filter? = nil) {
         subscribe(to: [aBeacon], filter: filter)
@@ -208,7 +176,7 @@ open class SignalLogger : NSObject {
     
     internal func subscribe(to beacons: [Beacon], filter: Filter? = nil) {
         beacons.forEach { (aBeacon) in
-            aBeacon.announcer.unsubscribe(self)
+            aBeacon.unsubscribe(self)
             aBeacon.when(Signal.self, subscriber: self) { [weak self]  (aSignal, anAnnouncer) in
                 guard let self = self else { return }
                 guard filter?(aSignal) ?? true else { return }
@@ -242,15 +210,52 @@ open class SignalLogger : NSObject {
         didStop()
     }
     
+    // MARK:- CustomStringConvertible
+    
+    open override var description: String {
+        return "<\(String(describing: type(of: self))): \(Unmanaged.passUnretained(self).toOpaque())> Name: \(name); Running: \(isRunning)"
+    }
+    
+    
     // MARK:- Identifying
     
     open func identify(on beacons: [Beacon] = [.shared]) {
         nextPut(IdentitySignal().sourcedFromHere())
     }
     
-    // MARK:- CustomStringConvertible
+    // MARK:- MachO
     
-    open override var description: String {
-        return "<\(String(describing: type(of: self))): \(Unmanaged.passUnretained(self).toOpaque())> Name: \(name); Running: \(isRunning)"
+    private func startTrackingMachImageImports() {
+        // Start monitoring if we haven't yet. This will subscribe to updates using a callback,
+        // which will then be fired for each image already loaded.
+        // Note that since no logger has had a chance to start observing announcements, these callbacks
+        // won't amount to any signals being emitted. This is why we do this first and then, immediately after,
+        // start observing for announcements.
+        // This will always emit at least one signal with all of the loaded images.
+        if !MachImageMonitor.isRunning {
+            MachImageMonitor.startMonitoring()
+        }
+        
+        MachImageMonitor.shared.announcer.when(MachImageMonitor.Announcement.self, subscriber: self) { [weak self] (announcement, _) in
+            guard let signal = self?.createSignal(for: announcement) else { return }
+            self?.nextPut(signal.sourcedFromHere())
+        }
+        
+        // Explicitly capture and log list of known images as being added
+        let signal = MachImageImportsSignal()
+        signal.added = MachImageMonitor.shared.images
+        nextPut(signal.sourcedFromHere())
     }
+    
+    private func createSignal(for announcement: MachImageMonitor.Announcement) -> MachImageImportsSignal {
+        let signal = MachImageImportsSignal()
+        if case let .didAddImage(anImage) = announcement {
+            signal.added = [anImage]
+        }
+        else if case let .didRemoveImage(anImage) = announcement {
+            signal.removed = [anImage]
+        }
+        return signal
+    }
+    
 }
