@@ -19,7 +19,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "9.0.0")),
-        .package(url: "https://github.com/grype/SwiftAnnouncements", .upToNextMajor(from: "1.0.2")),
+        .package(url: "https://github.com/grype/SwiftAnnouncements", .upToNextMajor(from: "1.0.3")),
         .package(url: "https://github.com/grype/RWLock-Swift", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/Brightify/Cuckoo", .upToNextMajor(from: "1.3.0")),
         .package(url: "https://github.com/Flight-School/AnyCodable", .upToNextMajor(from: "0.5.0"))
