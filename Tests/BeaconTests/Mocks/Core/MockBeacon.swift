@@ -30,6 +30,21 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
     
     
     
+    public override func logsSignals<T: Signal>(ofType aType: T.Type) -> Bool {
+        
+    return cuckoo_manager.call("logsSignals(ofType: T.Type) -> Bool",
+            parameters: (aType),
+            escapingParameters: (aType),
+            superclassCall:
+                
+                super.logsSignals(ofType: aType)
+                ,
+            defaultCall: __defaultImplStub!.logsSignals(ofType: aType))
+        
+    }
+    
+    
+    
     public override func signal(_ aSignal: Signal)  {
         
     return cuckoo_manager.call("signal(_: Signal)",
@@ -97,6 +112,11 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
 	    }
 	    
 	    
+	    func logsSignals<M1: Cuckoo.Matchable, T: Signal>(ofType aType: M1) -> Cuckoo.ClassStubFunction<(T.Type), Bool> where M1.MatchedType == T.Type {
+	        let matchers: [Cuckoo.ParameterMatcher<(T.Type)>] = [wrap(matchable: aType) { $0 }]
+	        return .init(stub: cuckoo_manager.createStub(for: MockBeacon.self, method: "logsSignals(ofType: T.Type) -> Bool", parameterMatchers: matchers))
+	    }
+	    
 	    func signal<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnFunction<(Signal)> where M1.MatchedType == Signal {
 	        let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
 	        return .init(stub: cuckoo_manager.createStub(for: MockBeacon.self, method: "signal(_: Signal)", parameterMatchers: matchers))
@@ -134,6 +154,12 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
 	
 	    
 	    @discardableResult
+	    func logsSignals<M1: Cuckoo.Matchable, T: Signal>(ofType aType: M1) -> Cuckoo.__DoNotUse<(T.Type), Bool> where M1.MatchedType == T.Type {
+	        let matchers: [Cuckoo.ParameterMatcher<(T.Type)>] = [wrap(matchable: aType) { $0 }]
+	        return cuckoo_manager.verify("logsSignals(ofType: T.Type) -> Bool", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+	    }
+	    
+	    @discardableResult
 	    func signal<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
 	        let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
 	        return cuckoo_manager.verify("signal(_: Signal)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
@@ -165,6 +191,10 @@ public class BeaconStub: Beacon {
 
     
 
+    
+    public override func logsSignals<T: Signal>(ofType aType: T.Type) -> Bool  {
+        return DefaultValueRegistry.defaultValue(for: (Bool).self)
+    }
     
     public override func signal(_ aSignal: Signal)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
