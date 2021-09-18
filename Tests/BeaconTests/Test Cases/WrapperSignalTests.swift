@@ -91,20 +91,18 @@ class WrapperSignalTests: XCTestCase {
     }
     
     func testInTimeDescription() {
-        var foo = "First"
-        var info = ["Foo": "I am Foo"]
+        let foo = Mutable()
+        foo.string = "First"
         
-        let signal = WrapperSignal(foo, userInfo: info)
+        let signal = WrapperSignal(foo)
+        expect(signal.valueDescription) == "First"
         
-        let description = signal.description
-        let userInfoDescription = signal.userInfoDescription
-        let debugDescription = signal.debugDescription
-        
-        foo.append("<CHANGED>")
-        info["Bar"] = "I am foo"
-        
-        expect(signal.description) == description
-        expect(signal.userInfoDescription) == userInfoDescription
-        expect(signal.debugDescription) == debugDescription
+        foo.string = "Changed"
+        expect(signal.valueDescription) == "Changed"
     }
+}
+
+class Mutable : CustomStringConvertible {
+    var string: String?
+    var description: String { string ?? "" }
 }

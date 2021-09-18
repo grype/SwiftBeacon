@@ -67,6 +67,10 @@ open class WrapperSignal: Signal {
             try container.encode(String(describing: value), forKey: .value)
         }
     }
+    
+    open override var valueDescription: String? {
+        return "\(value)"
+    }
 
 }
 
