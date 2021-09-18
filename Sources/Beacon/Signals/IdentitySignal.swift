@@ -24,9 +24,7 @@ open class IdentitySignal : Signal {
     
     // MARK:- Signal
     
-    open override var signalName: String {
-        return "💡"
-    }
+    open override var signalName: String { "💡" }
     
     open override class var portableClassName: String? { "RemoteIdentitySignal" }
     

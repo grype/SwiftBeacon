@@ -25,12 +25,9 @@ open class ErrorSignal : Signal {
         super.init()
     }
     
-    open override var signalName: String {
-        return "⚡ \(super.signalName)"
-    }
-    open override class var portableClassName : String? {
-        return "RemoteExceptionSignal"
-    }
+    open override var signalName: String { "⚡ \(super.signalName)" }
+    
+    open override class var portableClassName : String? { "RemoteExceptionSignal" }
     
     private enum CodingKeys : String, CodingKey {
         case error = "exception", stack
@@ -38,7 +35,7 @@ open class ErrorSignal : Signal {
     
     open override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
-        var container = encoder.container(keyedBy: ErrorSignal.CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(stack.map { CallStackFrame.fromString($0) }, forKey: .stack)
         if let encodableError = error as? Encodable {
             let wrapped = AnyEncodable(encodableError)

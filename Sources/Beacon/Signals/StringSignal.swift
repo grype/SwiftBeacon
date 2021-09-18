@@ -13,7 +13,6 @@ import Foundation
  
  I am used to announce arbitrary messages, ala traditional logging facilities.
  */
-
 open class StringSignal: Signal {
     @objc open private(set) var message: String
     
@@ -22,13 +21,9 @@ open class StringSignal: Signal {
         super.init()
     }
     
-    open override var signalName: String {
-        return "🏷"
-    }
+    open override var signalName: String { "🏷" }
     
-    override open class var portableClassName : String? {
-        return "RemoteStringSignal"
-    }
+    override open class var portableClassName : String? { "RemoteStringSignal" }
     
     open override var valueDescription: String? {
         return message
@@ -42,7 +37,7 @@ open class StringSignal: Signal {
     
     open override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
-        var container = encoder.container(keyedBy: StringSignal.CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(message, forKey: .message)
     }
 }

@@ -32,13 +32,9 @@ open class WrapperSignal: Signal {
     
     private var encodableValue: Encodable?
     
-    open override var signalName: String {
-        return "📦"
-    }
+    open override var signalName: String { "📦" }
     
-    override open class var portableClassName : String? {
-        return "RemoteWrapperSignal"
-    }
+    override open class var portableClassName : String? { "RemoteWrapperSignal" }
     
     public init(_ aValue: Encodable, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
         encodableValue = aValue
@@ -59,7 +55,7 @@ open class WrapperSignal: Signal {
     open override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         
-        var container = encoder.container(keyedBy: WrapperSignal.CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         
         try container.encode(String(describing: type(of: value)), forKey: .valueType)
         

@@ -154,7 +154,7 @@ open class Signal : NSObject, Encodable {
     }
     
     open func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: Signal.CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(type(of: self).portableClassName, forKey: .portableClassName)
         try container.encodeIfPresent(timestamp, forKey: .timestamp)
         try container.encode(source, forKey: .source)

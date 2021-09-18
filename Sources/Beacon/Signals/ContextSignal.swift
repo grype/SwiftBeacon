@@ -34,13 +34,9 @@ open class ContextSignal: Signal {
         super.init()
     }
 
-    open override var signalName: String {
-        return "🌀 \(super.signalName)"
-    }
+    open override var signalName: String { "🌀 \(super.signalName)" }
     
-    open override class var portableClassName : String? {
-        return "RemoteContextStackSignal"
-    }
+    open override class var portableClassName : String? { "RemoteContextStackSignal" }
     
     private enum CodingKeys : String, CodingKey {
         case stack, symbols
