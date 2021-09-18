@@ -64,30 +64,33 @@ class StreamLoggerTests : XCTestCase {
     
     func testThreadSafety() {
         logger.start()
-        var signals = [StringSignal]()
         var expectations = [XCTestExpectation]()
         let count = 10
-        (0..<count).forEach { (i) in
-            signals.append(StringSignal("Signal \(i)"))
+        let signals: [Signal] = (0..<count).map { (i) in
             expectations.append(XCTestExpectation(description: "Expectation \(1)"))
+            return StringSignal("Signal \(i)")
         }
+        
         let queue = DispatchQueue(label: "FileLoggerConcurrencyTest", qos: .default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
+        
         (0..<count).forEach { (i) in
             queue.async {
                 self.logger.nextPut(signals[i])
                 expectations[i].fulfill()
             }
         }
+        
         wait(for: expectations, timeout: 2, enforceOrder: false)
         
         let result = streamContents()
-        XCTAssertNotNil(result, "Failed to fetch data from log file")
-        if let result = result {
-            let gotSorted = result.components(separatedBy: separator!).filter { !$0.isEmpty }.sorted()
-            let expectSorted = signals.map { String(describing: $0) }.sorted()
-            XCTAssertEqual(gotSorted.count, signals.count, "Inconsistent number of entries logged")
-            XCTAssertEqual(gotSorted, expectSorted, "Logged signal isn't the same as its description")
-        }
+        expect(result).toNot(beNil())
+        
+        guard let result = result else { return }
+        
+        let gotSorted = result.components(separatedBy: separator!).filter { !$0.isEmpty }.sorted()
+        let expectSorted = signals.map { String(describing: $0) }.sorted()
+        expect(gotSorted.count) == signals.count
+        expect(gotSorted).to(equal(expectSorted))
     }
     
 }
