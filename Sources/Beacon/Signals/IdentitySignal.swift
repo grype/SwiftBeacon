@@ -8,6 +8,8 @@
 
 import Foundation
 
+// MARK:- IdentitySignal
+
 /**
  I am a `Signal` that captures an arbitrary identity.
  
@@ -47,6 +49,9 @@ open class IdentitySignal : Signal {
     open override var valueDescription: String? { "Beacon/\(beaconVersion) (\(systemInfo))" }
     
 }
+
+
+// MARK:- Globals
 
 /// Emits `IdentitySignal`
 public func emitIdentity(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {

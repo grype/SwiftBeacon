@@ -9,6 +9,8 @@
 import Foundation
 import MachO
 
+// MARK:- ContextSignal
+
 /**
  I am a `Signal` that captures current context.
  
@@ -56,6 +58,9 @@ open class ContextSignal: Signal {
         return result
     }
 }
+
+
+// MARK:- Globals
 
 /// Signal current context
 public func emit(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {

@@ -9,6 +9,8 @@
 import Foundation
 import AnyCodable
 
+// MARK:- ErrorSignal
+
 /**
  I am a `Signal` that captures an error.
  
@@ -65,6 +67,9 @@ open class ErrorSignal : Signal {
         return result
     }
 }
+
+
+// MARK:- Globals
 
 /**
  In the event of non-nil error argument, emits an ErrorSignal. Otherwise - ContextSignal.

@@ -9,14 +9,16 @@
 import Foundation
 import AnyCodable
 
+// MARK:- WrapperSignal
+
 /**
  I am a `Signal` that wraps any value.
  
  Simply call `emit(anything)` to emit me, and I'll capture the argument in my `value` property.
  
- - Important: Be mindful of what you're asking me to wrap. If the value is mutable, it may mutate by the time it is logged. Especially when using `IntervalLogger`s.
+ - Note: If the wrapped value is `Encodable`, I'll be able to encode it along with other properties!
  
- If the wrapped value is `Encodable`, I'll
+ - Important: Be mindful of what you're asking me to wrap. If the value is mutable, it may mutate by the time it is logged. Especially when using `IntervalLogger`s. If state is important, consider signaling either a copy of the object or encode it into `Data`. Otherwise, subclass either me or `Signal` and take care of preserving state there.
  */
 
 open class WrapperSignal: Signal {
@@ -75,6 +77,8 @@ open class WrapperSignal: Signal {
     }
 
 }
+
+// MARK:- Globals
 
 /// Wraps any value into WrapperSignal and emits the resulting signal
 public func emit(_ value: Any, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
