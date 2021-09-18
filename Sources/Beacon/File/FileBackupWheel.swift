@@ -33,7 +33,7 @@ open class FileBackupWheel : FileRotation {
     
     open var fileManager: FileManager = FileManager.default
     
-    open var dateFormatter: DateFormatter = .init(format: .fullSortable)
+    open var dateFormatter: DateFormatter = .init(format: .fileSortable)
     
     // MARK:- Init
     

@@ -11,7 +11,8 @@ import Foundation
 extension DateFormatter {
     
     public enum BeaconFormat : String {
-        case fullSortable = "yyyy-MM-dd-HH-mm-ss"
+        case fileSortable = "yyyy-MM-dd-HH-mm-ss"
+        case `default` = "yyyy-MM-dd HH:mm:ss.SSSZ"
         case iso8601 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
     }
     
