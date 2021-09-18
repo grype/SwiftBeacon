@@ -91,7 +91,7 @@ class WrapperSignalTests: XCTestCase {
     }
     
     func testInTimeDescription() {
-        let foo = Mutable()
+        let foo = MutableObject()
         foo.string = "First"
         
         let signal = WrapperSignal(foo)
@@ -100,9 +100,29 @@ class WrapperSignalTests: XCTestCase {
         foo.string = "Changed"
         expect(signal.valueDescription) == "Changed"
     }
+    
+    func testWrappingEncodable() {
+        let codable = EncodableObject()
+        codable.string = "I am a string"
+        let signal = WrapperSignal(codable)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let json = try! encoder.encode(signal)
+        let jsonObject = try! JSONSerialization.jsonObject(with: json, options: .fragmentsAllowed) as! [String : Any]
+        let target = jsonObject["target"] as! [String : String]
+        expect(target).to(equal(["string" : codable.string!]))
+    }
+    
 }
 
-class Mutable : CustomStringConvertible {
+class MutableObject : CustomStringConvertible {
     var string: String?
     var description: String { string ?? "" }
+}
+
+class EncodableObject : Encodable {
+    var string: String?
+    enum CodingKeys : String, CodingKey {
+        case string
+    }
 }

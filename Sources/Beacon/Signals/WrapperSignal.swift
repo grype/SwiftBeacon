@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AnyCodable
 
 /**
  I am a `Signal` that wraps any value.
@@ -14,6 +15,8 @@ import Foundation
  Simply call `emit(anything)` to emit me, and I'll capture the argument in my `value` property.
  
  - Important: Be mindful of what you're asking me to wrap. If the value is mutable, it may mutate by the time it is logged. Especially when using `IntervalLogger`s.
+ 
+ If the wrapped value is `Encodable`, I'll
  */
 
 open class WrapperSignal: Signal {
@@ -60,7 +63,10 @@ open class WrapperSignal: Signal {
         
         try container.encode(String(describing: type(of: value)), forKey: .valueType)
         
-        if let value = value as? CustomDebugStringConvertible {
+        if let value = encodableValue {
+            try container.encode(AnyCodable(value), forKey: .value)
+        }
+        else if let value = value as? CustomDebugStringConvertible {
             try container.encode(value.debugDescription, forKey: .value)
         }
         else {
