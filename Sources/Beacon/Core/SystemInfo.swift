@@ -8,8 +8,6 @@
 
 import Foundation
 import MachO
-import System
-
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -27,7 +25,7 @@ public struct SystemInfo : Encodable, CustomStringConvertible {
         let processInfo = ProcessInfo.processInfo
         let model = sysctlString(for: "hw.model")
         return SystemInfo(name: processInfo.operatingSystemVersionString, model: model, arch: arch)
-        #elseif canImport(UIKit)
+        #elseif canImport(UIKit) && !os(watchOS)
         let model = String(utf8String: (info?.pointee.description)!)!
         let device = UIDevice.current
         let arch = sysctlString(for: "hw.machine")
