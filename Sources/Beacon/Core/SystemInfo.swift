@@ -8,8 +8,6 @@
 
 import Foundation
 import MachO
-import System
-
 #if canImport(UIKit)
 import UIKit
 #endif
