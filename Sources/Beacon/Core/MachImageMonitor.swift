@@ -59,10 +59,7 @@ open class MachImageMonitor {
             print("Could not find added image at: \(String(describing: aHeader))")
             return
         }
-        guard let image = MachImage(at: index) else {
-            print("Could not create MachImage description at: \(String(describing: aHeader))")
-            return
-        }
+        let image = MachImage(at: index)
         images.append(image)
         announcer.announce(Announcement.didAddImage(image))
     }
