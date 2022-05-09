@@ -89,7 +89,7 @@ class StreamLoggerTests : XCTestCase {
         
         let gotSorted = result.components(separatedBy: separator!).filter { !$0.isEmpty }.sorted()
         let expectSorted = signals.map { String(describing: $0) }.sorted()
-        expect(gotSorted.count) == signals.count
+        expect(gotSorted.count) == count
         expect(gotSorted).to(equal(expectSorted))
     }
     
