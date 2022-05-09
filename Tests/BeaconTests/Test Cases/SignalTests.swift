@@ -10,7 +10,7 @@ import XCTest
 import Nimble
 @testable import Beacon
 
-class SignalTests : XCTestCase, Error {
+class SignalTests : XCTestCase {
     
     private var logger: MemoryLogger!
     
@@ -27,7 +27,7 @@ class SignalTests : XCTestCase, Error {
     }
     
     func throwup() throws {
-        throw self
+        throw "User Test Error"
     }
     
     // MARK:- Emitting various signals

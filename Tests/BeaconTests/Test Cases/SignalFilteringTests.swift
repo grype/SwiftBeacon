@@ -10,7 +10,7 @@ import XCTest
 import Nimble
 @testable import Beacon
 
-class SignalFilteringTests : XCTestCase, Error {
+class SignalFilteringTests : XCTestCase {
     
     private var logger: MemoryLogger!
     
@@ -31,7 +31,7 @@ class SignalFilteringTests : XCTestCase, Error {
     }
     
     func throwup() throws {
-        throw self
+        throw "User Test Error"
     }
     
     // MARK:- Query

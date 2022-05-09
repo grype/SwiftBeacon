@@ -10,7 +10,7 @@ import XCTest
 import Nimble
 @testable import Beacon
 
-class StringSignalTests : XCTestCase, Error {
+class StringSignalTests : XCTestCase {
     
     private var logger: MemoryLogger!
     
