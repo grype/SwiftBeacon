@@ -27,7 +27,7 @@ class MachDumpSignalTests : XCTestCase {
         let found = logger.recordings.map { ($0 as! MachImageImportsSignal).added!.count }.reduce(into: 0) { (total, value) in
             total += value
         }
-        expect(found) == Int(MachImage.loadedImageCount)
+        expect(found) == MachImageMonitor.shared.images.count
     }
     
 }
