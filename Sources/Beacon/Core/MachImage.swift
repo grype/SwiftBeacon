@@ -33,7 +33,7 @@ public struct MachImage : Encodable {
     /// Total number of loaded images
     public static var loadedImageCount: UInt32 { _dyld_image_count() }
     
-    public init?(at index: UInt32) {
+    public init(at index: UInt32) {
         let header = unsafeBitCast(_dyld_get_image_header(index), to: UnsafePointer<MachHeader>.self)
         name = String(cString: _dyld_get_image_name(index))
         address = Int(bitPattern: header)
