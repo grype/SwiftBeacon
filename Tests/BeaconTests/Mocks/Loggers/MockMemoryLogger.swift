@@ -5,6 +5,10 @@ import Foundation
 import RWLock
 
 
+
+
+
+
 public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
     
     public typealias MocksType = MemoryLogger
@@ -26,6 +30,7 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
     
     
     
+    
     public override var recordings: [Signal] {
         get {
             return cuckoo_manager.getter("recordings",
@@ -37,6 +42,8 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
         }
         
     }
+    
+    
     
     
     
@@ -62,15 +69,20 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
         
     }
     
+    
 
     
 
+    
     
     
     
     public override func nextPut(_ aSignal: Signal)  {
         
-    return cuckoo_manager.call("nextPut(_: Signal)",
+    return cuckoo_manager.call(
+    """
+    nextPut(_: Signal)
+    """,
             parameters: (aSignal),
             escapingParameters: (aSignal),
             superclassCall:
@@ -83,9 +95,14 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
     
     
     
+    
+    
     public override func clear()  {
         
-    return cuckoo_manager.call("clear()",
+    return cuckoo_manager.call(
+    """
+    clear()
+    """,
             parameters: (),
             escapingParameters: (),
             superclassCall:
@@ -96,77 +113,113 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
         
     }
     
+    
 
-	public struct __StubbingProxy_MemoryLogger: Cuckoo.StubbingProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	
-	    public init(manager: Cuckoo.MockManager) {
-	        self.cuckoo_manager = manager
-	    }
-	    
-	    
-	    var recordings: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockMemoryLogger, [Signal]> {
-	        return .init(manager: cuckoo_manager, name: "recordings")
-	    }
-	    
-	    
-	    var limit: Cuckoo.ClassToBeStubbedProperty<MockMemoryLogger, Int> {
-	        return .init(manager: cuckoo_manager, name: "limit")
-	    }
-	    
-	    
-	    func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnFunction<(Signal)> where M1.MatchedType == Signal {
-	        let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockMemoryLogger.self, method: "nextPut(_: Signal)", parameterMatchers: matchers))
-	    }
-	    
-	    func clear() -> Cuckoo.ClassStubNoReturnFunction<()> {
-	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
-	        return .init(stub: cuckoo_manager.createStub(for: MockMemoryLogger.self, method: "clear()", parameterMatchers: matchers))
-	    }
-	    
-	}
+    public struct __StubbingProxy_MemoryLogger: Cuckoo.StubbingProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+    
+        public init(manager: Cuckoo.MockManager) {
+            self.cuckoo_manager = manager
+        }
+        
+        
+        
+        var recordings: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockMemoryLogger, [Signal]> {
+            return .init(manager: cuckoo_manager, name: "recordings")
+        }
+        
+        
+        
+        
+        var limit: Cuckoo.ClassToBeStubbedProperty<MockMemoryLogger, Int> {
+            return .init(manager: cuckoo_manager, name: "limit")
+        }
+        
+        
+        
+        
+        
+        func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnFunction<(Signal)> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockMemoryLogger.self, method:
+    """
+    nextPut(_: Signal)
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func clear() -> Cuckoo.ClassStubNoReturnFunction<()> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return .init(stub: cuckoo_manager.createStub(for: MockMemoryLogger.self, method:
+    """
+    clear()
+    """, parameterMatchers: matchers))
+        }
+        
+        
+    }
 
-	public struct __VerificationProxy_MemoryLogger: Cuckoo.VerificationProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	    private let callMatcher: Cuckoo.CallMatcher
-	    private let sourceLocation: Cuckoo.SourceLocation
-	
-	    public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
-	        self.cuckoo_manager = manager
-	        self.callMatcher = callMatcher
-	        self.sourceLocation = sourceLocation
-	    }
-	
-	    
-	    
-	    var recordings: Cuckoo.VerifyReadOnlyProperty<[Signal]> {
-	        return .init(manager: cuckoo_manager, name: "recordings", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var limit: Cuckoo.VerifyProperty<Int> {
-	        return .init(manager: cuckoo_manager, name: "limit", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	
-	    
-	    @discardableResult
-	    func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
-	        let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
-	        return cuckoo_manager.verify("nextPut(_: Signal)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-	    }
-	    
-	    @discardableResult
-	    func clear() -> Cuckoo.__DoNotUse<(), Void> {
-	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
-	        return cuckoo_manager.verify("clear()", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-	    }
-	    
-	}
+    public struct __VerificationProxy_MemoryLogger: Cuckoo.VerificationProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+        private let callMatcher: Cuckoo.CallMatcher
+        private let sourceLocation: Cuckoo.SourceLocation
+    
+        public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+            self.cuckoo_manager = manager
+            self.callMatcher = callMatcher
+            self.sourceLocation = sourceLocation
+        }
+    
+        
+        
+        
+        var recordings: Cuckoo.VerifyReadOnlyProperty<[Signal]> {
+            return .init(manager: cuckoo_manager, name: "recordings", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var limit: Cuckoo.VerifyProperty<Int> {
+            return .init(manager: cuckoo_manager, name: "limit", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+    
+        
+        
+        
+        @discardableResult
+        func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    nextPut(_: Signal)
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func clear() -> Cuckoo.__DoNotUse<(), Void> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return cuckoo_manager.verify(
+    """
+    clear()
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+    }
 }
 
+
 public class MemoryLoggerStub: MemoryLogger {
+    
+    
     
     
     public override var recordings: [Signal] {
@@ -175,6 +228,9 @@ public class MemoryLoggerStub: MemoryLogger {
         }
         
     }
+    
+    
+    
     
     
     public override var limit: Int {
@@ -186,17 +242,29 @@ public class MemoryLoggerStub: MemoryLogger {
         
     }
     
+    
 
     
 
+    
+    
+    
     
     public override func nextPut(_ aSignal: Signal)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
+    
+    
+    
+    
     public override func clear()   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
+    
 }
+
+
+
 

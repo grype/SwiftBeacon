@@ -4,6 +4,10 @@ import Cuckoo
 import Foundation
 
 
+
+
+
+
 public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.ClassMock {
     
     public typealias MocksType = EncodedStreamSignalWriter
@@ -22,6 +26,7 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
     }
     
 
+    
     
     
     
@@ -49,6 +54,8 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
     
     
     
+    
+    
     public override var stream: OutputStream {
         get {
             return cuckoo_manager.getter("stream",
@@ -70,6 +77,8 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
         }
         
     }
+    
+    
     
     
     
@@ -95,15 +104,20 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
         
     }
     
+    
 
     
 
+    
     
     
     
     public override func open()  {
         
-    return cuckoo_manager.call("open()",
+    return cuckoo_manager.call(
+    """
+    open()
+    """,
             parameters: (),
             escapingParameters: (),
             superclassCall:
@@ -116,9 +130,14 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
     
     
     
+    
+    
     public override func close()  {
         
-    return cuckoo_manager.call("close()",
+    return cuckoo_manager.call(
+    """
+    close()
+    """,
             parameters: (),
             escapingParameters: (),
             superclassCall:
@@ -131,9 +150,14 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
     
     
     
+    
+    
     public override func write(_ aSignal: Signal) throws {
         
-    return try cuckoo_manager.callThrows("write(_: Signal) throws",
+    return try cuckoo_manager.callThrows(
+    """
+    write(_: Signal) throws
+    """,
             parameters: (aSignal),
             escapingParameters: (aSignal),
             superclassCall:
@@ -144,98 +168,150 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
         
     }
     
+    
 
-	public struct __StubbingProxy_EncodedStreamSignalWriter: Cuckoo.StubbingProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	
-	    public init(manager: Cuckoo.MockManager) {
-	        self.cuckoo_manager = manager
-	    }
-	    
-	    
-	    var encoder: Cuckoo.ClassToBeStubbedProperty<MockEncodedStreamSignalWriter, SignalEncoder> {
-	        return .init(manager: cuckoo_manager, name: "encoder")
-	    }
-	    
-	    
-	    var stream: Cuckoo.ClassToBeStubbedProperty<MockEncodedStreamSignalWriter, OutputStream> {
-	        return .init(manager: cuckoo_manager, name: "stream")
-	    }
-	    
-	    
-	    var separator: Cuckoo.ClassToBeStubbedProperty<MockEncodedStreamSignalWriter, Data> {
-	        return .init(manager: cuckoo_manager, name: "separator")
-	    }
-	    
-	    
-	    func open() -> Cuckoo.ClassStubNoReturnFunction<()> {
-	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
-	        return .init(stub: cuckoo_manager.createStub(for: MockEncodedStreamSignalWriter.self, method: "open()", parameterMatchers: matchers))
-	    }
-	    
-	    func close() -> Cuckoo.ClassStubNoReturnFunction<()> {
-	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
-	        return .init(stub: cuckoo_manager.createStub(for: MockEncodedStreamSignalWriter.self, method: "close()", parameterMatchers: matchers))
-	    }
-	    
-	    func write<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Signal)> where M1.MatchedType == Signal {
-	        let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockEncodedStreamSignalWriter.self, method: "write(_: Signal) throws", parameterMatchers: matchers))
-	    }
-	    
-	}
+    public struct __StubbingProxy_EncodedStreamSignalWriter: Cuckoo.StubbingProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+    
+        public init(manager: Cuckoo.MockManager) {
+            self.cuckoo_manager = manager
+        }
+        
+        
+        
+        var encoder: Cuckoo.ClassToBeStubbedProperty<MockEncodedStreamSignalWriter, SignalEncoder> {
+            return .init(manager: cuckoo_manager, name: "encoder")
+        }
+        
+        
+        
+        
+        var stream: Cuckoo.ClassToBeStubbedProperty<MockEncodedStreamSignalWriter, OutputStream> {
+            return .init(manager: cuckoo_manager, name: "stream")
+        }
+        
+        
+        
+        
+        var separator: Cuckoo.ClassToBeStubbedProperty<MockEncodedStreamSignalWriter, Data> {
+            return .init(manager: cuckoo_manager, name: "separator")
+        }
+        
+        
+        
+        
+        
+        func open() -> Cuckoo.ClassStubNoReturnFunction<()> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return .init(stub: cuckoo_manager.createStub(for: MockEncodedStreamSignalWriter.self, method:
+    """
+    open()
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func close() -> Cuckoo.ClassStubNoReturnFunction<()> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return .init(stub: cuckoo_manager.createStub(for: MockEncodedStreamSignalWriter.self, method:
+    """
+    close()
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func write<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Signal)> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockEncodedStreamSignalWriter.self, method:
+    """
+    write(_: Signal) throws
+    """, parameterMatchers: matchers))
+        }
+        
+        
+    }
 
-	public struct __VerificationProxy_EncodedStreamSignalWriter: Cuckoo.VerificationProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	    private let callMatcher: Cuckoo.CallMatcher
-	    private let sourceLocation: Cuckoo.SourceLocation
-	
-	    public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
-	        self.cuckoo_manager = manager
-	        self.callMatcher = callMatcher
-	        self.sourceLocation = sourceLocation
-	    }
-	
-	    
-	    
-	    var encoder: Cuckoo.VerifyProperty<SignalEncoder> {
-	        return .init(manager: cuckoo_manager, name: "encoder", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var stream: Cuckoo.VerifyProperty<OutputStream> {
-	        return .init(manager: cuckoo_manager, name: "stream", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var separator: Cuckoo.VerifyProperty<Data> {
-	        return .init(manager: cuckoo_manager, name: "separator", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	
-	    
-	    @discardableResult
-	    func open() -> Cuckoo.__DoNotUse<(), Void> {
-	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
-	        return cuckoo_manager.verify("open()", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-	    }
-	    
-	    @discardableResult
-	    func close() -> Cuckoo.__DoNotUse<(), Void> {
-	        let matchers: [Cuckoo.ParameterMatcher<Void>] = []
-	        return cuckoo_manager.verify("close()", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-	    }
-	    
-	    @discardableResult
-	    func write<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
-	        let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
-	        return cuckoo_manager.verify("write(_: Signal) throws", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-	    }
-	    
-	}
+    public struct __VerificationProxy_EncodedStreamSignalWriter: Cuckoo.VerificationProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+        private let callMatcher: Cuckoo.CallMatcher
+        private let sourceLocation: Cuckoo.SourceLocation
+    
+        public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+            self.cuckoo_manager = manager
+            self.callMatcher = callMatcher
+            self.sourceLocation = sourceLocation
+        }
+    
+        
+        
+        
+        var encoder: Cuckoo.VerifyProperty<SignalEncoder> {
+            return .init(manager: cuckoo_manager, name: "encoder", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var stream: Cuckoo.VerifyProperty<OutputStream> {
+            return .init(manager: cuckoo_manager, name: "stream", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var separator: Cuckoo.VerifyProperty<Data> {
+            return .init(manager: cuckoo_manager, name: "separator", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+    
+        
+        
+        
+        @discardableResult
+        func open() -> Cuckoo.__DoNotUse<(), Void> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return cuckoo_manager.verify(
+    """
+    open()
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func close() -> Cuckoo.__DoNotUse<(), Void> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return cuckoo_manager.verify(
+    """
+    close()
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func write<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    write(_: Signal) throws
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+    }
 }
 
+
 public class EncodedStreamSignalWriterStub: EncodedStreamSignalWriter {
+    
+    
     
     
     public override var encoder: SignalEncoder {
@@ -248,6 +324,9 @@ public class EncodedStreamSignalWriterStub: EncodedStreamSignalWriter {
     }
     
     
+    
+    
+    
     public override var stream: OutputStream {
         get {
             return DefaultValueRegistry.defaultValue(for: (OutputStream).self)
@@ -256,6 +335,9 @@ public class EncodedStreamSignalWriterStub: EncodedStreamSignalWriter {
         set { }
         
     }
+    
+    
+    
     
     
     public override var separator: Data {
@@ -267,21 +349,37 @@ public class EncodedStreamSignalWriterStub: EncodedStreamSignalWriter {
         
     }
     
+    
 
     
 
+    
+    
+    
     
     public override func open()   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
+    
+    
+    
+    
     public override func close()   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
+    
+    
+    
+    
     
     public override func write(_ aSignal: Signal) throws  {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
+    
 }
+
+
+
 

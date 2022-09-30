@@ -5,6 +5,10 @@ import AnyCodable
 import Foundation
 
 
+
+
+
+
 public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
     
     public typealias MocksType = ErrorSignal
@@ -26,6 +30,7 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
     
     
     
+    
     public override var error: Error {
         get {
             return cuckoo_manager.getter("error",
@@ -37,6 +42,8 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
         }
         
     }
+    
+    
     
     
     
@@ -64,6 +71,8 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
     
     
     
+    
+    
     public override var signalName: String {
         get {
             return cuckoo_manager.getter("signalName",
@@ -75,6 +84,8 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
         }
         
     }
+    
+    
     
     
     
@@ -92,6 +103,8 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
     
     
     
+    
+    
     public override var description: String {
         get {
             return cuckoo_manager.getter("description",
@@ -103,6 +116,8 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
         }
         
     }
+    
+    
     
     
     
@@ -118,15 +133,20 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
         
     }
     
+    
 
     
 
+    
     
     
     
     public override func encode(to encoder: Encoder) throws {
         
-    return try cuckoo_manager.callThrows("encode(to: Encoder) throws",
+    return try cuckoo_manager.callThrows(
+    """
+    encode(to: Encoder) throws
+    """,
             parameters: (encoder),
             escapingParameters: (encoder),
             superclassCall:
@@ -137,106 +157,146 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
         
     }
     
+    
 
-	public struct __StubbingProxy_ErrorSignal: Cuckoo.StubbingProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	
-	    public init(manager: Cuckoo.MockManager) {
-	        self.cuckoo_manager = manager
-	    }
-	    
-	    
-	    var error: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, Error> {
-	        return .init(manager: cuckoo_manager, name: "error")
-	    }
-	    
-	    
-	    var stack: Cuckoo.ClassToBeStubbedProperty<MockErrorSignal, [String]> {
-	        return .init(manager: cuckoo_manager, name: "stack")
-	    }
-	    
-	    
-	    var signalName: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, String> {
-	        return .init(manager: cuckoo_manager, name: "signalName")
-	    }
-	    
-	    
-	    var errorDescription: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, String> {
-	        return .init(manager: cuckoo_manager, name: "errorDescription")
-	    }
-	    
-	    
-	    var description: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, String> {
-	        return .init(manager: cuckoo_manager, name: "description")
-	    }
-	    
-	    
-	    var debugDescription: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, String> {
-	        return .init(manager: cuckoo_manager, name: "debugDescription")
-	    }
-	    
-	    
-	    func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Encoder)> where M1.MatchedType == Encoder {
-	        let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockErrorSignal.self, method: "encode(to: Encoder) throws", parameterMatchers: matchers))
-	    }
-	    
-	}
+    public struct __StubbingProxy_ErrorSignal: Cuckoo.StubbingProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+    
+        public init(manager: Cuckoo.MockManager) {
+            self.cuckoo_manager = manager
+        }
+        
+        
+        
+        var error: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, Error> {
+            return .init(manager: cuckoo_manager, name: "error")
+        }
+        
+        
+        
+        
+        var stack: Cuckoo.ClassToBeStubbedProperty<MockErrorSignal, [String]> {
+            return .init(manager: cuckoo_manager, name: "stack")
+        }
+        
+        
+        
+        
+        var signalName: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, String> {
+            return .init(manager: cuckoo_manager, name: "signalName")
+        }
+        
+        
+        
+        
+        var errorDescription: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, String> {
+            return .init(manager: cuckoo_manager, name: "errorDescription")
+        }
+        
+        
+        
+        
+        var description: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, String> {
+            return .init(manager: cuckoo_manager, name: "description")
+        }
+        
+        
+        
+        
+        var debugDescription: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockErrorSignal, String> {
+            return .init(manager: cuckoo_manager, name: "debugDescription")
+        }
+        
+        
+        
+        
+        
+        func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Encoder)> where M1.MatchedType == Encoder {
+            let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockErrorSignal.self, method:
+    """
+    encode(to: Encoder) throws
+    """, parameterMatchers: matchers))
+        }
+        
+        
+    }
 
-	public struct __VerificationProxy_ErrorSignal: Cuckoo.VerificationProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	    private let callMatcher: Cuckoo.CallMatcher
-	    private let sourceLocation: Cuckoo.SourceLocation
-	
-	    public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
-	        self.cuckoo_manager = manager
-	        self.callMatcher = callMatcher
-	        self.sourceLocation = sourceLocation
-	    }
-	
-	    
-	    
-	    var error: Cuckoo.VerifyReadOnlyProperty<Error> {
-	        return .init(manager: cuckoo_manager, name: "error", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var stack: Cuckoo.VerifyProperty<[String]> {
-	        return .init(manager: cuckoo_manager, name: "stack", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var signalName: Cuckoo.VerifyReadOnlyProperty<String> {
-	        return .init(manager: cuckoo_manager, name: "signalName", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var errorDescription: Cuckoo.VerifyReadOnlyProperty<String> {
-	        return .init(manager: cuckoo_manager, name: "errorDescription", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var description: Cuckoo.VerifyReadOnlyProperty<String> {
-	        return .init(manager: cuckoo_manager, name: "description", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var debugDescription: Cuckoo.VerifyReadOnlyProperty<String> {
-	        return .init(manager: cuckoo_manager, name: "debugDescription", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	
-	    
-	    @discardableResult
-	    func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.__DoNotUse<(Encoder), Void> where M1.MatchedType == Encoder {
-	        let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
-	        return cuckoo_manager.verify("encode(to: Encoder) throws", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-	    }
-	    
-	}
+    public struct __VerificationProxy_ErrorSignal: Cuckoo.VerificationProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+        private let callMatcher: Cuckoo.CallMatcher
+        private let sourceLocation: Cuckoo.SourceLocation
+    
+        public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+            self.cuckoo_manager = manager
+            self.callMatcher = callMatcher
+            self.sourceLocation = sourceLocation
+        }
+    
+        
+        
+        
+        var error: Cuckoo.VerifyReadOnlyProperty<Error> {
+            return .init(manager: cuckoo_manager, name: "error", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var stack: Cuckoo.VerifyProperty<[String]> {
+            return .init(manager: cuckoo_manager, name: "stack", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var signalName: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "signalName", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var errorDescription: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "errorDescription", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var description: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "description", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var debugDescription: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "debugDescription", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+    
+        
+        
+        
+        @discardableResult
+        func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.__DoNotUse<(Encoder), Void> where M1.MatchedType == Encoder {
+            let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    encode(to: Encoder) throws
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+    }
 }
 
+
 public class ErrorSignalStub: ErrorSignal {
+    
+    
     
     
     public override var error: Error {
@@ -245,6 +305,9 @@ public class ErrorSignalStub: ErrorSignal {
         }
         
     }
+    
+    
+    
     
     
     public override var stack: [String] {
@@ -257,12 +320,18 @@ public class ErrorSignalStub: ErrorSignal {
     }
     
     
+    
+    
+    
     public override var signalName: String {
         get {
             return DefaultValueRegistry.defaultValue(for: (String).self)
         }
         
     }
+    
+    
+    
     
     
     public override var errorDescription: String {
@@ -273,12 +342,18 @@ public class ErrorSignalStub: ErrorSignal {
     }
     
     
+    
+    
+    
     public override var description: String {
         get {
             return DefaultValueRegistry.defaultValue(for: (String).self)
         }
         
     }
+    
+    
+    
     
     
     public override var debugDescription: String {
@@ -288,13 +363,21 @@ public class ErrorSignalStub: ErrorSignal {
         
     }
     
+    
 
     
 
+    
+    
+    
     
     public override func encode(to encoder: Encoder) throws  {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
+    
 }
+
+
+
 

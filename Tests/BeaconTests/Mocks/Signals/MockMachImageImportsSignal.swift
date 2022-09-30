@@ -4,6 +4,10 @@ import Cuckoo
 import Foundation
 
 
+
+
+
+
 public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMock {
     
     public typealias MocksType = MachImageImportsSignal
@@ -22,6 +26,7 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
     }
     
 
+    
     
     
     
@@ -49,6 +54,8 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
     
     
     
+    
+    
     public override var removed: [MachImage]? {
         get {
             return cuckoo_manager.getter("removed",
@@ -73,6 +80,8 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
     
     
     
+    
+    
     public override var signalName: String {
         get {
             return cuckoo_manager.getter("signalName",
@@ -84,6 +93,8 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
         }
         
     }
+    
+    
     
     
     
@@ -99,15 +110,20 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
         
     }
     
+    
 
     
 
+    
     
     
     
     public override func encode(to encoder: Encoder) throws {
         
-    return try cuckoo_manager.callThrows("encode(to: Encoder) throws",
+    return try cuckoo_manager.callThrows(
+    """
+    encode(to: Encoder) throws
+    """,
             parameters: (encoder),
             escapingParameters: (encoder),
             superclassCall:
@@ -118,86 +134,118 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
         
     }
     
+    
 
-	public struct __StubbingProxy_MachImageImportsSignal: Cuckoo.StubbingProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	
-	    public init(manager: Cuckoo.MockManager) {
-	        self.cuckoo_manager = manager
-	    }
-	    
-	    
-	    var added: Cuckoo.ClassToBeStubbedOptionalProperty<MockMachImageImportsSignal, [MachImage]> {
-	        return .init(manager: cuckoo_manager, name: "added")
-	    }
-	    
-	    
-	    var removed: Cuckoo.ClassToBeStubbedOptionalProperty<MockMachImageImportsSignal, [MachImage]> {
-	        return .init(manager: cuckoo_manager, name: "removed")
-	    }
-	    
-	    
-	    var signalName: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockMachImageImportsSignal, String> {
-	        return .init(manager: cuckoo_manager, name: "signalName")
-	    }
-	    
-	    
-	    var valueDescription: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockMachImageImportsSignal, String?> {
-	        return .init(manager: cuckoo_manager, name: "valueDescription")
-	    }
-	    
-	    
-	    func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Encoder)> where M1.MatchedType == Encoder {
-	        let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockMachImageImportsSignal.self, method: "encode(to: Encoder) throws", parameterMatchers: matchers))
-	    }
-	    
-	}
+    public struct __StubbingProxy_MachImageImportsSignal: Cuckoo.StubbingProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+    
+        public init(manager: Cuckoo.MockManager) {
+            self.cuckoo_manager = manager
+        }
+        
+        
+        
+        var added: Cuckoo.ClassToBeStubbedOptionalProperty<MockMachImageImportsSignal, [MachImage]> {
+            return .init(manager: cuckoo_manager, name: "added")
+        }
+        
+        
+        
+        
+        var removed: Cuckoo.ClassToBeStubbedOptionalProperty<MockMachImageImportsSignal, [MachImage]> {
+            return .init(manager: cuckoo_manager, name: "removed")
+        }
+        
+        
+        
+        
+        var signalName: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockMachImageImportsSignal, String> {
+            return .init(manager: cuckoo_manager, name: "signalName")
+        }
+        
+        
+        
+        
+        var valueDescription: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockMachImageImportsSignal, String?> {
+            return .init(manager: cuckoo_manager, name: "valueDescription")
+        }
+        
+        
+        
+        
+        
+        func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Encoder)> where M1.MatchedType == Encoder {
+            let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockMachImageImportsSignal.self, method:
+    """
+    encode(to: Encoder) throws
+    """, parameterMatchers: matchers))
+        }
+        
+        
+    }
 
-	public struct __VerificationProxy_MachImageImportsSignal: Cuckoo.VerificationProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	    private let callMatcher: Cuckoo.CallMatcher
-	    private let sourceLocation: Cuckoo.SourceLocation
-	
-	    public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
-	        self.cuckoo_manager = manager
-	        self.callMatcher = callMatcher
-	        self.sourceLocation = sourceLocation
-	    }
-	
-	    
-	    
-	    var added: Cuckoo.VerifyOptionalProperty<[MachImage]> {
-	        return .init(manager: cuckoo_manager, name: "added", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var removed: Cuckoo.VerifyOptionalProperty<[MachImage]> {
-	        return .init(manager: cuckoo_manager, name: "removed", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var signalName: Cuckoo.VerifyReadOnlyProperty<String> {
-	        return .init(manager: cuckoo_manager, name: "signalName", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var valueDescription: Cuckoo.VerifyReadOnlyProperty<String?> {
-	        return .init(manager: cuckoo_manager, name: "valueDescription", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	
-	    
-	    @discardableResult
-	    func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.__DoNotUse<(Encoder), Void> where M1.MatchedType == Encoder {
-	        let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
-	        return cuckoo_manager.verify("encode(to: Encoder) throws", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-	    }
-	    
-	}
+    public struct __VerificationProxy_MachImageImportsSignal: Cuckoo.VerificationProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+        private let callMatcher: Cuckoo.CallMatcher
+        private let sourceLocation: Cuckoo.SourceLocation
+    
+        public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+            self.cuckoo_manager = manager
+            self.callMatcher = callMatcher
+            self.sourceLocation = sourceLocation
+        }
+    
+        
+        
+        
+        var added: Cuckoo.VerifyOptionalProperty<[MachImage]> {
+            return .init(manager: cuckoo_manager, name: "added", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var removed: Cuckoo.VerifyOptionalProperty<[MachImage]> {
+            return .init(manager: cuckoo_manager, name: "removed", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var signalName: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "signalName", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var valueDescription: Cuckoo.VerifyReadOnlyProperty<String?> {
+            return .init(manager: cuckoo_manager, name: "valueDescription", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+    
+        
+        
+        
+        @discardableResult
+        func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.__DoNotUse<(Encoder), Void> where M1.MatchedType == Encoder {
+            let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    encode(to: Encoder) throws
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+    }
 }
 
+
 public class MachImageImportsSignalStub: MachImageImportsSignal {
+    
+    
     
     
     public override var added: [MachImage]? {
@@ -210,6 +258,9 @@ public class MachImageImportsSignalStub: MachImageImportsSignal {
     }
     
     
+    
+    
+    
     public override var removed: [MachImage]? {
         get {
             return DefaultValueRegistry.defaultValue(for: ([MachImage]?).self)
@@ -220,12 +271,18 @@ public class MachImageImportsSignalStub: MachImageImportsSignal {
     }
     
     
+    
+    
+    
     public override var signalName: String {
         get {
             return DefaultValueRegistry.defaultValue(for: (String).self)
         }
         
     }
+    
+    
+    
     
     
     public override var valueDescription: String? {
@@ -235,13 +292,21 @@ public class MachImageImportsSignalStub: MachImageImportsSignal {
         
     }
     
+    
 
     
 
+    
+    
+    
     
     public override func encode(to encoder: Encoder) throws  {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
+    
 }
+
+
+
 

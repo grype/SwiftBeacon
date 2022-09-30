@@ -1,7 +1,12 @@
 import Cuckoo
 @testable import Beacon
 
+import AnyCodable
 import Foundation
+
+
+
+
 
 
 public class MockWrapperSignal: WrapperSignal, Cuckoo.ClassMock {
@@ -25,6 +30,7 @@ public class MockWrapperSignal: WrapperSignal, Cuckoo.ClassMock {
     
     
     
+    
     public override var value: Any {
         get {
             return cuckoo_manager.getter("value",
@@ -36,6 +42,8 @@ public class MockWrapperSignal: WrapperSignal, Cuckoo.ClassMock {
         }
         
     }
+    
+    
     
     
     
@@ -51,15 +59,36 @@ public class MockWrapperSignal: WrapperSignal, Cuckoo.ClassMock {
         
     }
     
+    
+    
+    
+    
+    public override var valueDescription: String? {
+        get {
+            return cuckoo_manager.getter("valueDescription",
+                superclassCall:
+                    
+                    super.valueDescription
+                    ,
+                defaultCall: __defaultImplStub!.valueDescription)
+        }
+        
+    }
+    
+    
 
     
 
+    
     
     
     
     public override func encode(to encoder: Encoder) throws {
         
-    return try cuckoo_manager.callThrows("encode(to: Encoder) throws",
+    return try cuckoo_manager.callThrows(
+    """
+    encode(to: Encoder) throws
+    """,
             parameters: (encoder),
             escapingParameters: (encoder),
             superclassCall:
@@ -70,66 +99,104 @@ public class MockWrapperSignal: WrapperSignal, Cuckoo.ClassMock {
         
     }
     
+    
 
-	public struct __StubbingProxy_WrapperSignal: Cuckoo.StubbingProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	
-	    public init(manager: Cuckoo.MockManager) {
-	        self.cuckoo_manager = manager
-	    }
-	    
-	    
-	    var value: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockWrapperSignal, Any> {
-	        return .init(manager: cuckoo_manager, name: "value")
-	    }
-	    
-	    
-	    var signalName: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockWrapperSignal, String> {
-	        return .init(manager: cuckoo_manager, name: "signalName")
-	    }
-	    
-	    
-	    func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Encoder)> where M1.MatchedType == Encoder {
-	        let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockWrapperSignal.self, method: "encode(to: Encoder) throws", parameterMatchers: matchers))
-	    }
-	    
-	}
+    public struct __StubbingProxy_WrapperSignal: Cuckoo.StubbingProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+    
+        public init(manager: Cuckoo.MockManager) {
+            self.cuckoo_manager = manager
+        }
+        
+        
+        
+        var value: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockWrapperSignal, Any> {
+            return .init(manager: cuckoo_manager, name: "value")
+        }
+        
+        
+        
+        
+        var signalName: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockWrapperSignal, String> {
+            return .init(manager: cuckoo_manager, name: "signalName")
+        }
+        
+        
+        
+        
+        var valueDescription: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockWrapperSignal, String?> {
+            return .init(manager: cuckoo_manager, name: "valueDescription")
+        }
+        
+        
+        
+        
+        
+        func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Encoder)> where M1.MatchedType == Encoder {
+            let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockWrapperSignal.self, method:
+    """
+    encode(to: Encoder) throws
+    """, parameterMatchers: matchers))
+        }
+        
+        
+    }
 
-	public struct __VerificationProxy_WrapperSignal: Cuckoo.VerificationProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	    private let callMatcher: Cuckoo.CallMatcher
-	    private let sourceLocation: Cuckoo.SourceLocation
-	
-	    public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
-	        self.cuckoo_manager = manager
-	        self.callMatcher = callMatcher
-	        self.sourceLocation = sourceLocation
-	    }
-	
-	    
-	    
-	    var value: Cuckoo.VerifyReadOnlyProperty<Any> {
-	        return .init(manager: cuckoo_manager, name: "value", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var signalName: Cuckoo.VerifyReadOnlyProperty<String> {
-	        return .init(manager: cuckoo_manager, name: "signalName", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	
-	    
-	    @discardableResult
-	    func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.__DoNotUse<(Encoder), Void> where M1.MatchedType == Encoder {
-	        let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
-	        return cuckoo_manager.verify("encode(to: Encoder) throws", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-	    }
-	    
-	}
+    public struct __VerificationProxy_WrapperSignal: Cuckoo.VerificationProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+        private let callMatcher: Cuckoo.CallMatcher
+        private let sourceLocation: Cuckoo.SourceLocation
+    
+        public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+            self.cuckoo_manager = manager
+            self.callMatcher = callMatcher
+            self.sourceLocation = sourceLocation
+        }
+    
+        
+        
+        
+        var value: Cuckoo.VerifyReadOnlyProperty<Any> {
+            return .init(manager: cuckoo_manager, name: "value", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var signalName: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "signalName", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var valueDescription: Cuckoo.VerifyReadOnlyProperty<String?> {
+            return .init(manager: cuckoo_manager, name: "valueDescription", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+    
+        
+        
+        
+        @discardableResult
+        func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.__DoNotUse<(Encoder), Void> where M1.MatchedType == Encoder {
+            let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    encode(to: Encoder) throws
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+    }
 }
 
+
 public class WrapperSignalStub: WrapperSignal {
+    
+    
     
     
     public override var value: Any {
@@ -140,6 +207,9 @@ public class WrapperSignalStub: WrapperSignal {
     }
     
     
+    
+    
+    
     public override var signalName: String {
         get {
             return DefaultValueRegistry.defaultValue(for: (String).self)
@@ -147,13 +217,32 @@ public class WrapperSignalStub: WrapperSignal {
         
     }
     
+    
+    
+    
+    
+    public override var valueDescription: String? {
+        get {
+            return DefaultValueRegistry.defaultValue(for: (String?).self)
+        }
+        
+    }
+    
+    
 
     
 
+    
+    
+    
     
     public override func encode(to encoder: Encoder) throws  {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
+    
 }
+
+
+
 

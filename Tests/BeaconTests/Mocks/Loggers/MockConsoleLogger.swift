@@ -4,6 +4,10 @@ import Cuckoo
 import Foundation
 
 
+
+
+
+
 public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
     
     public typealias MocksType = ConsoleLogger
@@ -22,6 +26,7 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
     }
     
 
+    
     
     
     
@@ -49,6 +54,8 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
     
     
     
+    
+    
     public override var inactivityDelimiter: String {
         get {
             return cuckoo_manager.getter("inactivityDelimiter",
@@ -71,15 +78,20 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
         
     }
     
+    
 
     
 
+    
     
     
     
     public override func nextPut(_ aSignal: Signal)  {
         
-    return cuckoo_manager.call("nextPut(_: Signal)",
+    return cuckoo_manager.call(
+    """
+    nextPut(_: Signal)
+    """,
             parameters: (aSignal),
             escapingParameters: (aSignal),
             superclassCall:
@@ -90,66 +102,90 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
         
     }
     
+    
 
-	public struct __StubbingProxy_ConsoleLogger: Cuckoo.StubbingProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	
-	    public init(manager: Cuckoo.MockManager) {
-	        self.cuckoo_manager = manager
-	    }
-	    
-	    
-	    var markedInactvitiyPeriod: Cuckoo.ClassToBeStubbedProperty<MockConsoleLogger, TimeInterval> {
-	        return .init(manager: cuckoo_manager, name: "markedInactvitiyPeriod")
-	    }
-	    
-	    
-	    var inactivityDelimiter: Cuckoo.ClassToBeStubbedProperty<MockConsoleLogger, String> {
-	        return .init(manager: cuckoo_manager, name: "inactivityDelimiter")
-	    }
-	    
-	    
-	    func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnFunction<(Signal)> where M1.MatchedType == Signal {
-	        let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
-	        return .init(stub: cuckoo_manager.createStub(for: MockConsoleLogger.self, method: "nextPut(_: Signal)", parameterMatchers: matchers))
-	    }
-	    
-	}
+    public struct __StubbingProxy_ConsoleLogger: Cuckoo.StubbingProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+    
+        public init(manager: Cuckoo.MockManager) {
+            self.cuckoo_manager = manager
+        }
+        
+        
+        
+        var markedInactvitiyPeriod: Cuckoo.ClassToBeStubbedProperty<MockConsoleLogger, TimeInterval> {
+            return .init(manager: cuckoo_manager, name: "markedInactvitiyPeriod")
+        }
+        
+        
+        
+        
+        var inactivityDelimiter: Cuckoo.ClassToBeStubbedProperty<MockConsoleLogger, String> {
+            return .init(manager: cuckoo_manager, name: "inactivityDelimiter")
+        }
+        
+        
+        
+        
+        
+        func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnFunction<(Signal)> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockConsoleLogger.self, method:
+    """
+    nextPut(_: Signal)
+    """, parameterMatchers: matchers))
+        }
+        
+        
+    }
 
-	public struct __VerificationProxy_ConsoleLogger: Cuckoo.VerificationProxy {
-	    private let cuckoo_manager: Cuckoo.MockManager
-	    private let callMatcher: Cuckoo.CallMatcher
-	    private let sourceLocation: Cuckoo.SourceLocation
-	
-	    public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
-	        self.cuckoo_manager = manager
-	        self.callMatcher = callMatcher
-	        self.sourceLocation = sourceLocation
-	    }
-	
-	    
-	    
-	    var markedInactvitiyPeriod: Cuckoo.VerifyProperty<TimeInterval> {
-	        return .init(manager: cuckoo_manager, name: "markedInactvitiyPeriod", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	    
-	    var inactivityDelimiter: Cuckoo.VerifyProperty<String> {
-	        return .init(manager: cuckoo_manager, name: "inactivityDelimiter", callMatcher: callMatcher, sourceLocation: sourceLocation)
-	    }
-	    
-	
-	    
-	    @discardableResult
-	    func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
-	        let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
-	        return cuckoo_manager.verify("nextPut(_: Signal)", callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-	    }
-	    
-	}
+    public struct __VerificationProxy_ConsoleLogger: Cuckoo.VerificationProxy {
+        private let cuckoo_manager: Cuckoo.MockManager
+        private let callMatcher: Cuckoo.CallMatcher
+        private let sourceLocation: Cuckoo.SourceLocation
+    
+        public init(manager: Cuckoo.MockManager, callMatcher: Cuckoo.CallMatcher, sourceLocation: Cuckoo.SourceLocation) {
+            self.cuckoo_manager = manager
+            self.callMatcher = callMatcher
+            self.sourceLocation = sourceLocation
+        }
+    
+        
+        
+        
+        var markedInactvitiyPeriod: Cuckoo.VerifyProperty<TimeInterval> {
+            return .init(manager: cuckoo_manager, name: "markedInactvitiyPeriod", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var inactivityDelimiter: Cuckoo.VerifyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "inactivityDelimiter", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+    
+        
+        
+        
+        @discardableResult
+        func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    nextPut(_: Signal)
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+    }
 }
 
+
 public class ConsoleLoggerStub: ConsoleLogger {
+    
+    
     
     
     public override var markedInactvitiyPeriod: TimeInterval {
@@ -162,6 +198,9 @@ public class ConsoleLoggerStub: ConsoleLogger {
     }
     
     
+    
+    
+    
     public override var inactivityDelimiter: String {
         get {
             return DefaultValueRegistry.defaultValue(for: (String).self)
@@ -171,13 +210,21 @@ public class ConsoleLoggerStub: ConsoleLogger {
         
     }
     
+    
 
     
 
+    
+    
+    
     
     public override func nextPut(_ aSignal: Signal)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
+    
 }
+
+
+
 
