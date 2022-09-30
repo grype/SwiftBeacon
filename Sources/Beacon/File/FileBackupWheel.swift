@@ -114,9 +114,3 @@ open class FileBackupWheel: FileRotation {
         return (fileAttributes as NSDictionary).fileSize()
     }
 }
-
-extension URL {
-    var createdDate: Date? {
-        try? resourceValues(forKeys: [.creationDateKey]).creationDate
-    }
-}
