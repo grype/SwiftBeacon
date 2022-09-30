@@ -1,17 +1,16 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 5/20/21.
 //
 
-import XCTest
+@testable import Beacon
 import Cuckoo
 import Nimble
-@testable import Beacon
+import XCTest
 
-class FileBackupWheelTests : XCTestCase {
-    
+class FileBackupWheelTests: XCTestCase {
     let url = URL(fileURLWithPath: "/tmp/FileWheelTests.log")
     
     var wheel: MockFileBackupWheel!
@@ -43,13 +42,13 @@ class FileBackupWheelTests : XCTestCase {
     }
     
     func testShouldRotateWhenFileWillExceedMaxSize() {
-        configureFile(exists: true, size: maxSize+1)
+        configureFile(exists: true, size: maxSize + 1)
         expect(self.wheel.shouldRotate(fileAt: self.url)).to(beTrue())
     }
     
     func testShouldNotRotateWhenFileWillNotExceedMaxSize() {
         let data = "a".data(using: .utf8)!
-        configureFile(exists: true, size: maxSize-UInt64(data.count+1))
+        configureFile(exists: true, size: maxSize - UInt64(data.count + 1))
         expect(self.wheel.shouldRotate(fileAt: self.url)).to(beFalse())
     }
     
@@ -75,8 +74,22 @@ class FileBackupWheelTests : XCTestCase {
         backups = try! wheel.backupsOfFile(at: url)
         expect(backups.count) == 2
         
-        backups.forEach { (aURL) in
+        backups.forEach { aURL in
             try? wheel.fileManager.removeItem(at: aURL)
+        }
+    }
+    
+    struct Backup: Hashable {
+        var url: URL
+        var created: Date?
+        init(_ aUrl: URL) {
+            url = aUrl
+            created = aUrl.createdDate
+        }
+        
+        var hashValue: Int { url.hashValue }
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(url)
         }
     }
     
@@ -85,33 +98,32 @@ class FileBackupWheelTests : XCTestCase {
             wheel.fileManager.createFile(atPath: url.path, contents: nil, attributes: nil)
             try! wheel.backupFile(at: url)
         }
-        let backupsBeforeRotation = try! wheel.backupsOfFile(at: url)
+        let backupsBeforeRotation = try! wheel.backupsOfFile(at: url).map { Backup.init($0) }
         expect(backupsBeforeRotation.count) == wheel.maxNumberOfBackups
         
         wheel.fileManager.createFile(atPath: url.path, contents: nil, attributes: nil)
         try! wheel.backupFile(at: url)
-        let backupsAfterRotation = try! wheel.backupsOfFile(at: url)
+        let backupsAfterRotation: [Backup] = try! wheel.backupsOfFile(at: url).map { Backup.init($0) }
         expect(backupsAfterRotation.count) == wheel.maxNumberOfBackups
         
-        let allBackups = Set(backupsBeforeRotation + backupsAfterRotation).sorted { $0.path > $1.path }
-        let expectedBackups = Array(allBackups.prefix(wheel.maxNumberOfBackups))
+        let allBackups = Set(backupsBeforeRotation + backupsAfterRotation).sorted { $0.created! < $1.created! }
+        let expectedBackups = Array(allBackups.suffix(wheel.maxNumberOfBackups))
         expect(backupsAfterRotation) == expectedBackups
         
-        allBackups.forEach { aURL in
-            guard wheel.fileManager.fileExists(atPath: aURL.path) else { return }
-            try? wheel.fileManager.removeItem(at: aURL)
+        allBackups.forEach { aBackup in
+            guard wheel.fileManager.fileExists(atPath: aBackup.url.path) else { return }
+            try? wheel.fileManager.removeItem(at: aBackup.url)
         }
     }
     
-    // MARK:- Configuring
+    // MARK: - Configuring
     
     private func configureFile(exists: Bool, size: UInt64 = 0) {
-        stub(wheel) { (stub) in
+        stub(wheel) { stub in
             when(stub.fileExists(at: any())).thenReturn(exists)
             if exists {
                 when(stub.fileSize(at: any())).thenReturn(size)
             }
         }
     }
-    
 }

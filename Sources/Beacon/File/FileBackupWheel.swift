@@ -64,7 +64,7 @@ open class FileBackupWheel: FileRotation {
         guard maxNumberOfBackups > 0 else { return }
         let backups = try backupsOfFile(at: aURL)
         guard backups.count >= maxNumberOfBackups else { return }
-        try backups.suffix(from: maxNumberOfBackups - 1).forEach { aURL in
+        try backups.prefix(maxNumberOfBackups - 1).forEach { aURL in
             try fileManager.removeItem(at: aURL)
         }
     }
@@ -79,8 +79,8 @@ open class FileBackupWheel: FileRotation {
             }
             .map { dir.appendingPathComponent($0) }
             .sorted {
-                guard let a = $0.createdDate, let b = $1.createdDate else { return $0.path > $1.path }
-                return b > a
+                guard let a = $0.createdDate, let b = $1.createdDate else { return $0.path < $1.path }
+                return a < b
             }
     }
     
