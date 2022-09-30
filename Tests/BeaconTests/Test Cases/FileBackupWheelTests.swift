@@ -80,6 +80,29 @@ class FileBackupWheelTests : XCTestCase {
         }
     }
     
+    func testRotationDeletesOldFile() {
+        Array(repeating: 0, count: wheel.maxNumberOfBackups).forEach { _ in
+            wheel.fileManager.createFile(atPath: url.path, contents: nil, attributes: nil)
+            try! wheel.backupFile(at: url)
+        }
+        let backupsBeforeRotation = try! wheel.backupsOfFile(at: url)
+        expect(backupsBeforeRotation.count) == wheel.maxNumberOfBackups
+        
+        wheel.fileManager.createFile(atPath: url.path, contents: nil, attributes: nil)
+        try! wheel.backupFile(at: url)
+        let backupsAfterRotation = try! wheel.backupsOfFile(at: url)
+        expect(backupsAfterRotation.count) == wheel.maxNumberOfBackups
+        
+        let allBackups = Set(backupsBeforeRotation + backupsAfterRotation).sorted { $0.path > $1.path }
+        let expectedBackups = Array(allBackups.prefix(wheel.maxNumberOfBackups))
+        expect(backupsAfterRotation) == expectedBackups
+        
+        allBackups.forEach { aURL in
+            guard wheel.fileManager.fileExists(atPath: aURL.path) else { return }
+            try? wheel.fileManager.removeItem(at: aURL)
+        }
+    }
+    
     // MARK:- Configuring
     
     private func configureFile(exists: Bool, size: UInt64 = 0) {

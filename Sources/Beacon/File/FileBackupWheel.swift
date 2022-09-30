@@ -1,13 +1,12 @@
 //
 //  FileBackupWheel.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 5/20/21.
 //  Copyright © 2021 Pavel Skaldin. All rights reserved.
 //
 
 import Foundation
-
 
 /**
  I rotate files that exceed certain file size by keeping a certain number of backups.
@@ -24,25 +23,24 @@ import Foundation
  ```
  */
 
-open class FileBackupWheel : FileRotation {
-    
+open class FileBackupWheel: FileRotation {
     // Max file size, in bytes, that log file should not exceed
     open var maxFileSize: UInt64 = 0
     
     open var maxNumberOfBackups: Int = 0
     
-    open var fileManager: FileManager = FileManager.default
+    open var fileManager = FileManager.default
     
     open var dateFormatter: DateFormatter = .init(format: .fileSortable)
     
-    // MARK:- Init
+    // MARK: - Init
     
-    public init(maxFileSize aSize: UInt64, maxNumberOfBackups aCount:Int) {
+    public init(maxFileSize aSize: UInt64, maxNumberOfBackups aCount: Int) {
         maxFileSize = aSize
         maxNumberOfBackups = aCount
     }
     
-    // MARK:- Rotating
+    // MARK: - Rotating
     
     open func shouldRotate(fileAt url: URL) -> Bool {
         guard fileExists(at: url) else { return false }
@@ -55,18 +53,18 @@ open class FileBackupWheel : FileRotation {
         try backupFile(at: aURL)
     }
     
-    // MARK:- Backing up
+    // MARK: - Backing up
     
     open func backupFile(at aURL: URL) throws {
-        try fileManager.moveItem(at: aURL, to: nextBackupURLFor(url: aURL))
         try deleteOldBackupsOfFile(at: aURL)
+        try fileManager.moveItem(at: aURL, to: nextBackupURLFor(url: aURL))
     }
     
     open func deleteOldBackupsOfFile(at aURL: URL) throws {
         guard maxNumberOfBackups > 0 else { return }
-        let backups = try backupsOfFile(at: aURL).sorted { $0.path > $1.path }
-        guard backups.count > maxNumberOfBackups else { return }
-        try backups.suffix(from: maxNumberOfBackups).forEach { (aURL) in
+        let backups = try backupsOfFile(at: aURL)
+        guard backups.count >= maxNumberOfBackups else { return }
+        try backups.suffix(from: maxNumberOfBackups - 1).forEach { aURL in
             try fileManager.removeItem(at: aURL)
         }
     }
@@ -76,31 +74,36 @@ open class FileBackupWheel : FileRotation {
         let dir = aURL.deletingLastPathComponent()
         return try fileManager
             .contentsOfDirectory(atPath: dir.path)
-            .filter { (aFileName) in
-                return aFileName != aURL.lastPathComponent && aFileName.hasPrefix(prefix)
+            .filter { aFileName in
+                aFileName != aURL.lastPathComponent && aFileName.hasPrefix(prefix)
             }
             .map { dir.appendingPathComponent($0) }
+            .sorted {
+                guard let a = $0.createdDate, let b = $1.createdDate else { return $0.path > $1.path }
+                return b > a
+            }
     }
     
     open func nextBackupURLFor(url: URL) -> URL {
-        var index: UInt8 = 0
-        var suffix = dateFormatter.string(from: Date())
+        let timestamp = dateFormatter.string(from: Date())
+        var suffix = timestamp
         let fileManager = self.fileManager
         let dir = url.deletingLastPathComponent()
-        let filename = url.deletingPathExtension().lastPathComponent
+        let baseName = url.deletingPathExtension().lastPathComponent
         let ext = url.pathExtension
+        var index: UInt8 = 0
         var nextURL: URL!
         
         repeat {
-            nextURL = dir.appendingPathComponent("\(filename).\(suffix).\(ext)")
+            nextURL = dir.appendingPathComponent("\(baseName).\(suffix).\(ext)")
             index += 1
-            suffix = "\(suffix).\(index)"
+            suffix = "\(timestamp) (\(index))"
         } while fileManager.fileExists(atPath: nextURL.path)
         
         return nextURL
     }
     
-    // MARK:- File (Internal)
+    // MARK: - File (Internal)
     
     open func fileExists(at url: URL) -> Bool {
         return FileManager.default.fileExists(atPath: (url.path as NSString).resolvingSymlinksInPath)
@@ -110,5 +113,10 @@ open class FileBackupWheel : FileRotation {
         guard let fileAttributes = try? FileManager.default.attributesOfItem(atPath: url.path) else { return 0 }
         return (fileAttributes as NSDictionary).fileSize()
     }
-    
+}
+
+extension URL {
+    var createdDate: Date? {
+        try? resourceValues(forKeys: [.creationDateKey]).creationDate
+    }
 }
