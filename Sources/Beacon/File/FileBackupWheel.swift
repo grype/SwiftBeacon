@@ -29,7 +29,7 @@ open class FileBackupWheel: FileRotation {
     
     open var maxNumberOfBackups: Int = 0
     
-    open var fileManager = FileManager.default
+    open var fileManager: FileManager = .default
     
     open var dateFormatter: DateFormatter = .init(format: .fileSortable)
     
