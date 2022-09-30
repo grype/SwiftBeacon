@@ -6,9 +6,9 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
+import AnyCodable
 import Foundation
 import SwiftAnnouncements
-import AnyCodable
 
 /**
  I am an abstract signal.
@@ -21,12 +21,11 @@ import AnyCodable
  
  */
 
-open class Signal : NSObject, Encodable {
-    
-    // MARK:- Structs
+open class Signal: NSObject, Encodable {
+    // MARK: - Structs
     
     /// Used to capture `emit()` invocation context
-    public struct Source : CustomStringConvertible, Codable {
+    public struct Source: CustomStringConvertible, Codable {
         public var identifier: String? = UniqueDeviceIdentifier
         public var module: String?
         public var fileName: String
@@ -54,23 +53,23 @@ open class Signal : NSObject, Encodable {
         }
     }
     
-    // MARK:- Class
+    // MARK: - Class
     
     // MARK: Properties
     
-    open class var portableClassName : String? {
+    open class var portableClassName: String? {
         return String(describing: self)
     }
     
-    // MARK:- Instance
+    // MARK: - Instance
     
     // MARK: Properties
     
     /// Source where the signal was `emit()`ed from.
-    private(set) public var source: Source?
+    public private(set) var source: Source?
     
-    /// User info data passed along by the signaler. 
-    @objc open var userInfo: [AnyHashable : Any]?
+    /// User info data passed along by the signaler.
+    @objc open var userInfo: [AnyHashable: Any]?
     
     /// Signal name as appropriate for the instance.
     @objc open var signalName: String {
@@ -81,7 +80,7 @@ open class Signal : NSObject, Encodable {
     }
     
     /// Time when the signal was `emit()`ed.
-    @objc public let timestamp: Date = Date()
+    @objc public let timestamp: Date = .init()
     
     // MARK: Properties - Private
     
@@ -89,14 +88,13 @@ open class Signal : NSObject, Encodable {
     @objc open lazy var descriptionDateFormatter: DateFormatter = .init(format: .default)
     
     @objc private(set) lazy var bundleName: String? = {
-        return Bundle.main.infoDictionary?["CFBundleName"] as? String
+        Bundle.main.infoDictionary?["CFBundleName"] as? String
     }()
     
+    // MARK: - Filtering
     
-    // MARK:- Filtering
-    
-    struct Constraint<T:Signal> {
-        var `type`: T.Type
+    struct Constraint<T: Signal> {
+        var type: T.Type
         var logger: SignalLogger?
         var beacon: Beacon?
         func applies(to aType: T.Type, logger aLogger: SignalLogger?, beacon aBeacon: Beacon?) -> Bool {
@@ -119,20 +117,19 @@ open class Signal : NSObject, Encodable {
         constraints.removeAll { $0.applies(to: self, logger: aLogger, beacon: aBeacon) }
     }
     
-    
-    // MARK:- Emitting
+    // MARK: - Emitting
     
     /// Emits signal to all running instances of `SignalLogger`
-    @objc open func emit(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+    @objc open func emit(on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
         let source = Signal.Source(origin: bundleName, fileName: fileName, line: line, functionName: functionName)
         emit(on: beacons, source: source, userInfo: userInfo)
     }
     
     /// Emits signal to all running instances of `SignalLogger`
-    private func emit(on beacons: [Beacon], source aSource: Signal.Source, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
+    private func emit(on beacons: [Beacon], source aSource: Signal.Source, userInfo anUserInfo: [AnyHashable: Any]? = nil) {
         if let anUserInfo = anUserInfo {
             if let userInfo = userInfo {
-                self.userInfo = userInfo.merging(anUserInfo) { (_, incoming) in incoming }
+                self.userInfo = userInfo.merging(anUserInfo) { _, incoming in incoming }
             }
             else {
                 userInfo = anUserInfo
@@ -147,9 +144,9 @@ open class Signal : NSObject, Encodable {
         return self
     }
     
-    // MARK:- Encodable
+    // MARK: - Encodable
     
-    private enum CodingKeys : String , CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case timestamp, source, userInfo = "properties", portableClassName = "__class", description
     }
     
@@ -159,18 +156,18 @@ open class Signal : NSObject, Encodable {
         try container.encodeIfPresent(timestamp, forKey: .timestamp)
         try container.encode(source, forKey: .source)
         try container.encode(debugDescription, forKey: .description)
-        if let codableInfo = userInfo as? [String : Encodable] {
+        if let codableInfo = userInfo as? [String: Encodable] {
             let wrapped = codableInfo.mapValues(AnyEncodable.init)
             try container.encode(wrapped, forKey: .userInfo)
         }
         // Swift is great!
-        else if let codableInfo = (userInfo as? [String : AnyHashable]) as? [String : Encodable] {
+        else if let codableInfo = (userInfo as? [String: AnyHashable]) as? [String: Encodable] {
             let wrapped = codableInfo.mapValues(AnyEncodable.init)
             try container.encode(wrapped, forKey: .userInfo)
         }
     }
     
-    // MARK:- CustomStringConvertible
+    // MARK: - CustomStringConvertible
     
     @objc
     open var sourceDescription: String? {
@@ -199,7 +196,7 @@ open class Signal : NSObject, Encodable {
     }
     
     @objc
-    open override var description: String {
+    override open var description: String {
         let dateString = descriptionDateFormatter.string(from: timestamp)
         var result = "\(dateString) \(signalName)"
         if let sourceDescription = sourceDescription {
@@ -212,7 +209,7 @@ open class Signal : NSObject, Encodable {
     }
     
     @objc
-    open override var debugDescription: String {
+    override open var debugDescription: String {
         let dateString = descriptionDateFormatter.string(from: timestamp)
         var result = "\(dateString) \(signalName)"
         if let sourceDescription = sourceDescription {
@@ -226,18 +223,16 @@ open class Signal : NSObject, Encodable {
         }
         return result
     }
-
 }
 
-// MARK:- Extensions
+// MARK: - Extensions
 
-extension Signal : Announceable {}
+extension Signal: Announceable {}
 
-
-// MARK:- Globals
+// MARK: - Globals
 
 /// Returns whether signals of given type will be logged if emitted on given beacons
-public func willLog<T:Signal>(type aSignalType: T.Type, on beacons: [Beacon]) -> Bool {
+public func willLog<T: Signal>(type aSignalType: T.Type, on beacons: [Beacon]) -> Bool {
     guard let _ = beacons.first(where: { aBeacon in
         aBeacon.logsSignals(ofType: aSignalType)
     }) else { return false }
