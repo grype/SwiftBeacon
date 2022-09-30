@@ -64,7 +64,7 @@ open class FileBackupWheel : FileRotation {
     
     open func deleteOldBackupsOfFile(at aURL: URL) throws {
         guard maxNumberOfBackups > 0 else { return }
-        let backups = try backupsOfFile(at: aURL)
+        let backups = try backupsOfFile(at: aURL).sorted { $0.path > $1.path }
         guard backups.count > maxNumberOfBackups else { return }
         try backups.suffix(from: maxNumberOfBackups).forEach { (aURL) in
             try fileManager.removeItem(at: aURL)
