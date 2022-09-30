@@ -47,7 +47,7 @@ let Loggers = (
     console: ConsoleLogger.starting(name: "Console"),
     
     // Start JSON-RPC logger on shared and dedicated RPC beacons
-    rpc: JRPCLogger.starting(url: "http://localhost:4000", method: "emit", name: "JRPC", on: Beacons.shared + Beacons.rpc)
+    rpc: JRPCLogger.starting(url: "http://localhost:4000", method: "emit", name: "JRPC", on: [Beacons.shared, Beacons.rpc])
     
     // Start file logger on shared beacon, logging only errors, 
     // capturing them in JSON format, rotating files before they reach 2Mb, 
@@ -101,7 +101,7 @@ let consoleLogger = ConsoleLogger.starting(name: "Console error logger")) {
 }
 
 // will be logged
-do { throw(...) } catch { emit(error) }
+do { throw(...) } catch { emit(error: error) }
 
 // won't be logged
 emit("A String")
@@ -110,8 +110,8 @@ emit("A String")
 Handling of individual signal types is also possible:
 
 ```swift
-let firstLogger = ConsoleLogger.starting(name: "Console error logger"))
-let secondLogger = ConsoleLogger.starting(name: "Console error logger"))
+let firstLogger = ConsoleLogger.starting(name: "First logger"))
+let secondLogger = ConsoleLogger.starting(name: "Second logger"))
 
 // will disable handling of `StringSignal`s by `secondLogger` regardless of what Beacon the signal came from.
 StringSignal.disable(loggingTo aLogger: secondLogger, on aBeacon: nil)
@@ -160,14 +160,16 @@ A few signals, namely `ErrorSignal` and `ContextSignal`, capture stack traces th
 It may be helpful to emit those signals as soon as a logger starts:
 
 ```
-let consoleLogger = ConsoleLogger.starting(name: "Console")
+let consoleLogger = ConsoleLogger(name: "Console")
 
 // Will emit IdentitySignal when started
-console.logger.identifiesOnStart = true
+consoleLogger.identifiesOnStart = true
 
 // Will emit MachImageImportsSignal for all loaded MachO images when started 
 // and then track subsequently loaded and unloaded images 
-console.logger.tracksMachImageImports = true 
+consoleLogger.tracksMachImageImports = true
+
+consoleLogger.start() 
 ```
 
 
@@ -197,5 +199,5 @@ BeaconEmitSignal(signal, on: arrayOfBeacons, userInfo: aUserInfoDictionary)
 
 ## Xcode Goodies
 
-To simplify creation of custom signal classes, there exists a code snippet that can be added to Xcode's snippet library. You will find it in [Xcode/Snippets/MakeSignal.swift](Xcode/Snippets/MakeSignal.swift)
+Here's an Xcode snippet to simplify creation of custom Signals: [Xcode/Snippets/MakeSignal.swift](Xcode/Snippets/MakeSignal.swift).
 
