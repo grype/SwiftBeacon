@@ -1,6 +1,6 @@
 //
 //  IntervalLogger.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 12/19/19.
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
@@ -23,8 +23,7 @@ import Foundation
  
  */
 
-open class IntervalLogger : SignalLogger {
-    
+open class IntervalLogger: SignalLogger {
     // MARK: - Variables
     
     @objc open var flushInterval: TimeInterval {
@@ -42,7 +41,7 @@ open class IntervalLogger : SignalLogger {
     
     // MARK: - Init
     
-    required public init(name aName: String, interval anInterval: TimeInterval, queue aQueue: DispatchQueue? = nil) {
+    public required init(name aName: String, interval anInterval: TimeInterval, queue aQueue: DispatchQueue? = nil) {
         flushInterval = anInterval
         super.init(name: aName)
         queue = aQueue ?? DispatchQueue(label: String(describing: type(of: self)))
@@ -66,19 +65,19 @@ open class IntervalLogger : SignalLogger {
     
     override open func nextPutAll(_ signals: [Signal]) {
         queue.async {
-            self.buffer.append(contentsOf: signals.compactMap({ (aSignal) -> Data? in
-                return self.encodeSignal(aSignal)
-            }))
+            self.buffer.append(contentsOf: signals.compactMap { aSignal -> Data? in
+                self.encodeSignal(aSignal)
+            })
             self.fixBuffer()
         }
     }
     
     private func fixBuffer() {
         // be sure to call on `queue`
-        buffer.removeFirst(max(0, self.buffer.count - self.maxBufferSize))
+        buffer.removeFirst(max(0, buffer.count - maxBufferSize))
     }
     
-    // MARK:- Encoding
+    // MARK: - Encoding
     
     func encodeSignal(_ aSignal: Signal) -> Data? {
         fatalError("This logger did not implement signal encoding!")
@@ -115,7 +114,7 @@ open class IntervalLogger : SignalLogger {
     
     func startFlushTimer() {
         guard flushTimer == nil else { return }
-        flushTimer = Timer.scheduledTimer(withTimeInterval: flushInterval, repeats: true, block: { (aTimer) in
+        flushTimer = Timer.scheduledTimer(withTimeInterval: flushInterval, repeats: true, block: { _ in
             self.queue.async {
                 self.flushIfPossible()
             }
@@ -132,5 +131,4 @@ open class IntervalLogger : SignalLogger {
         stopFlushTimer()
         startFlushTimer()
     }
-    
 }

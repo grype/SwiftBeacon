@@ -8,15 +8,15 @@
 
 import Foundation
 
-// MARK:- Signaling
+// MARK: - Signaling
 
 /**
  I describe a signaling protocol.
- 
+
  Conforming objects become `emit()`able, by returning an instance of appropriate `Signal` subclass.
- 
+
  - Note: Be mindful of the return type as it is also used to determine whether the resulting signal will be logged when `emit()`ing a value.
- 
+
  For example:
  ````
  class URLRequestSignal: Signal {
@@ -26,7 +26,7 @@ import Foundation
         super.init()
     }
  }
- 
+
  extension URLRequest : Signaling {
     var beaconSignal: URLRequestSignal {
         return URLRequestSignal(self)
@@ -36,12 +36,11 @@ import Foundation
  - See Also: `WrapperSignal`
  */
 public protocol Signaling {
-    associatedtype SignalType : Signal
+    associatedtype SignalType: Signal
     var beaconSignal: SignalType { get }
 }
 
-
-// MARK:- Globals
+// MARK: - Globals
 
 /**
  Emits a signaling object.
@@ -49,7 +48,7 @@ public protocol Signaling {
  To be consistent, it is preferred that all logging is done via various `emit()` methods,
  rather than directly interfacing with instances of `Signal` and `SignalLogger`.
  */
-public func emit<T:Signaling>(_ value: T, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emit<T: Signaling>(_ value: T, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     guard willLog(type: type(of: value).SignalType, on: [beacon]) else { return }
     value.beaconSignal.emit(on: [beacon],
                             userInfo: userInfo,
@@ -64,7 +63,7 @@ public func emit<T:Signaling>(_ value: T, on beacon: Beacon = Beacon.shared, use
  To be consistent, it is preferred that all logging is done via various `emit()` methods,
  rather than directly interfacing with instances of `Signal` and `SignalLogger`.
  */
-public func emit<T:Signaling>(_ value: T, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emit<T: Signaling>(_ value: T, on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     guard willLog(type: type(of: value).SignalType, on: beacons) else { return }
     value.beaconSignal.emit(on: beacons,
                             userInfo: userInfo,

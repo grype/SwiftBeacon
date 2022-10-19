@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 8/27/21.
 //
@@ -13,9 +13,9 @@ let UniqueDeviceIdentifier: String? = UIDevice.current.identifierForVendor?.uuid
 #elseif os(macOS)
 import IOKit
 let UniqueDeviceIdentifier: String? = {
-    let platformExpert: io_service_t = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"));
-    let serialNumberAsCFString = IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformSerialNumberKey as CFString, kCFAllocatorDefault, 0);
-    IOObjectRelease(platformExpert);
+    let platformExpert: io_service_t = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"))
+    let serialNumberAsCFString = IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformSerialNumberKey as CFString, kCFAllocatorDefault, 0)
+    IOObjectRelease(platformExpert)
     return serialNumberAsCFString?.takeUnretainedValue() as? String
 }()
 #else

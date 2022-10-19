@@ -15,9 +15,9 @@ import Foundation
  I can also indicate periods of inactivity via `markedInactivityPeriod`.
  */
 
-open class ConsoleLogger : SignalLogger {
-    
+open class ConsoleLogger: SignalLogger {
     // MARK: - Instance Creation
+
     @objc public static let shared = ConsoleLogger(name: "Shared Console Logger")
     
     // MARK: - Variables
@@ -47,5 +47,4 @@ open class ConsoleLogger : SignalLogger {
         print("\(aSignal.debugDescription)")
         lastPrintDate = Date()
     }
-    
 }

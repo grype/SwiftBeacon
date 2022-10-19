@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 5/7/21.
 //  Copyright © 2021 Pavel Skaldin. All rights reserved.
@@ -12,7 +12,7 @@ import MachO
 import UIKit
 #endif
 
-public struct SystemInfo : Encodable, CustomStringConvertible {
+public struct SystemInfo: Encodable, CustomStringConvertible {
     var name: String?
     var model: String?
     var arch: String?
@@ -46,7 +46,7 @@ public struct SystemInfo : Encodable, CustomStringConvertible {
     private static func sysctlString(for key: String) -> String {
         var size = 0
         sysctlbyname(key, nil, &size, nil, 0)
-        var machine = [CChar](repeating: 0,  count: size)
+        var machine = [CChar](repeating: 0, count: size)
         sysctlbyname(key, &machine, &size, nil, 0)
         return String(cString: machine)
     }

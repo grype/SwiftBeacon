@@ -12,14 +12,13 @@ import RWLock
 import SwiftAnnouncements
 
 open class MachImageMonitor {
+    // MARK: - Types
     
-    // MARK:- Types
-    
-    public enum Announcement : Announceable {
+    public enum Announcement: Announceable {
         case didAddImage(MachImage), didRemoveImage(MachImage)
     }
     
-    // MARK:- API
+    // MARK: - API
     
     public static var shared = MachImageMonitor()
     
@@ -28,7 +27,7 @@ open class MachImageMonitor {
     public static func startMonitoring() {
         guard !isRunning else { return }
         isRunning = true
-        _dyld_register_func_for_add_image { (aHeader, _) in
+        _dyld_register_func_for_add_image { aHeader, _ in
             guard let aHeader = aHeader else { return }
             MachImageMonitor.shared.didAddImage(aHeader)
         }
@@ -36,24 +35,24 @@ open class MachImageMonitor {
     
     public static func stopMonitoring() {
         guard isRunning else { return }
-        _dyld_register_func_for_remove_image { (aHeader, _) in
+        _dyld_register_func_for_remove_image { aHeader, _ in
             guard let aHeader = aHeader else { return }
             MachImageMonitor.shared.didRemoveImage(aHeader)
         }
         isRunning = false
     }
     
-    // MARK:- Properties
+    // MARK: - Properties
     
     @RWLocked public private(set) var images = [MachImage]()
     
     public private(set) var announcer = Announcer()
     
-    // MARK:- Adding/Removing Images
+    // MARK: - Adding/Removing Images
     
     private func didAddImage(_ aHeader: UnsafePointer<mach_header>) {
         let startIndex = UInt32(images.count)
-        guard let index = (startIndex..<_dyld_image_count()).first(where: { (anIndex) -> Bool in
+        guard let index = (startIndex ..< _dyld_image_count()).first(where: { anIndex -> Bool in
             _dyld_get_image_header(anIndex) == aHeader
         }) else {
             print("Could not find added image at: \(String(describing: aHeader))")
@@ -73,5 +72,4 @@ open class MachImageMonitor {
         }
         announcer.announce(Announcement.didRemoveImage(image))
     }
-
 }

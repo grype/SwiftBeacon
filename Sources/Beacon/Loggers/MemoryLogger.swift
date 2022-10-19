@@ -17,13 +17,13 @@ import RWLock
  
  */
 
-open class MemoryLogger : SignalLogger {
+open class MemoryLogger: SignalLogger {
     @objc public static var shared = MemoryLogger(name: "MemoryLogger")
     
     @objc @RWLocked open private(set) var recordings = [Signal]()
     @objc open var limit: Int = 100
     
-    open override func nextPut(_ aSignal: Signal) {
+    override open func nextPut(_ aSignal: Signal) {
         recordings.append(aSignal)
         guard limit > 0, recordings.count - limit > 0 else { return }
         recordings.removeFirst(recordings.count - limit)

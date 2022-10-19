@@ -1,6 +1,6 @@
 //
 //  StreamLogger.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 12/20/19.
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
@@ -21,21 +21,20 @@ import Foundation
  logger.nextPut(StringSignal("Hello world"))
  */
 
-open class StreamLogger : SignalLogger {
-    
+open class StreamLogger: SignalLogger {
     // MARK: - Properties
     
     private(set) var writer: EncodedStreamSignalWriter
     
     // MARK: - Instance Creation
     
-    public class func starting<T:StreamLogger>(name aName: String, writer aWriter: EncodedStreamSignalWriter, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
+    public class func starting<T: StreamLogger>(name aName: String, writer aWriter: EncodedStreamSignalWriter, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(name: aName, writer: aWriter)
         me.subscribe(to: beacons, filter: filter)
         return me as! T
     }
     
-    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T : SignalLogger {
+    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T: SignalLogger {
         fatalError("Use StreamLogger.starting(name:writer:on:filter:)")
     }
     
@@ -72,5 +71,4 @@ open class StreamLogger : SignalLogger {
             print("Error writing signal: \(error)")
         }
     }
-    
 }

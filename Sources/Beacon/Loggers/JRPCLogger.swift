@@ -19,7 +19,6 @@ import Foundation
  */
 
 open class JRPCLogger: IntervalLogger {
-    
     // MARK: - Variables
     
     /// Base URL to the JSON RPC server
@@ -39,9 +38,9 @@ open class JRPCLogger: IntervalLogger {
     
     // MARK: - Structs
     
-    private struct Method : Encodable {
-        static private var counter: Int = 0
-        static private func nextId() -> Int {
+    private struct Method: Encodable {
+        private static var counter: Int = 0
+        private static func nextId() -> Int {
             counter += 1
             return counter
         }
@@ -52,8 +51,8 @@ open class JRPCLogger: IntervalLogger {
         var arguments: [Data]
         
         var json: String {
-            let args = arguments.compactMap { (anArgument) -> String? in
-                return String(data: anArgument, encoding: .utf8)
+            let args = arguments.compactMap { anArgument -> String? in
+                String(data: anArgument, encoding: .utf8)
             }
             // I don't want to do things this way, and would really love to use Codable approach here,
             // but it's such a pain in the ass. Arguments are already encoded, they just need to be written out verbatim
@@ -71,19 +70,19 @@ open class JRPCLogger: IntervalLogger {
     
     // MARK: - Instance Creation
     
-    public class func starting<T:JRPCLogger>(url anUrl: URL, method aMethod: String, name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
+    public class func starting<T: JRPCLogger>(url anUrl: URL, method aMethod: String, name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(url: anUrl, method: aMethod, name: aName)
         me.subscribe(to: beacons, filter: filter)
         return me as! T
     }
     
-    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T : SignalLogger {
+    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T: SignalLogger {
         fatalError("Use JRPCLogger.starting(url:method:name:on:filter:)")
     }
     
     // MARK: - Init
     
-    @objc required public init(url anUrl: URL, method aMethod: String, name aName: String, interval anInterval: TimeInterval = 3, queue aQueue: DispatchQueue? = nil) {
+    @objc public required init(url anUrl: URL, method aMethod: String, name aName: String, interval anInterval: TimeInterval = 3, queue aQueue: DispatchQueue? = nil) {
         url = anUrl
         method = aMethod
         super.init(name: aName, interval: anInterval, queue: aQueue)
@@ -93,7 +92,7 @@ open class JRPCLogger: IntervalLogger {
         fatalError("Use init(url:name:) to instantiate")
     }
     
-    required public init(name aName: String, interval anInterval: TimeInterval, queue aQueue: DispatchQueue? = nil) {
+    public required init(name aName: String, interval anInterval: TimeInterval, queue aQueue: DispatchQueue? = nil) {
         fatalError("init(name:interval:queue:) has not been implemented")
     }
     
@@ -124,7 +123,7 @@ open class JRPCLogger: IntervalLogger {
     override open func flush() {
         let buffer = self.buffer
         guard let urlRequest = createUrlRequest(with: buffer) else { return }
-        perform(urlRequest: urlRequest) { (success) in
+        perform(urlRequest: urlRequest) { success in
             self.urlSessionTask = nil
             guard success else { return }
             self.buffer.removeFirst(buffer.count)
@@ -142,8 +141,8 @@ open class JRPCLogger: IntervalLogger {
         return urlRequest
     }
     
-    internal func perform(urlRequest: URLRequest, completion:((Bool)->Void)? = nil) {
-        let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+    internal func perform(urlRequest: URLRequest, completion: ((Bool) -> Void)? = nil) {
+        let task = URLSession.shared.dataTask(with: urlRequest) { _, response, error in
             var success = false
             defer { completion?(success) }
             self.lastCompletionDate = Date()
@@ -155,7 +154,7 @@ open class JRPCLogger: IntervalLogger {
                 print("Unexpected response from jrpc server")
                 return
             }
-            guard (200...299).contains(response.statusCode) else {
+            guard (200 ... 299).contains(response.statusCode) else {
                 print("Unexpected response from jrpc server: \(response.statusCode) \(response)")
                 return
             }
@@ -166,8 +165,8 @@ open class JRPCLogger: IntervalLogger {
     }
 }
 
-fileprivate extension WrapperSignal {
-    enum CodingKeys : String, CodingKey {
+private extension WrapperSignal {
+    enum CodingKeys: String, CodingKey {
         case value = "target"
     }
 }

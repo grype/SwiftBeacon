@@ -1,6 +1,6 @@
 //
 //  FileLogger.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 12/27/19.
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
@@ -15,9 +15,8 @@ import Foundation
  One such mechanism is support for file rotation.
  */
 
-open class FileLogger : StreamLogger {
-    
-    // MARK:- Properties
+open class FileLogger: StreamLogger {
+    // MARK: - Properties
     
     open private(set) var url: URL
     
@@ -34,17 +33,17 @@ open class FileLogger : StreamLogger {
     
     // MARK: - Instance Creation
     
-    public class func starting<T:FileLogger>(name aName: String, url anURL: URL, encoder anEncoder: SignalEncoder, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
+    public class func starting<T: FileLogger>(name aName: String, url anURL: URL, encoder anEncoder: SignalEncoder, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
         let me = self.init(name: aName, on: anURL, encoder: anEncoder)!
         me.subscribe(to: beacons, filter: filter)
         return me as! T
     }
     
-    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T : SignalLogger {
+    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T: SignalLogger {
         fatalError("Use StreamLogger.starting(name:url:encoder:on:filter:)")
     }
     
-    // MARK:- Init
+    // MARK: - Init
     
     public required init?(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoder) {
         url = anUrl
@@ -64,7 +63,7 @@ open class FileLogger : StreamLogger {
         fatalError("init(name:writer:) has not been implemented")
     }
     
-    // MARK:- Starting/Stopping
+    // MARK: - Starting/Stopping
     
     override func didStart(on beacons: [Beacon]) {
         if rotateOnStart, let wheel = wheel {
@@ -78,9 +77,9 @@ open class FileLogger : StreamLogger {
         super.didStart(on: beacons)
     }
     
-    // MARK:- Logging
+    // MARK: - Logging
     
-    open override func nextPut(_ aSignal: Signal) {
+    override open func nextPut(_ aSignal: Signal) {
         if wheel?.shouldRotate(fileAt: url) ?? false {
             do {
                 try forceRotate()
@@ -92,7 +91,7 @@ open class FileLogger : StreamLogger {
         super.nextPut(aSignal)
     }
     
-    // MARK:- File
+    // MARK: - File
     
     open func forceRotate() throws {
         guard let wheel = wheel else { return }
@@ -101,5 +100,4 @@ open class FileLogger : StreamLogger {
         writer.stream = OutputStream(url: url, append: true)!
         writer.open()
     }
-    
 }

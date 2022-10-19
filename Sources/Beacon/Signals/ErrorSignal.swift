@@ -6,10 +6,10 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
-import Foundation
 import AnyCodable
+import Foundation
 
-// MARK:- ErrorSignal
+// MARK: - ErrorSignal
 
 /**
  I am a `Signal` that captures an error.
@@ -17,7 +17,7 @@ import AnyCodable
  Simply call `emit(anError)` to emit me, and I'll capture the error.
  */
 
-open class ErrorSignal : Signal {
+open class ErrorSignal: Signal {
     @objc open private(set) var error: Error
     @objc open var stack: [String]
     
@@ -27,15 +27,15 @@ open class ErrorSignal : Signal {
         super.init()
     }
     
-    open override var signalName: String { "⚡ \(super.signalName)" }
+    override open var signalName: String { "⚡ \(super.signalName)" }
     
-    open override class var portableClassName : String? { "RemoteExceptionSignal" }
+    override open class var portableClassName: String? { "RemoteExceptionSignal" }
     
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case error = "exception", stack
     }
     
-    open override func encode(to encoder: Encoder) throws {
+    override open func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(stack.map { CallStackFrame.fromString($0) }, forKey: .stack)
@@ -52,13 +52,13 @@ open class ErrorSignal : Signal {
         return (type(of: error) == NSError.self) ? error.localizedDescription : String(describing: error)
     }
     
-    open override var description: String {
+    override open var description: String {
         var result = "\(super.description): \(errorDescription)"
         stack.forEach { result.append(contentsOf: "\n\t\($0)") }
         return result
     }
     
-    open override var debugDescription: String {
+    override open var debugDescription: String {
         var result = "\(super.description) \(errorDescription)"
         if let userInfoDescription = userInfoDescription {
             result += "\n\(userInfoDescription)"
@@ -68,8 +68,7 @@ open class ErrorSignal : Signal {
     }
 }
 
-
-// MARK:- Globals
+// MARK: - Globals
 
 /**
  In the event of non-nil error argument, emits an ErrorSignal. Otherwise - ContextSignal.
@@ -78,8 +77,8 @@ open class ErrorSignal : Signal {
  wrap that value in a WrapperSignal. This may not be desired when the value conforms to Error. The optionality
  of the error argument is solely for convenience, so as to avoid having to check optional error values and
  introducing if/else statements all over the code.
-*/
-public func emit(error: Error?, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+ */
+public func emit(error: Error?, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     emit(error: error, on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
@@ -91,7 +90,7 @@ public func emit(error: Error?, on beacon: Beacon = Beacon.shared, userInfo: [An
  of the error argument is solely for convenience, so as to avoid having to check optional error values and
  introducing if/else statements all over the code.
  */
-public func emit(error: Error?, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emit(error: Error?, on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     guard let error = error else {
         emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
         return

@@ -6,10 +6,10 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
-import Foundation
 import AnyCodable
+import Foundation
 
-// MARK:- WrapperSignal
+// MARK: - WrapperSignal
 
 /**
  I am a `Signal` that wraps any value.
@@ -34,27 +34,27 @@ open class WrapperSignal: Signal {
     
     private var encodableValue: Encodable?
     
-    open override var signalName: String { "📦" }
+    override open var signalName: String { "📦" }
     
-    override open class var portableClassName : String? { "RemoteWrapperSignal" }
+    override open class var portableClassName: String? { "RemoteWrapperSignal" }
     
-    public init(_ aValue: Encodable, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
+    public init(_ aValue: Encodable, userInfo anUserInfo: [AnyHashable: Any]? = nil) {
         encodableValue = aValue
         super.init()
         userInfo = anUserInfo
     }
     
-    @objc public init(_ aValue: Any, userInfo anUserInfo: [AnyHashable : Any]? = nil) {
+    @objc public init(_ aValue: Any, userInfo anUserInfo: [AnyHashable: Any]? = nil) {
         anyValue = aValue
         super.init()
         userInfo = anUserInfo
     }
     
-    private enum CodingKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case value = "target", valueType = "targetType"
     }
     
-    open override func encode(to encoder: Encoder) throws {
+    override open func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -72,21 +72,20 @@ open class WrapperSignal: Signal {
         }
     }
     
-    open override var valueDescription: String? {
+    override open var valueDescription: String? {
         return "\(value)"
     }
-
 }
 
-// MARK:- Globals
+// MARK: - Globals
 
 /// Wraps any value into WrapperSignal and emits the resulting signal
-public func emit(_ value: Any, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emit(_ value: Any, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     emit(value, on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
 /// Wraps any value into WrapperSignal and emits the resulting signal
-public func emit(_ value: Any, on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emit(_ value: Any, on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     guard willLog(type: WrapperSignal.self, on: beacons) else { return }
     WrapperSignal(value).emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }

@@ -1,6 +1,6 @@
 //
 //  IdentitySignal.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 5/4/21.
 //  Copyright © 2021 Pavel Skaldin. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-// MARK:- IdentitySignal
+// MARK: - IdentitySignal
 
 /**
  I am a `Signal` that captures an arbitrary identity.
@@ -16,50 +16,47 @@ import Foundation
  By default I capture Beacon version. Feel free to extend me...
  */
 
-open class IdentitySignal : Signal {
-    
-    // MARK:- Properties
+open class IdentitySignal: Signal {
+    // MARK: - Properties
     
     public var beaconVersion: String { Beacon.beaconVersion }
     
-    lazy public var systemInfo: SystemInfo = { SystemInfo.current }()
+    public lazy var systemInfo: SystemInfo = .current
     
-    // MARK:- Signal
+    // MARK: - Signal
     
-    open override var signalName: String { "💡" }
+    override open var signalName: String { "💡" }
     
-    open override class var portableClassName: String? { "RemoteIdentitySignal" }
+    override open class var portableClassName: String? { "RemoteIdentitySignal" }
     
-    // MARK:- Codable
+    // MARK: - Codable
     
-    private enum CodingKeys : String , CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case beaconVersion = "version"
         case systemInfo = "info"
     }
     
-    open override func encode(to encoder: Encoder) throws {
+    override open func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(beaconVersion, forKey: .beaconVersion)
         try container.encode(systemInfo, forKey: .systemInfo)
     }
     
-    // MARK:- Describing
+    // MARK: - Describing
     
-    open override var valueDescription: String? { "Beacon/\(beaconVersion) (\(systemInfo))" }
-    
+    override open var valueDescription: String? { "Beacon/\(beaconVersion) (\(systemInfo))" }
 }
 
-
-// MARK:- Globals
+// MARK: - Globals
 
 /// Emits `IdentitySignal`
-public func emitIdentity(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emitIdentity(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     emitIdentity(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
 /// Emits `IdentitySignal`
-public func emitIdentity(on beacons: [Beacon], userInfo: [AnyHashable : Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
+public func emitIdentity(on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
     guard willLog(type: IdentitySignal.self, on: beacons) else { return }
     IdentitySignal().emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }

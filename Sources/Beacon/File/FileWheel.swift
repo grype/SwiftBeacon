@@ -1,6 +1,6 @@
 //
 //  FileWheel.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 12/27/19.
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
@@ -15,8 +15,7 @@ import Foundation
  And `rotationBlock` to perform the actual rotation.
  */
 
-open class FileWheel : FileRotation {
-    
+open class FileWheel: FileRotation {
     public typealias RotationBlock = (_ url: URL) throws -> Void
     
     public typealias ConditionBlock = (_ url: URL) -> Bool
@@ -44,7 +43,6 @@ open class FileWheel : FileRotation {
         return conditionBlock(url)
     }
     
-    
     /// Rotates file at given URL or throws an error indicating why rotation failed.
     open func rotate(fileAt url: URL) throws {
         try rotationBlock(url)
@@ -55,5 +53,4 @@ open class FileWheel : FileRotation {
         guard shouldRotate(fileAt: url) else { return }
         try rotate(fileAt: url)
     }
-    
 }

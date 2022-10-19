@@ -40,39 +40,35 @@ import SwiftAnnouncements
  
  */
 
-open class Beacon : NSObject {
-    
+open class Beacon: NSObject {
     @objc public static var beaconVersion = "2.1.4"
     
     /// Shared general-purpose instance
     @objc public static var shared = Beacon()
     
-    
-    // MARK:- Properties
+    // MARK: - Properties
     
     internal let announcer = Announcer()
     
-    
-    // MARK:- Filtering
+    // MARK: - Filtering
     
     /// Returns whether this instance will log signals of given type.
     /// This is determined by a) whether there are any running loggers that observe this Beacon instance
     /// and b) whether the given signal type isn't disabled for that logger
-    open func logsSignals<T:Signal>(ofType aType: T.Type) -> Bool {
+    open func logsSignals<T: Signal>(ofType aType: T.Type) -> Bool {
         return announcer.allSubscribers.contains { anObject in
             guard let logger = (anObject as? SignalLogger), logger.isRunning else { return false }
             return aType.isEnabled(for: logger, on: self)
         }
     }
     
-    
-    // MARK:- Announcements
+    // MARK: - Announcements
 
     @objc open func signal(_ aSignal: Signal) {
         announcer.announce(aSignal)
     }
     
-    open func when<T: Announceable>(_ aType: T.Type, subscriber: AnyObject? = nil, do aBlock: @escaping (T, Announcer)->Void) {
+    open func when<T: Announceable>(_ aType: T.Type, subscriber: AnyObject? = nil, do aBlock: @escaping (T, Announcer) -> Void) {
         announcer.when(aType, subscriber: subscriber, do: aBlock)
     }
     
@@ -83,7 +79,6 @@ open class Beacon : NSObject {
     open func unsubscribe(_ anObject: AnyObject) {
         announcer.unsubscribe(anObject)
     }
-    
 }
 
 @available(*, deprecated)
