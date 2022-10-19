@@ -94,12 +94,12 @@ let firstLogger = ConsoleLogger.starting(name: "First logger"))
 let secondLogger = ConsoleLogger.starting(name: "Second logger"))
 
 // will disable handling of `StringSignal`s by `secondLogger` regardless of what Beacon the signal came from.
-StringSignal.disable(loggingTo aLogger: secondLogger, on aBeacon: nil)
+StringSignal.disable(loggingTo: secondLogger, on: nil)
 
 emit("Will only be logged by firstLogger")
 
 // will re-enable handling of StringSignal across all loggers and beacons
-StringSignal.enable(loggingTo aLogger: nil, on aBeacon: nil)
+StringSignal.enable(loggingTo: nil, on: nil)
 
 emit("Will be logged by both loggers")
 ```
