@@ -4,5 +4,6 @@
         <page name='JRPC'/>
         <page name='Custom Signal'/>
         <page name='Scratchpad'/>
+        <page name='Filtering'/>
     </pages>
 </playground>
