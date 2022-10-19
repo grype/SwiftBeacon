@@ -15,9 +15,7 @@ public class PlaygroundPageSignal: WrapperSignal {
 }
 
 extension T: Signaling {
-    public var beaconSignal: PlaygroundPageSignal {
-        return PlaygroundPageSignal(self)
-    }
+    public var beaconSignal: PlaygroundPageSignal { .init(self) }
 }
 
 let logger = ConsoleLogger(name: "Playground Console")
