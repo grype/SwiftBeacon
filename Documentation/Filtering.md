@@ -53,12 +53,19 @@ let memory = MemoryLogger.starting(name: "Memory", on: [.debug])
 
 // Disable logging of string signals across all loggers and beacons
 StringSignal.disable(loggingTo: nil, on: nil)
+ErrorSignal.disable(loggingTo: nil, on: nil)
 
-// Enable logging of string signals to the memory logger via any beacon
-StringSignal.enable(loggingTo: [memory], on: nil)
+// Enable logging of string signals to console logger via any beacon
+StringSignal.enable(loggingTo: console, on: nil)
 
-// Enable logging of string signals to any logger via 'debug' beacon
-StringSignal.enable(loggingTo: nil, on: [.debug])
+// Enable logging of error signals to any logger via 'debug' beacon
+ErrorSignal.enable(loggingTo: nil, on: .debug)
+
+// will log only to console
+emit("Hello World", on: [.shared, .debug])
+
+// will log only to memory
+emit(error: "OMG" as Error, on: [.shared, .debug])
 ```
 
 Be mindful that loggers retain their filtering block they were started with. Constraint-based filtering takes place before that block is evaluated.
@@ -68,10 +75,11 @@ Be mindful that loggers retain their filtering block they were started with. Con
 In the event where logging may be too expensive an operation - perhaps it's a large payload, or requires making a trip to disk or network - it may be a good idea to forego all of the required work if there aren't any loggers that would process a signal. Constraints make it possible to know this. Borrowing from earlier examples:
 
 ```swift
-StringSignal.disable(loggingTo: [memory], on: nil)
 willLog(type: StringSelf.self, on: [.debug]) 	// false
-willLog(type: StringSelf.self, on: nil) 		// true
+willLog(type: StringSelf.self, on: [.shared]) 	// true
+
 willLog(type: ErrorSignal.self, on: [.debug]) // true
+willLog(type: ErrorSignal.self, on: [.shared]) // false
 ```
 
-This logic is used inside all `emit()` declarations. If for some reason you need to provide your own implementation of that method, be sure to check `willLog()` before emitting the actual signal! See any of the `emit()` methods for examples.
+This logic is used inside all `emit()` methods. If for some reason you need to provide your own implementation of that method, be sure to check `willLog()` before emitting the actual signal! See any of the `emit()` methods for examples.
