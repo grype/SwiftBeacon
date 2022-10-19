@@ -1,0 +1,70 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "AnyCodable",
+        "repositoryURL": "https://github.com/Flight-School/AnyCodable",
+        "state": {
+          "branch": null,
+          "revision": "56901f2af3625b38924d488b612e95fe8846ee9b",
+          "version": "0.6.6"
+        }
+      },
+      {
+        "package": "Cuckoo",
+        "repositoryURL": "https://github.com/Brightify/Cuckoo",
+        "state": {
+          "branch": null,
+          "revision": "64b1681e37444d998e9cff2df6537a75695ab638",
+          "version": "1.9.1"
+        }
+      },
+      {
+        "package": "CwlCatchException",
+        "repositoryURL": "https://github.com/mattgallagher/CwlCatchException.git",
+        "state": {
+          "branch": null,
+          "revision": "35f9e770f54ce62dd8526470f14c6e137cef3eea",
+          "version": "2.1.1"
+        }
+      },
+      {
+        "package": "CwlPreconditionTesting",
+        "repositoryURL": "https://github.com/mattgallagher/CwlPreconditionTesting.git",
+        "state": {
+          "branch": null,
+          "revision": "c21f7bab5ca8eee0a9998bbd17ca1d0eb45d4688",
+          "version": "2.1.0"
+        }
+      },
+      {
+        "package": "Nimble",
+        "repositoryURL": "https://github.com/Quick/Nimble",
+        "state": {
+          "branch": null,
+          "revision": "c93f16c25af5770f0d3e6af27c9634640946b068",
+          "version": "9.2.1"
+        }
+      },
+      {
+        "package": "RWLock",
+        "repositoryURL": "https://github.com/grype/RWLock-Swift",
+        "state": {
+          "branch": null,
+          "revision": "fc7781a5b696c9e26942d8175b7d2363cd2d3680",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "SwiftAnnouncements",
+        "repositoryURL": "https://github.com/grype/SwiftAnnouncements",
+        "state": {
+          "branch": null,
+          "revision": "dedf28cd49da4ad893fefdc135b50c8e034966c6",
+          "version": "1.0.4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
