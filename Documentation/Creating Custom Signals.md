@@ -43,6 +43,8 @@ class DuckSignal: WrapperSignal {
 }
 ```
 
+Another benefit of subclassing from `WrapperSignal` is portability - any subclass automatically uses the same `portableClassName` as opposed to introducing new types that may not have been defined elsewhere. See [Portability](Portability.md) for more information.
+
 ## Using Signaling protocol
 
 Lastly, we need to associate the value type with the new signal type so that calls to `emit()` can infer this information. This is done via the `Signaling` protocol:
