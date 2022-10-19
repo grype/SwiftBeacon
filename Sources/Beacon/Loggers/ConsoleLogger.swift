@@ -30,7 +30,7 @@ open class ConsoleLogger: SignalLogger {
     
     @objc private var lastPrintDate: Date?
     
-    private var queue = DispatchQueue.global(qos: DispatchQoS.QoSClass.default)
+    private var queue = DispatchQueue(label: "Beacon.ConsoleLogger")
     
     // MARK: - Logging
     
