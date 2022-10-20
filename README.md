@@ -6,7 +6,14 @@ Structured logging in Swift and Objective-C. The framework distinguishes itself 
 
 Beacon provides all the essentials for logging any type of value as well as facilities for logging to files and remote machines (via JSON-RPC). It is designed to be easily extended to accommodate custom types and loggers, with out-of-the-box support for buffered and stream-bound logging.
 
-For more information, see [this post](http://www.humane-assessment.com/blog/beacon) describing the system that inspired this implementation in Swift.
+For more information:
+
+* See [this post](http://www.humane-assessment.com/blog/beacon) describing the system that inspired this implementation in Swift.
+* Understand the [signal flow](https://github.com/grype/SwiftBeacon/wiki/Signal-flow)
+* Learn about [filtering](https://github.com/grype/SwiftBeacon/wiki/Filtering)
+* How to [create custom signals](https://github.com/grype/SwiftBeacon/wiki/Creating-Custom-Signals)
+* How to [symbolicate stack traces](https://github.com/grype/SwiftBeacon/wiki/Symbolicating-stack-traces)
+* ... more on the [Wiki](https://github.com/grype/SwiftBeacon/wiki)
 
 
 ## Using 
