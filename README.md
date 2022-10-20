@@ -187,5 +187,5 @@ BeaconEmitSignal(signal, on: arrayOfBeacons, userInfo: aUserInfoDictionary)
 
 ## Xcode Goodies
 
-Here's an Xcode snippet to simplify creation of custom Signals: [Xcode/Snippets/MakeSignal.swift](Xcode/Snippets/MakeSignal.swift).
+You can find a code snippet to simplify creation of custom signals [here](Xcode/Snippets/MakeSignal.swift). Add it to your existing collection of Xcode snippets, if you're into that sort of thing...
 
