@@ -109,7 +109,7 @@ open class Signal: NSObject, Encodable {
     
     public static func isEnabled(for aLogger: SignalLogger, on aBeacon: Beacon) -> Bool {
         guard !constraints.predicates.isEmpty else { return true }
-        let answers = (rules + constraints).ask(.fact("isDisabled", .var("signal"), .lit(aLogger), .lit(aBeacon)), logger: DefaultLogger(useFontAttributes: false))
+        let answers = (rules + constraints).ask(.fact("isDisabled", .var("signal"), .lit(aLogger), .lit(aBeacon))/*, logger: DefaultLogger(useFontAttributes: false)*/)
         
         var classes: [String] = []
         var currentClass: AnyClass = self
