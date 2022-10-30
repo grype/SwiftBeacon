@@ -8,6 +8,7 @@
 
 import AnyCodable
 import Foundation
+import LogicKit
 import SwiftAnnouncements
 
 /**
@@ -93,28 +94,90 @@ open class Signal: NSObject, Encodable {
     
     // MARK: - Filtering
     
-    struct Constraint<T: Signal> {
-        var type: T.Type
-        var logger: SignalLogger?
-        var beacon: Beacon?
-        func applies(to aType: T.Type, logger aLogger: SignalLogger?, beacon aBeacon: Beacon?) -> Bool {
-            return (type == aType || aType.isSubclass(of: type)) && (logger == nil || logger === aLogger) && (beacon == nil || beacon === beacon)
+    public static var rules: KnowledgeBase = [
+        .rule("isDisabled", .var("signal"), .var("logger"), .var("beacon"), body: {
+            .fact("disable", .var("signal"), .var("logger"), .var("beacon"))
+                || (.fact("enable", .var("signal"), .var("logger")) && (.fact("disable", .var("signal"), .var("beacon")) || .fact("disable", .var("signal"))))
+                || (.fact("enable", .var("signal"), .var("beacon")) && (.fact("disable", .var("signal"), .var("logger")) || .fact("disable", .var("signal"))))
+                || .fact("disable", .var("signal"), .var("logger"))
+                || .fact("disable", .var("signal"), .var("beacon"))
+                || .fact("disable", .var("signal"))
+        }),
+    ]
+    
+    public static var constraints: KnowledgeBase = []
+    
+    public static func isEnabled(for aLogger: SignalLogger, on aBeacon: Beacon) -> Bool {
+        guard !constraints.predicates.isEmpty else { return true }
+        let answers = (rules + constraints).ask(.fact("isDisabled", .var("signal"), .lit(aLogger), .lit(aBeacon)), logger: DefaultLogger(useFontAttributes: false))
+        
+        var classes: [String] = []
+        var currentClass: AnyClass = self
+        repeat {
+            classes.append(factName(for: currentClass))
+            guard let superClass = class_getSuperclass(currentClass) else { break }
+            currentClass = superClass
         }
+        while currentClass != NSObject.self
+        
+        let result = answers.first { aBinding in
+            let boundTerm = aBinding["signal"]
+            return classes.contains { .fact($0) == boundTerm }
+        }
+        return result == nil
     }
     
-    static var constraints: [Constraint] = .init()
-    
-    open class func isEnabled(for aLogger: SignalLogger?, on aBeacon: Beacon) -> Bool {
-        return !constraints.contains { $0.applies(to: self, logger: aLogger, beacon: aBeacon) }
+    public static func disable(loggingTo aLogger: SignalLogger? = nil, on aBeacon: Beacon? = nil) {
+        remove(functor: "enable", logger: aLogger, beacon: aBeacon)
+        add(functor: "disable", logger: aLogger, beacon: aBeacon)
     }
     
-    open class func disable(loggingTo aLogger: SignalLogger?, on aBeacon: Beacon?) {
-        guard !constraints.contains(where: { $0.applies(to: self, logger: aLogger, beacon: aBeacon) }) else { return }
-        constraints.append(Constraint(type: self, logger: aLogger, beacon: aBeacon))
+    public static func enable(loggingTo aLogger: SignalLogger? = nil, on aBeacon: Beacon? = nil) {
+        remove(functor: "disable", logger: aLogger, beacon: aBeacon)
+        add(functor: "enable", logger: aLogger, beacon: aBeacon)
     }
     
-    open class func enable(loggingTo aLogger: SignalLogger?, on aBeacon: Beacon?) {
-        constraints.removeAll { $0.applies(to: self, logger: aLogger, beacon: aBeacon) }
+    public static func removeAllConstraints() {
+        constraints = []
+    }
+    
+    fileprivate static func add(functor: String, logger: SignalLogger?, beacon: Beacon?) {
+        var newTerm: Term
+        let factName = factName(for: self)
+        if let logger = logger, let beacon = beacon {
+            newTerm = .fact(functor, .fact(factName), .lit(logger), .lit(beacon))
+        }
+        else if let logger = logger {
+            newTerm = .fact(functor, .fact(factName), .lit(logger))
+        }
+        else if let beacon = beacon {
+            newTerm = .fact(functor, .fact(factName), .lit(beacon))
+        }
+        else {
+            newTerm = .fact(functor, .fact(factName))
+        }
+        guard !constraints.contains(where: { $0 == newTerm }) else {
+            return
+        }
+        constraints = constraints + [newTerm]
+    }
+    
+    fileprivate static func remove(functor: String, logger: SignalLogger?, beacon: Beacon?) {
+        var term: Term
+        let factName = factName(for: self)
+        if let logger = logger, let beacon = beacon {
+            term = .fact(functor, .fact(factName), .lit(logger), .lit(beacon))
+        }
+        else if let logger = logger {
+            term = .fact(functor, .fact(factName), .lit(logger))
+        }
+        else if let beacon = beacon {
+            term = .fact(functor, .fact(factName), .lit(beacon))
+        }
+        else {
+            term = .fact(functor, .fact(factName))
+        }
+        constraints = KnowledgeBase(knowledge: constraints.filter { $0 != term })
     }
     
     // MARK: - Emitting
@@ -225,7 +288,7 @@ open class Signal: NSObject, Encodable {
     }
 }
 
-// MARK: - Extensions
+// MARK: - Announceable
 
 extension Signal: Announceable {}
 
@@ -237,4 +300,10 @@ public func willLog<T: Signal>(type aSignalType: T.Type, on beacons: [Beacon]) -
         aBeacon.logsSignals(ofType: aSignalType)
     }) else { return false }
     return true
+}
+
+// MARK: - Helpers
+
+fileprivate func factName(for aClass: AnyClass) -> String {
+    String(cString: class_getName(aClass))
 }

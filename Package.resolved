@@ -38,6 +38,15 @@
         }
       },
       {
+        "package": "LogicKit",
+        "repositoryURL": "https://github.com/kyouko-taiga/LogicKit",
+        "state": {
+          "branch": null,
+          "revision": "3e32454479684da7f37f8fe31c73724735b71d04",
+          "version": "2.1.0"
+        }
+      },
+      {
         "package": "Nimble",
         "repositoryURL": "https://github.com/Quick/Nimble",
         "state": {
