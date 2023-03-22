@@ -43,7 +43,7 @@ open class StringSignal: Signal {
 }
 
 extension String: Signaling {
-    public var beaconSignal: Signal {
+    public var beaconSignal: StringSignal {
         return StringSignal(self)
     }
 }

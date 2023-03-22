@@ -52,11 +52,13 @@ open class IdentitySignal: Signal {
 
 /// Emits `IdentitySignal`
 public func emitIdentity(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    emitIdentity(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+    guard willLog(type: IdentitySignal.self, on: beacon) else { return }
+    IdentitySignal().emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
 /// Emits `IdentitySignal`
 public func emitIdentity(on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    guard willLog(type: IdentitySignal.self, on: beacons) else { return }
-    IdentitySignal().emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+    beacons.forEach { aBeacon in
+        emitIdentity(on: aBeacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+    }
 }

@@ -50,18 +50,6 @@ open class Beacon: NSObject {
     
     internal let announcer = Announcer()
     
-    // MARK: - Filtering
-    
-    /// Returns whether this instance will log signals of given type.
-    /// This is determined by a) whether there are any running loggers that observe this Beacon instance
-    /// and b) whether the given signal type isn't disabled for that logger
-    open func logsSignals<T: Signal>(ofType aType: T.Type) -> Bool {
-        return announcer.allSubscribers.contains { anObject in
-            guard let logger = (anObject as? SignalLogger), logger.isRunning else { return false }
-            return aType.isEnabled(for: logger, on: self)
-        }
-    }
-    
     // MARK: - Announcements
 
     @objc open func signal(_ aSignal: Signal) {

@@ -2,30 +2,36 @@
 
 import Beacon
 import Foundation
+import LogicKit
+import LogicKitBuiltins
 import PlaygroundSupport
 
-extension String: Error {}
+let firstLogger = MemoryLogger(name: "First Logger")
+let secondLogger = MemoryLogger(name: "Second Logger")
+let firstBeacon = Beacon()
+let secondBeacon = Beacon()
 
-let console = ConsoleLogger(name: "Console")
-
-func doIt() {
-    console.run { _ in
-        if willLog(type: StringSignal.self, on: [.shared]) {
-            // will log a string signal only if there's a running logger listening on .shared beacon
-            // and there aren't any constraints prohibiting it
-            emit("Logging string signal")
-        } else {
-            // otherwise, this will get logged, and that's because
-            // we're not filtering out ErrorSignal's anywhere
-            emit(error: "WARNING: String signals are disabled!")
-        }
-    }
+Constraint.clearAndActivate {
+    -Signal.self
+    +StringSignal.self ~> firstBeacon
+    +ContextSignal.self ~> secondBeacon
 }
 
-StringSignal.disable(loggingTo: console, on: nil)
-doIt()
+Constraint.state(of: StringSignal.self, constrainedTo: secondLogger, on: secondBeacon)
 
-StringSignal.enable(loggingTo: console, on: nil)
-doIt()
+firstLogger.start(on: [firstBeacon])
+secondLogger.start(on: [secondBeacon])
+
+emit("I am a string", on: [firstBeacon, secondBeacon])
+emit(on: [firstBeacon, secondBeacon])
+emit(123, on: [firstBeacon, secondBeacon])
+
+print("\(firstLogger.name): ")
+firstLogger.recordings.forEach { print($0.description) }
+
+print("\(secondLogger.name): ")
+secondLogger.recordings.forEach { print($0.description) }
+
+[firstLogger, secondLogger].forEach { $0.stop() }
 
 //: [Next](@next)

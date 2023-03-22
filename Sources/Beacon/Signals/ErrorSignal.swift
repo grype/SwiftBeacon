@@ -79,7 +79,12 @@ open class ErrorSignal: Signal {
  introducing if/else statements all over the code.
  */
 public func emit(error: Error?, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    emit(error: error, on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+    guard let error else {
+        emit(on: beacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
+        return
+    }
+    guard willLog(type: ErrorSignal.self, on: beacon) else { return }
+    ErrorSignal(error: error).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 
 /**
@@ -91,10 +96,7 @@ public func emit(error: Error?, on beacon: Beacon = Beacon.shared, userInfo: [An
  introducing if/else statements all over the code.
  */
 public func emit(error: Error?, on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    guard let error = error else {
-        emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
-        return
+    beacons.forEach { aBeacon in
+        emit(error: error, on: aBeacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
     }
-    guard willLog(type: ErrorSignal.self, on: beacons) else { return }
-    ErrorSignal(error: error).emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }

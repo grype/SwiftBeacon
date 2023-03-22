@@ -57,7 +57,7 @@ public class MockContextSignal: ContextSignal, Cuckoo.ClassMock {
     
     
     
-    public override var symbols: [String : [Int]] {
+    public override var symbols: [String: [Int]] {
         get {
             return cuckoo_manager.getter("symbols",
                 superclassCall:
@@ -153,7 +153,7 @@ public class MockContextSignal: ContextSignal, Cuckoo.ClassMock {
         
         
         
-        var symbols: Cuckoo.ClassToBeStubbedProperty<MockContextSignal, [String : [Int]]> {
+        var symbols: Cuckoo.ClassToBeStubbedProperty<MockContextSignal, [String: [Int]]> {
             return .init(manager: cuckoo_manager, name: "symbols")
         }
         
@@ -207,7 +207,7 @@ public class MockContextSignal: ContextSignal, Cuckoo.ClassMock {
         
         
         
-        var symbols: Cuckoo.VerifyProperty<[String : [Int]]> {
+        var symbols: Cuckoo.VerifyProperty<[String: [Int]]> {
             return .init(manager: cuckoo_manager, name: "symbols", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
         
@@ -262,9 +262,9 @@ public class ContextSignalStub: ContextSignal {
     
     
     
-    public override var symbols: [String : [Int]] {
+    public override var symbols: [String: [Int]] {
         get {
-            return DefaultValueRegistry.defaultValue(for: ([String : [Int]]).self)
+            return DefaultValueRegistry.defaultValue(for: ([String: [Int]]).self)
         }
         
         set { }

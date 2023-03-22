@@ -22,6 +22,7 @@ class SignalLoggerTests: XCTestCase {
         inactiveBeacon = Beacon()
         logger = MemoryLogger(name: "Test logger")
         logger.beForTesting()
+        Constraint.enableAllSignals()
     }
     
     override func tearDown() {

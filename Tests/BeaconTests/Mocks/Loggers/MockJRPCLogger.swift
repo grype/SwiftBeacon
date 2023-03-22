@@ -220,11 +220,11 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
     
     
     
-    public override func perform(urlRequest: URLRequest, completion: ((Bool)->Void)?)  {
+    public override func perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)  {
         
     return cuckoo_manager.call(
     """
-    perform(urlRequest: URLRequest, completion: ((Bool)->Void)?)
+    perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)
     """,
             parameters: (urlRequest, completion),
             escapingParameters: (urlRequest, completion),
@@ -323,11 +323,11 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         
-        func perform<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable>(urlRequest: M1, completion: M2) -> Cuckoo.ClassStubNoReturnFunction<(URLRequest, ((Bool)->Void)?)> where M1.MatchedType == URLRequest, M2.OptionalMatchedType == ((Bool)->Void) {
-            let matchers: [Cuckoo.ParameterMatcher<(URLRequest, ((Bool)->Void)?)>] = [wrap(matchable: urlRequest) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+        func perform<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable>(urlRequest: M1, completion: M2) -> Cuckoo.ClassStubNoReturnFunction<(URLRequest, ((Bool) -> Void)?)> where M1.MatchedType == URLRequest, M2.OptionalMatchedType == ((Bool) -> Void) {
+            let matchers: [Cuckoo.ParameterMatcher<(URLRequest, ((Bool) -> Void)?)>] = [wrap(matchable: urlRequest) { $0.0 }, wrap(matchable: completion) { $0.1 }]
             return .init(stub: cuckoo_manager.createStub(for: MockJRPCLogger.self, method:
     """
-    perform(urlRequest: URLRequest, completion: ((Bool)->Void)?)
+    perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)
     """, parameterMatchers: matchers))
         }
         
@@ -429,11 +429,11 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func perform<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable>(urlRequest: M1, completion: M2) -> Cuckoo.__DoNotUse<(URLRequest, ((Bool)->Void)?), Void> where M1.MatchedType == URLRequest, M2.OptionalMatchedType == ((Bool)->Void) {
-            let matchers: [Cuckoo.ParameterMatcher<(URLRequest, ((Bool)->Void)?)>] = [wrap(matchable: urlRequest) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+        func perform<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable>(urlRequest: M1, completion: M2) -> Cuckoo.__DoNotUse<(URLRequest, ((Bool) -> Void)?), Void> where M1.MatchedType == URLRequest, M2.OptionalMatchedType == ((Bool) -> Void) {
+            let matchers: [Cuckoo.ParameterMatcher<(URLRequest, ((Bool) -> Void)?)>] = [wrap(matchable: urlRequest) { $0.0 }, wrap(matchable: completion) { $0.1 }]
             return cuckoo_manager.verify(
     """
-    perform(urlRequest: URLRequest, completion: ((Bool)->Void)?)
+    perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -547,7 +547,7 @@ public class JRPCLoggerStub: JRPCLogger {
     
     
     
-    public override func perform(urlRequest: URLRequest, completion: ((Bool)->Void)?)   {
+    public override func perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
