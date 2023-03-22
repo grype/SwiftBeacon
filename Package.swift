@@ -18,7 +18,7 @@ let package = Package(
             targets: ["Beacon"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "9.0.0")),
+        .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "11.2.0")),
         .package(url: "https://github.com/grype/SwiftAnnouncements", .upToNextMajor(from: "1.0.3")),
         .package(url: "https://github.com/grype/RWLock-Swift", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/Brightify/Cuckoo", .upToNextMajor(from: "1.3.0")),
