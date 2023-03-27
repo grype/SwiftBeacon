@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SystemInfo.swift
 //
 //
 //  Created by Pavel Skaldin on 5/7/21.

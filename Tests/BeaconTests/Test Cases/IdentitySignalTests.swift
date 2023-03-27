@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  IdentitySignalTests.swift
 //  
 //
 //  Created by Pavel Skaldin on 5/7/21.

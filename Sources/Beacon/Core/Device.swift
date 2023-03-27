@@ -1,8 +1,9 @@
 //
-//  File.swift
+//  Device.swift
 //
 //
 //  Created by Pavel Skaldin on 8/27/21.
+//  Copyright © 2021 Pavel Skaldin. All rights reserved.
 //
 
 import Foundation
