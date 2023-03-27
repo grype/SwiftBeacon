@@ -18,17 +18,17 @@ import SwiftAnnouncements
  I carry a `name` to disinguish myself from other loggers. I also keep a reference to the `Beacon`
  on which I observe signals, defaulting to `Beacon.shared` instance.
  
- # Subclassing notes
+ **Subclassing notes**
  
  - At the bare minumum, override `nextPut(_:)`. In that method, take care of handling the signal.
  - Override `nextPutAll(_:)` if special care is needed when handling multiple signals.
  - Override `description` for customizing my description.
  
- # Identifying a client
+ **Identifying a client**
  
  It may be beneficial to identify the client whenever the logger starts. Especially when utilizing a logger in production, on remote machines. There exists a special `IdentifySignal` that captures particulars about the machine. I can be configured to emit that signal when it is started via `identifiesOnStart`.
  
- # Tracking framework loading
+ **Tracking framework loading**
  
  It may be beneficial to track when MachO images are being loaded - this happens whenever a framework gets loaded. Doing so will help with symbolication of stack traces, when working with binaries with stripped symbols. Crashlogs automatically capture this information, but emitting an error or context signals, doesn't really provide all the particulars needed to symbolicate the stack trace.
  
@@ -177,6 +177,7 @@ open class SignalLogger: NSObject {
             aBeacon.unsubscribe(self)
             aBeacon.when(Signal.self, subscriber: self) { [weak self] aSignal, _ in
                 guard let self = self else { return }
+                
                 guard filter?(aSignal) ?? true else { return }
                 self.process(aSignal)
             }
