@@ -2,9 +2,11 @@
 
 [![CI](https://github.com/grype/SwiftBeacon/actions/workflows/swift.yml/badge.svg)](https://github.com/grype/SwiftBeacon/actions/workflows/swift.yml) ![SPM](https://img.shields.io/badge/Swift_Package_Manager-compatible-orange)
 
-Structured logging in Swift and Objective-C. The framework distinguishes itself from traditional systems by working with arbitrary values, not just strings, and doing away with severity levels in favor of type-based filtering.
+### Structured logging in Swift and Objective-C
 
-Beacon provides all the essentials for logging any type of value as well as facilities for logging to files and remote machines (via JSON-RPC). It is designed to be easily extended to accommodate custom types and loggers, with out-of-the-box support for buffered and stream-bound logging.
+Beacon distinguishes itself from traditional logging systems by working with arbitrary values, not just strings, and it does away with severity levels in favor of type-based filtering.
+
+Beacon provides all the essentials for logging any type of value as well as facilities for logging to files and remote machines (via JSON-RPC). It provides out-of-the-box support for buffered and stream-based logging.
 
 For more information:
 
@@ -18,7 +20,7 @@ For more information:
 
 ## Using 
 
-Logging with Beacon is a matter of emitting a signal. Let's start by creating a console logger and emitting a few things for it to log (try it in a [Playground](Playground.xcworkspace)):
+Logging with Beacon is a matter of emitting a signal. Let's start by creating a console logger and emitting a few things for it to log:
 
 ```swift
 // create and start an instance of a console logger
@@ -37,14 +39,19 @@ do { try something() } catch { emit(error: error) }
 consoleLogger.stop()
 ``` 
 
-The framework uses the Observer pattern, in which one or more `SignalLogger`s observe one or more `Beacon`s for emitted `Signal`s. Calling `emit()` creates an appropriate instance of a `Signal` and announces it to one or more `Beacon`s. In the above examples, a shared instance of `Beacon` is implied. However, multiple loggers and beacons can be used:
+The framework uses the Observer pattern, where `SignalLogger`s observe one or more `Beacon`s for emitted `Signal`s. Calling `emit()` creates an appropriate instance of a `Signal` and announces it via one or more `Beacon`s. In the above examples, a shared instance of `Beacon` is implied. However, multiple loggers and beacons can be used to construct intricate signaling routes.
+
+Let's create a dedicated Beacon for logging to a remote host:
 
 ```swift
-
 extension Beacon {
     static var remote: Beacon = .init()
 }
+```
 
+and a couple of loggers - one for logging to the console and another for logging to a JSON RPC host:
+
+```swift
 let Loggers = (
     // Starts a console logger on the implied shared beacon
     console: ConsoleLogger.starting(name: "Console"),

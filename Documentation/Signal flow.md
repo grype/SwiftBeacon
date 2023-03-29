@@ -1,6 +1,6 @@
 # Signal flow
 
-Beacon uses the Observer pattern to implement the flow of signals to loggers. Whenever you call `emit()` a signal is created and emitted on one or more beacons. Whenever you start a logger, you indicate which beacons to observe. So when a signal is emitted on a beacon, the interested loggers respond by logging it in an appropriate manner:
+Beacon uses the Observer pattern to implement the flow of signals to loggers. Whenever you call `emit()` a signal is created and emitted on one or more beacons. Whenever you start a logger, you indicate which beacons to observe. So when a signal is emitted on a beacon, the interested loggers respond by logging it in an appropriate manner. For example,
 
 ```swift
 let logger = MemoryLogger(name: "Memory")

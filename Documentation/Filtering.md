@@ -9,13 +9,13 @@ One of the major ideas behind Beacon is the ability to filter signals programmat
 
 ## Filtering with loggers
 
-Probably the most obvious place to filter signals is at the logger level. For example, to log only errors:
+The most direct place to filter signals is at the logger level. All subclasses of `SignalLogger` accept a filter block as their final argument.
+
+For example, to log only errors to the console:
 
 ```swift
 ConsoleLogger.starting(name: "Console") { $0 is ErrorSignal }
 ```
-
-All subclasses of `SignalLogger` accept a filter block as their final argument. If you're implementing your own logger - it's best to follow the lead here.
 
 We can get more creative here and filter in only errors and any signal that originates from files with a certain path:
 
@@ -29,57 +29,82 @@ ConsoleLogger.starting(name: "Console") { aSignal in
 
 ## Filtering with constraints
 
-Another way of filtering signals is by constraining signals to beacons and loggers. For example, to filter out all string signals:
+Another way of filtering signals is by constraining signals to specific beacons and loggers. This approach makes more sense in the context of a production application, where it may be desirable to limit logging to specific signals until we need to debug specific areas of the application in greater detail. 
+
+For example, to filter out all signals:
 
 ```swift
-StringSignal.disable(loggingTo: nil, on: nil)
+Signal.disable()
 ```
 
 To filter in string signals across all beacons and loggers:
 
 ```swift
-StringSignal.enable(loggingTo: nil, on: nil)
+StringSignal.enable(constrainedTo: aLogger, on: aBeacon)
 ```
 
-Fine tune these operations for specific loggers:
+The two examples above effectively limit logging to just the `StringSignal`s being emitted on a specific logger and beacon.
+
+When handling multiple constraints, its best to interact with actual constraints, as opposed to the convenience methods introduced above. For example:
 
 ```swift
 extension Beacon {
 	static let debug: Beacon = .init()
 }
 
+// console logger will run on both shared and debug beacons
 let console = ConsoleLogger.starting(name: "Console")
+
+// memory logger will only run on the debug beacon
 let memory = MemoryLogger.starting(name: "Memory", on: [.debug])
 
-// Disable logging of string signals across all loggers and beacons
-StringSignal.disable(loggingTo: nil, on: nil)
-ErrorSignal.disable(loggingTo: nil, on: nil)
+Constraint.activate {
+	-Signal.self							// disables logging of all signals
+	+ErrorSignal.self ~> console			// enables error signals only on the console logger
+	+StringSignal.self ~> (memory, .debug)	// enables string signals only on memory logger running on the debug beacon
+}
 
-// Enable logging of string signals to console logger via any beacon
-StringSignal.enable(loggingTo: console, on: nil)
-
-// Enable logging of error signals to any logger via 'debug' beacon
-ErrorSignal.enable(loggingTo: nil, on: .debug)
-
-// will log only to console
+// will only be logged by the memory logger
 emit("Hello World", on: [.shared, .debug])
 
-// will log only to memory
+// will only be logged by the console logger
 emit(error: "OMG" as Error, on: [.shared, .debug])
 ```
 
-Be mindful that loggers retain their filtering block they were started with. Constraint-based filtering takes place before that block is evaluated.
-
-## Constraints and optimizations
-
-In the event where logging may be too expensive an operation - perhaps it's a large payload, or requires making a trip to disk or network - it may be a good idea to forego all of the required work if there aren't any loggers that would process a signal. Constraints make it possible to know this. Borrowing from earlier examples:
+Be mindful that constraint-based filtering takes place before the logger is even given a chance to log a signal. This means that the filtering block that a logger was started with may not be evaluated. Consider this example:
 
 ```swift
-willLog(type: StringSelf.self, on: [.debug]) 	// false
-willLog(type: StringSelf.self, on: [.shared]) 	// true
+// Console logger will filter out anything that is not an `ErrorSignal`
+let logger = ConsoleLogger.starting(name: "Console") { $0 is ErrorSignal }
 
-willLog(type: ErrorSignal.self, on: [.debug]) // true
-willLog(type: ErrorSignal.self, on: [.shared]) // false
+// Disables any logging of `ErrorSignal`s
+ErrorSignal.disable()
+
+// Won't be logged due to above constraint
+emit(error: anError)
 ```
 
-This logic is used inside all `emit()` methods. If for some reason you need to provide your own implementation of that method, be sure to check `willLog()` before emitting the actual signal! See any of the `emit()` methods for examples.
+The key takeaway here is this - use constraint-based filtering when establishing particular behavior(s) - i.e. errors go to the console, specific areas of the application - to a file. Use block-based filtering in ad hoc situations.
+
+## Constraint-based optimizations
+
+Constraints make it possible for Beacon to determine whether a signal will be handled before it is actually constructed, thus reducing the unnecessary overhead of having to create signals and potentially encode its data. Whenever an `emit()` method is called, Beacon will first check whether the signal type, associated with the emitting value, is actually going to be logged by asking `willLog(type:on:)`.
+
+For example:
+
+```swift
+willLog(type: Signal.self, on: .shared) 		// true
+willLog(type: StringSignal.self, on: shared) 	// true
+willLog(type: ErrorSignal.self, on: .shared) 	// true
+
+Constraint.activate {
+	-Signal.self
+	+ErrorSignal.self
+}
+
+willLog(type: Signal.self, on: .shared) 		// false
+willLog(type: StringSignal.self, on: shared) 	// false
+willLog(type: ErrorSignal.self, on: .shared) 	// true
+```
+
+Whenever you find the need to implement your own `emit()` method - be sure to check with `willLog(type:on:)` to make use of this optimization.
