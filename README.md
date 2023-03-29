@@ -101,19 +101,20 @@ do { throw(...) } catch { emit(error: error) }
 emit("A String")
 ```
 
-It is also possible to define logging semantics in a more declarative fashion:
+It is also possible to define logging semantics in a more declarative fashion, using constraints:
 
 ```swift
 let firstLogger = ConsoleLogger.starting(name: "First logger"))
 let secondLogger = ConsoleLogger.starting(name: "Second logger"))
 
-// will disable handling of `StringSignal`s by `secondLogger` regardless of what Beacon the signal came from.
-StringSignal.disable(loggingTo: secondLogger, on: nil)
+Constraint.activate {
+	-Signal.self
+	+StringSignal.self ~> secondLogger
+}
 
-emit("Will only be logged by firstLogger")
+emit("Will only be logged by the second logger")
 
-// will re-enable handling of StringSignal across all loggers and beacons
-StringSignal.enable(loggingTo: nil, on: nil)
+Constraints.enableAllSignals()
 
 emit("Will be logged by both loggers")
 ```
