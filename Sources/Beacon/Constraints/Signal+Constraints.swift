@@ -9,13 +9,13 @@
 import Foundation
 
 extension Signal {
-    static func enable(constrainedTo aLogger: SignalLogger? = nil, on aBeacon: Beacon? = nil) {
+    @objc static func enable(constrainedTo aLogger: SignalLogger? = nil, on aBeacon: Beacon? = nil) {
         Constraint.activate {
             Constraint(signalType: self, state: .enabled, logger: aLogger, beacon: aBeacon)
         }
     }
 
-    static func disable(constrainedTo aLogger: SignalLogger? = nil, on aBeacon: Beacon? = nil) {
+    @objc static func disable(constrainedTo aLogger: SignalLogger? = nil, on aBeacon: Beacon? = nil) {
         Constraint.activate {
             Constraint(signalType: self, state: .disabled, logger: aLogger, beacon: aBeacon)
         }
