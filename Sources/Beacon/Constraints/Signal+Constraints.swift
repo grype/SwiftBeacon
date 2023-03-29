@@ -1,5 +1,5 @@
 //
-//  Signal+Filtering.swift
+//  Signal+Constraints.swift
 //
 //
 //  Created by Pavel Skaldin on 3/25/23.

@@ -1,5 +1,5 @@
 //
-//  Beacon+Filtering.swift
+//  Beacon+Constraints.swift
 //
 //
 //  Created by Pavel Skaldin on 12/3/22.

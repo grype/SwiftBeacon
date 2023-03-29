@@ -1,5 +1,5 @@
 //
-//  Term+Filtering.swift
+//  Term+Constraints.swift
 //
 //
 //  Created by Pavel Skaldin on 12/1/22.
