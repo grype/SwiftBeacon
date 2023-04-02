@@ -2,8 +2,6 @@
 
 import Beacon
 import Foundation
-import LogicKit
-import LogicKitBuiltins
 import PlaygroundSupport
 
 let firstLogger = MemoryLogger(name: "First Logger")
