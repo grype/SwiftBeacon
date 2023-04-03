@@ -4,13 +4,14 @@
 
 ### Structured logging in Swift and Objective-C
 
-Beacon distinguishes itself from traditional logging systems by working with arbitrary values, not just strings, and it does away with severity levels in favor of type-based filtering.
+Beacon distinguishes itself from conventional logging systems by working with arbitrary values, not just strings, and it does away with severity levels in favor of type-based filtering.
 
-Beacon provides all the essentials for logging any type of value as well as facilities for logging to files and remote machines (via JSON-RPC). It provides out-of-the-box support for buffered and stream-based logging.
+This framework provides all the essentials for logging any value to the  console, files and remote services. It also provides a broader support for buffered and stream-based logging, making it easy to implement custom logging facilities.
 
 For more information:
 
 * See [this post](http://www.humane-assessment.com/blog/beacon) describing the system that inspired this implementation in Swift.
+* Learn the [essentials](https://github.com/grype/SwiftBeacon/wiki/Essentials)
 * Understand the [signal flow](https://github.com/grype/SwiftBeacon/wiki/Signal-flow)
 * Learn about [filtering](https://github.com/grype/SwiftBeacon/wiki/Filtering)
 * How to [create custom signals](https://github.com/grype/SwiftBeacon/wiki/Creating-Custom-Signals)
@@ -20,108 +21,78 @@ For more information:
 
 ## Using 
 
-Logging with Beacon is a matter of emitting a signal. Let's start by creating a console logger and emitting a few things for it to log:
+Logging with Beacon happens by starting one or more loggers and emitting values.
 
 ```swift
-// create and start an instance of a console logger
 let consoleLogger = ConsoleLogger.starting(name: "Console")
-
-// emit a string, à la print()
 emit("A message")
-
-// emit arbitrary value
-emit(anything)
-
-// emit an error
-do { try something() } catch { emit(error: error) }
-
-// stop logger when done
-consoleLogger.stop()
 ``` 
 
-The framework uses the Observer pattern, where `SignalLogger`s observe one or more `Beacon`s for emitted `Signal`s. Calling `emit()` creates an appropriate instance of a `Signal` and announces it via one or more `Beacon`s. In the above examples, a shared instance of `Beacon` is implied. However, multiple loggers and beacons can be used to construct intricate signaling routes.
-
-Let's create a dedicated Beacon for logging to a remote host:
+The above example is equivalent to printing a time-stamped message to the console, à la conventional logging systems. However, you are not limited to emitting strings - any value can be emitted:
 
 ```swift
-extension Beacon {
-    static var remote: Beacon = .init()
+do { 
+	let result: MyThing = try something()
+	emit(result)
+} catch { 
+	emit(error: error) 
 }
 ```
 
-and a couple of loggers - one for logging to the console and another for logging to a JSON RPC host:
+There is no need to specify debug levels - simply emit a value you're interested in. Beacon allows you to control what information is being logged by means of filters and constraints.
+
+### In a nutshell...
+
 
 ```swift
-let Loggers = (
-    // Starts a console logger on the implied shared beacon
-    console: ConsoleLogger.starting(name: "Console"),
-    
-    // Starts a JSON-RPC logger on both - shared and remote beacons
-    remote: JRPCLogger.starting(url: "http://localhost:4000", method: "emit", name: "JRPC", on: [.shared, .remote])
-)
+⓪ let memoryLogger = MemoryLogger(name: "Memory")
 
-// Emits current context signal on the shared beacon
-// which get logged by both - console & remote loggers
-emit()
+① let consoleLogger = ConsoleLogger.starting(name: "Console") { 
+②	$0 is StringSignal 
+   }
 
-// Emits current context only on the remote beacon
-// which gets logged only to the remote (JSON-RPC) logger
-emit(on: [.remote])
-```
-
-Signals can be augmented with arbitrary user info:
-
-```swift
-emit(something, userInfo: ["detail" : "Detail Info"])
-```
-
-Loggers support single-shot runs:
-
-```swift
-ConsoleLogger(name: "Console").run {
-    // will be logged by console logger
-    emit()
-}
-
-// won't be logged by console logger
-emit()
-```
-
-and are capable of filtering signals:
-
-```swift
-let consoleLogger = ConsoleLogger.starting(name: "Console error logger")) {
-    return aSignal is ErrorSignal
-}
-
-// will be logged
-do { throw(...) } catch { emit(error: error) }
-
-// won't be logged
-emit("A String")
-```
-
-It is also possible to define logging semantics in a more declarative fashion, using constraints:
-
-```swift
-let firstLogger = ConsoleLogger.starting(name: "First logger"))
-let secondLogger = ConsoleLogger.starting(name: "Second logger"))
-
-Constraint.activate {
+③ Constraint.activate {
 	-Signal.self
-	+StringSignal.self ~> secondLogger
-}
+	+ErrorSignal.self ~> memoryLogger
+   }
 
-emit("Will only be logged by the second logger")
+④ emit()
 
-Constraints.enableAllSignals()
-
-emit("Will be logged by both loggers")
+  do {
+⑤	memoryLogger.run {
+		let result = try something()
+⑥		emit(result, on: [.shared], userInfo: ["detail": "Detail info"])
+	 }
+  }
+  catch {
+⑦	emit(error: error)
+  }
+  
+⑧ consoleLogger.stop()
+⑨ Constraint.enableAllSignals()
 ```
 
-Doing so avoids having to construct actual `Signal` objects during `emit()` calls, which can be benefitial when e.g. emitting `Encodable` values using `WrapperSignal`, which encodes the wrapped value during initialization of the signal.
+⓪ Creates an instance of `MemoryLogger`. This logger simply captures signals into an array, available via the `recordings` property. Notice that the logger isn't running yet.
 
-##  Components
+① Creates and starts a `ConsoleLogger`. This logger simply prints a time-stamped `debugDescription` of the emitted value to the console, similar how to a conventional system logs. See [Components](#Components) for a list of available loggers.
+
+② The console logger is set to filter out anything that is not a `StringSignal` - this is the object that actually gets emitted when we call `emit("with a string")`.
+
+③ Defines signal constraints - first, disabling logging of all types of signals and then enabling logging of `ErrorSignal`s but only by the `memoryLogger`. By default Beacon enables logging of all types of signals - equivalent of `+Signal.self` as the sole constraint. See [Filtering](https://github.com/grype/SwiftBeacon/wiki/Filtering) for more information on constraint-based filtering.
+
+④ Calling `emit()` without a value logs curent context, including the stack trace leading to the call. This happens by creating and emitting an instance of `ContextSignal`.
+
+⑤ It is possible to perform one-shot logging - that is, starting the logger only for the duration of the passed block. It doesn't mean other running loggers won't handle emitted signals. However, in this case, the `memoryLogger` won't be doing any more logging outside of the given block.
+
+⑥ Every form of `emit()` allows passing a list of `Beacon` objects on which to emit the resulting signal. Not specifying one implies a special shared beacon (accessible via `Beacon.shared`). It is also possible to pass along userInfo values, similar to how this is done with `NSNotification`s.
+
+⑦ Emits an `ErrorSignal`, which captures the given error. Notice that this variant of `emit()` has a named argument. This is done for convenience as any object can be made to conform to `Error`. There is a difference between `emit(anError)` and `emit(error: anError)` - in the former case - a `WrapperSignal` is created, while in the latter case - an `ErrorSignal` is created.
+
+⑧ Since we started the console logger in ①, we should stop it whenever we're done using it.
+
+⑨ Restores constraints back to their defaults.
+
+## Components
 
 The framework provides the following building blocks:
 
@@ -129,7 +100,7 @@ The framework provides the following building blocks:
 | ------ | ----------- |
 | `ContextSignal` | Captures execution context at initialization site - e.g. name of containing method and a stack trace |
 | `ErrorSignal` | Captures an error and a stack trace that lead to it |
-| `StringSignal` | Captures a string - à la traditional logging facilities |
+| `StringSignal` | Captures a string - à la conventional logging systems |
 | `WrapperSignal` | Captures arbitrary value - be mindful of mutating values as some of the logging facilities may log at a later time |
 | `IdentitySignal` | Captures information about Beacon itself - such as version, current platform, architecture, etc |
 | `MachImageImportsSignal` | Captures addition and removal of MachO images - this is mainly to help with stack symbolication |
@@ -138,7 +109,7 @@ Custom signals are typically implemented as subclasses of `WrapperSignal` as it 
 
 | Loggers | Description |
 | ------- | ----------- |
-| `MemoryLogger` | Logs signals into an array of fixed size, in a FIFO fashion |
+| `MemoryLogger` | Logs signals into an array of fixed size |
 | `ConsoleLogger` | Prints signals onto the console |
 | `JRPCLogger` | Sends signals to a JSON-RPC server (see [Beacon-Server](https://github.com/grype/Beacon-Server/) for a server implementation in Pharo) |
 | `FileLogger` | Logs signals to a file, with rotation support |
@@ -153,9 +124,9 @@ Furthermore, there are a couple of abstract loggers:
 
 A few signals, namely `ErrorSignal` and `ContextSignal`, capture stack traces that lead to the emission of the signal. In some cases, the binary may have its symbols stripped, and those stack traces will need to be symbolicated in order to make any sense of them. To help with that, Beacon uses two special signals: `IdentitySignal` and `MachImageImportsSignal`. The former captures the current running environment - operating system and processor architecture, while the latter captures insertion and removal of MachO images. Armed with both the architecture and load addresses of the binary and its dependencies it is possible to symbolicate those stack traces with a tool like `atos`.
 
-It may be helpful to emit those signals as soon as a logger starts:
+Loggers can be configured to emit those signals:
 
-```
+```swift
 let consoleLogger = ConsoleLogger(name: "Console")
 
 // Will emit IdentitySignal when started
