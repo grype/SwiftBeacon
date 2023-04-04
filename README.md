@@ -21,7 +21,7 @@ For more information:
 
 ## Using 
 
-Logging with Beacon happens by starting one or more loggers and emitting values.
+Logging with Beacon happens by starting one or more loggers and emitting some values.
 
 ```swift
 let consoleLogger = ConsoleLogger.starting(name: "Console")
@@ -39,7 +39,7 @@ do {
 }
 ```
 
-There is no need to specify debug levels - simply emit a value you're interested in. Beacon allows you to control what information is being logged by means of filters and constraints.
+There is no need to specify debug levels - simply emit a value you're interested in. Beacon allows you to control what is being logged by means of filters and constraints.
 
 ### In a nutshell...
 
@@ -72,17 +72,17 @@ There is no need to specify debug levels - simply emit a value you're interested
 ⑨ Constraint.enableAllSignals()
 ```
 
-⓪ Creates an instance of `MemoryLogger`. This logger simply captures signals into an array, available via the `recordings` property. Notice that the logger isn't running yet.
+⓪ Creates an instance of `MemoryLogger`. This logger simply captures signals into an array, available via the `recordings` property. Notice that this logger isn't running yet.
 
-① Creates and starts a `ConsoleLogger`. This logger simply prints a time-stamped `debugDescription` of the emitted value to the console, similar how to a conventional system logs. See [Components](#Components) for a list of available loggers.
+① Creates and starts a `ConsoleLogger`. This logger simply prints a time-stamped `debugDescription` of the emitted value to the console, similar to how a conventional system logs messages. In contrast to the memory logger created in ⓪ - this logger is running and will log emitted signals. See [Components](#Components) for a list of available loggers.
 
-② The console logger is set to filter out anything that is not a `StringSignal` - this is the object that actually gets emitted when we call `emit("with a string")`.
+② The console logger is set to filter out anything that is not a `StringSignal` - this is the object that actually gets logged when we call `emit("with a string")`. Different types of values are represented by different signal types, falling back to `WrapperSignal` for capturing arbitrary values. Signals are designed to be portable - meaning, they can be represented by remote systems. This makes it easy to adopt existing technologies. See [Components](#Components) for a list of available signals. You can easily create custom signal types for capturing specific types of values.
 
-③ Defines signal constraints - first, disabling logging of all types of signals and then enabling logging of `ErrorSignal`s but only by the `memoryLogger`. By default Beacon enables logging of all types of signals - equivalent of `+Signal.self` as the sole constraint. See [Filtering](https://github.com/grype/SwiftBeacon/wiki/Filtering) for more information on constraint-based filtering.
+③ Control which signals are logged by what facilities by defining constraints. The first constraint disables logging of all types of signals, while the second - enables logging of `ErrorSignal`s but only by the `memoryLogger`. By default Beacon enables logging of all types of signals - equivalent of `+Signal.self` as the sole constraint. See [Filtering](https://github.com/grype/SwiftBeacon/wiki/Filtering) for more information on constraint-based filtering.
 
-④ Calling `emit()` without a value logs curent context, including the stack trace leading to the call. This happens by creating and emitting an instance of `ContextSignal`.
+④ Calling `emit()` without a value logs curent context, including the stack trace leading to the call. This happens by creating and emitting an instance of `ContextSignal`. Beacon provides specialized signals for capturing information to help in symbolication of stack traces.
 
-⑤ It is possible to perform one-shot logging - that is, starting the logger only for the duration of the passed block. It doesn't mean other running loggers won't handle emitted signals. However, in this case, the `memoryLogger` won't be doing any more logging outside of the given block.
+⑤ It is possible to perform one-shot logging - that is, starting the logger only for the duration of the passed block. It doesn't mean other running loggers won't handle emitted signals. In this example, the `memoryLogger` won't be doing any more logging outside of the given block.
 
 ⑥ Every form of `emit()` allows passing a list of `Beacon` objects on which to emit the resulting signal. Not specifying one implies a special shared beacon (accessible via `Beacon.shared`). It is also possible to pass along userInfo values, similar to how this is done with `NSNotification`s.
 
