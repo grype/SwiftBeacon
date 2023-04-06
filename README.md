@@ -4,7 +4,7 @@
 
 ### Structured logging in Swift and Objective-C
 
-Beacon distinguishes itself from conventional logging systems by working with arbitrary values, not just strings, and it does away with severity levels in favor of type-based filtering.
+Beacon distinguishes itself from conventional logging systems by working with arbitrary values, not just strings, and doing away with severity levels in favor of type-based filtering.
 
 This framework provides all the essentials for logging any value to the  console, files and remote services. It also provides a broader support for buffered and stream-based logging, making it easy to implement custom logging facilities.
 
