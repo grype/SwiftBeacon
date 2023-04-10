@@ -212,7 +212,7 @@ open class SignalLogger: NSObject {
     // MARK: - CustomStringConvertible
     
     override open var description: String {
-        return "<\(String(describing: type(of: self))): \(Unmanaged.passUnretained(self).toOpaque())> Name: \(name); Running: \(isRunning)"
+        return "\(super.description) \(name)\(isRunning ? "*" : "!")"
     }
     
     // MARK: - Identifying
