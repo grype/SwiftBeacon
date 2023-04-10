@@ -119,13 +119,18 @@ private let constraint = "constraint"/4
 private let findAllConstraints = "findAllConstraints"/4
 private let signalHierarchy = "signalHierarchy"/3
 
+@inline(__always)
+private func className(of aClass: AnyClass) -> String {
+    NSString(cString: class_getName(aClass), encoding: NSUTF8StringEncoding)! as String
+}
+
 // MARK: - Rules & Axioms
 
 private var axioms: [Term] = Signal.withAllSubclasses.map { aClass in
     let nsClass = aClass as! NSObject.Type
     let superClasses = nsClass.withAllSuperclasses
-    let terms: [Term] = superClasses.map { .lit(($0 as! NSObject.Type).className()) }
-    return signalHierarchy(.lit(nsClass.className()), List.from(elements: terms), Nat.from(superClasses.count))
+    let terms: [Term] = superClasses.map { .lit(className(of: $0)) }
+    return signalHierarchy(.lit(className(of: nsClass)), List.from(elements: terms), Nat.from(superClasses.count))
 }
 
 private var constraints: [Term] = [constraint(.signal(Signal.self), .signalState(.enabled), .any, .any)]
