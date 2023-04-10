@@ -107,6 +107,35 @@ public struct Constraint {
         }
         return result?["state"] == .signalState(.enabled) ? .enabled : .disabled
     }
+
+    // MARK: Describing
+
+    public static var current: [Constraint] {
+        var results: [Constraint] = .init()
+        var kb: KnowledgeBase!
+        constraintLock.readProtected {
+            kb = KnowledgeBase(knowledge: constraints)
+        }
+        let answers = kb.ask(
+            constraint(.var("signal"), .var("state"), .var("logger"), .var("beacon"))
+        )
+        answers.forEach { a in
+            guard let signalClassName = a["signal"]?.extractValue(ofType: String.self),
+                  let signalClass = NSClassFromString(signalClassName) as? Signal.Type,
+                  let stateString = a["state"]?.extractValue(ofType: String.self),
+                  let state = State(rawValue: stateString)
+            else { return }
+            let logger = a["logger"]?.extractValue(ofType: SignalLogger.self)
+            let beacon = a["beacon"]?.extractValue(ofType: Beacon.self)
+            let constraint = Constraint(signalType: signalClass, state: state, logger: logger, beacon: beacon)
+            results.append(constraint)
+        }
+        return results
+    }
+
+    public static var currentDescription: String {
+        current.map { $0.description }.joined(separator: "\n")
+    }
 }
 
 // MARK: - Variables
@@ -148,7 +177,7 @@ private var rules: [Term] = [
 extension Constraint: CustomStringConvertible {
     public var description: String {
         let base = "\(state == .enabled ? "+" : "-")\(signalType)"
-        if let logger, let beacon  {
+        if let logger, let beacon {
             return "\(base) ~> (\(logger), \(beacon))"
         }
         if let logger {
