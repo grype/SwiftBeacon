@@ -29,9 +29,12 @@ class ContextSignalTests : XCTestCase {
     
     func testEmitStringOnly() {
         emit()
-        expect(self.logger.recordings.first).toNot(beNil())
-        let signal = logger.recordings.first!
-        expect(signal).to(beAKindOf(ContextSignal.self))
+        if let signal = logger.recordings.first {
+            expect(signal).to(beAKindOf(ContextSignal.self))
+        }
+        else {
+            expect(self.logger.recordings.first).toNot(beNil())
+        }
     }
     
     func testSymbols() {
