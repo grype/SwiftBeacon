@@ -11,12 +11,19 @@ let package = Package(
         .tvOS(.v10),
         .watchOS(.v3),
     ],
-    products: [
-        // Products define the executables and libraries produced by a package, and make them visible to other packages.
-        .library(
-            name: "Beacon",
-            targets: ["Beacon"]),
-    ],
+    products: {
+        var libs: [Product] = [
+            .library(
+                name: "Beacon",
+                targets: ["Beacon"]),
+        ]
+        #if _runtime(_ObjC)
+        libs.append(.library(
+            name: "BeaconObjcRuntime",
+            targets: ["BeaconObjcRuntime"]))
+        #endif
+        return libs
+    }(),
     dependencies: [
         .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "11.2.0")),
         .package(url: "https://github.com/grype/SwiftAnnouncements", .upToNextMajor(from: "1.0.3")),
@@ -27,18 +34,17 @@ let package = Package(
     ],
     targets: {
         var targets: [Target] = [
+            .target(
+                name: "Beacon",
+                dependencies: ["SwiftAnnouncements", "RWLock", "AnyCodable", "LogicKit"],
+                exclude: ["Sources/BeaconObjcRuntime"]),
             .testTarget(
                 name: "BeaconTests",
                 dependencies: ["Beacon", "Nimble", "SwiftAnnouncements", "Cuckoo", "AnyCodable"]),
         ]
         #if _runtime(_ObjC)
         targets.append(contentsOf: [
-            .target(name: "BeaconObjcRuntime", dependencies: []),
-            .target(name: "Beacon", dependencies: ["BeaconObjcRuntime", "SwiftAnnouncements", "RWLock", "AnyCodable", "LogicKit"]),
-        ])
-        #else
-        targets.append(contentsOf: [
-            .target(name: "Beacon", dependencies: ["SwiftAnnouncements", "RWLock", "AnyCodable", "LogicKit"], exclude: ["Sources/BeaconObjcRuntime"]),
+            .target(name: "BeaconObjcRuntime", dependencies: ["Beacon"], exclude: ["Sources/Beacon"]),
         ])
         #endif
         return targets
