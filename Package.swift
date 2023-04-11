@@ -44,7 +44,7 @@ let package = Package(
         ]
         #if _runtime(_ObjC)
         targets.append(contentsOf: [
-            .target(name: "BeaconObjcRuntime", dependencies: ["Beacon"], exclude: ["Sources/Beacon"]),
+            .target(name: "BeaconObjcRuntime", dependencies: ["Beacon"]),
         ])
         #endif
         return targets
