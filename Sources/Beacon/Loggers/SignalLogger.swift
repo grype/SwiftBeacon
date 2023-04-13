@@ -99,7 +99,7 @@ open class SignalLogger: NSObject {
     }
     
     /// Start on shared beacon for the duration of the given run block
-    @objc open func run(during: RunBlock) {
+    @objc(runDuring:) open func run(during: RunBlock) {
         run(on: [Beacon.shared], during: during)
     }
     
