@@ -35,7 +35,7 @@ open class ConsoleLogger: SignalLogger {
     // MARK: - Logging
     
     override open func nextPut(_ aSignal: Signal) {
-        queue.async {
+        queue.sync {
             self.doPut(aSignal)
         }
     }
