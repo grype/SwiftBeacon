@@ -6,7 +6,7 @@
 
 Beacon distinguishes itself from conventional logging systems by working with arbitrary values, not just strings, and doing away with severity levels in favor of type-based filtering.
 
-This framework provides all the essentials for logging any value to the  console, files and remote services. It also provides a broader support for buffered and stream-based logging, making it easy to implement custom logging facilities.
+This framework provides all the essentials for logging any type of value to the console, a file or a remote service. It also provides a broader support for buffered and stream-based logging, making it easy to implement custom logging facilities.
 
 For more information:
 
@@ -21,14 +21,14 @@ For more information:
 
 ## Using 
 
-Logging with Beacon happens by starting one or more loggers and emitting some values.
+Logging with Beacon is a matter of starting a logger and emitting a value.
 
 ```swift
 let consoleLogger = ConsoleLogger.starting(name: "Console")
 emit("A message")
 ``` 
 
-The above example is equivalent to printing a time-stamped message to the console, à la conventional logging systems. However, you are not limited to emitting strings - any value can be emitted:
+The above is equivalent to printing a time-stamped message to the console, à la conventional logging systems. You are not, however, limited to emitting strings - any type of value can be emitted:
 
 ```swift
 do { 
@@ -39,7 +39,7 @@ do {
 }
 ```
 
-There is no need to specify debug levels - simply emit a value you're interested in. Beacon allows you to control what is being logged by means of filters and constraints.
+There is no need to specify debug levels - simply emit a value of interest. Beacon lets you control what gets logged and where by means of filters and constraints.
 
 ### In a nutshell...
 
@@ -74,23 +74,23 @@ There is no need to specify debug levels - simply emit a value you're interested
 
 ⓪ Creates an instance of `MemoryLogger`. This logger simply captures signals into an array, available via the `recordings` property. Notice that this logger isn't running yet.
 
-① Creates and starts a `ConsoleLogger`. This logger simply prints a time-stamped `debugDescription` of the emitted value to the console, similar to how a conventional system logs messages. In contrast to the memory logger created in ⓪ - this logger is running and will log emitted signals. See [Components](#Components) for a list of available loggers.
+① Creates and starts a `ConsoleLogger`. This logger simply prints a time-stamped `debugDescription` of the emitted value to the console, similar to how a conventional system logs messages. In contrast to the memory logger created in ⓪ - this logger is running and will process emitted signals. See [Components](#Components) for a list of available loggers.
 
-② The console logger is set to filter out anything that is not a `StringSignal` - this is the object that actually gets logged when we call `emit("with a string")`. Different types of values are represented by different signal types, falling back to `WrapperSignal` for capturing arbitrary values. Signals can be easily extended to accomodate specific types of values and are [portable](wiki/Portability). See [Components](#Components) for a list of available signals.
+② The console logger is set to filter out anything that is not a `StringSignal` - that's what actually gets logged when we call `emit("with a string")`. Different types of values are represented by different types of signal, falling back to the `WrapperSignal` for capturing arbitrary values. Signals can be easily extended to accomodate specific types of values and are [portable](wiki/Portability). See [Components](#Components) for a list of available signals.
 
-③ Control which signals are logged by what facilities by defining constraints. The first constraint disables logging of all types of signals. The second constraint enables logging `ErrorSignal`s to `memoryLogger` only. The effect is that only `ErrorSignal`s will be logged, and only by the `memoryLogger`. By default Beacon logs all types of signals - equivalent of `+Signal.self` as the sole constraint. See [Filtering](https://github.com/grype/SwiftBeacon/wiki/Filtering) for more information on constraint-based filtering.
+③ Control the flow of signals by defining constraints. The first constraint disables logging of all types of signals. The second constraint enables logging `ErrorSignal`s, but only by the `memoryLogger`. The effect is that only `ErrorSignal`s will be logged, and only by the `memoryLogger`. By default all types of signals are logger, which is the equivalent of `+Signal.self` as the sole constraint. See [Filtering](https://github.com/grype/SwiftBeacon/wiki/Filtering) for more information on constraints.
 
-④ Calling `emit()` without a value logs curent context, including the stack trace leading to the call. This happens by creating and emitting an instance of `ContextSignal`. Beacon provides specialized signals for capturing information to help in [symbolication of stack traces](wiki/Symbolicating-stack-traces).
+④ Calling `emit()` without a value logs the execution context, capturing the stack trace leading to the call. This happens by creating and emitting a `ContextSignal`. Additionally, Beacon provides specialized signals for capturing information needed to [symbolicate those stack traces](wiki/Symbolicating-stack-traces).
 
-⑤ It is possible to perform one-shot logging - that is, starting the logger only for the duration of the passed block. It doesn't mean other running loggers won't handle emitted signals - but that the logger won't log anything outside of the given block.
+⑤ It is possible to perform one-shot logging - that is, starting the logger only for the duration of a block closure.
 
-⑥ Every form of `emit()` takes an optional list of `Beacon` objects on which to emit the resulting signal. Not specifying one implies a special shared beacon (accessible via `Beacon.shared`). It is also possible to pass along userInfo values, similar to how this is done with `NSNotification`s.
+⑥ Every form of `emit()` takes two additional and optional arguments: a list of `Beacon`s on which to emit a signal (defaulting to `Beacon.shared`), and an arbitrary userInfo value.
 
-⑦ Emits an `ErrorSignal`, which captures the given error. Notice that this variant of `emit()` has a named argument. This is done for convenience as any object can be made to conform to `Error`. There is a difference between `emit(anError)` and `emit(error: anError)` - in the former case - a `WrapperSignal` is created, while in the latter case - an `ErrorSignal` is created.
+⑦ Emits an `ErrorSignal`, wrapping the error. Notice that this variant of `emit()` has a named argument. There is a difference between `emit(anError)`, which will emit a `WrapperSignal`, and `emit(error: anError)`, which would emnit an `ErrorSignal`.
 
-⑧ Since we started the console logger in ①, we should stop it whenever we're done using it.
+⑧ Since we started the console logger in ①, we should stop it whenever we're done with it.
 
-⑨ Restores constraints back to their defaults.
+⑨ Restore constraints back to their defaults.
 
 ## Components
 
