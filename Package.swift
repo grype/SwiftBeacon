@@ -37,7 +37,7 @@ let package = Package(
             .target(
                 name: "Beacon",
                 dependencies: ["SwiftAnnouncements", "RWLock", "AnyCodable", "LogicKit"],
-                exclude: ["Sources/BeaconObjcRuntime"]),
+                exclude: ["../BeaconObjcRuntime"]),
             .testTarget(
                 name: "BeaconTests",
                 dependencies: ["Beacon", "Nimble", "SwiftAnnouncements", "Cuckoo", "AnyCodable"]),
