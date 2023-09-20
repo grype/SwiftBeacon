@@ -111,7 +111,10 @@ open class Signal: NSObject, Encodable {
             }
         }
         source = aSource
-        beacons.forEach { $0.signal(self) }
+        beacons.forEach {
+            guard willEmit(type: type(of: self), on: $0) else { return }
+            $0.signal(self)
+        }
     }
     
     @objc open func sourcedFromHere(fileName: String = #file, line: Int = #line, functionName: String = #function) -> Self {
@@ -207,6 +210,6 @@ extension Signal: Announceable {}
 // MARK: - Globals
 
 /// Returns whether signals of given type will be logged if emitted on given beacons
-public func willLog<T: Signal>(type aSignalType: T.Type, on beacon: Beacon) -> Bool {
+public func willEmit<T: Signal>(type aSignalType: T.Type, on beacon: Beacon) -> Bool {
     beacon.logsSignals(ofType: aSignalType)
 }

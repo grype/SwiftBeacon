@@ -52,7 +52,7 @@ open class IdentitySignal: Signal {
 
 /// Emits `IdentitySignal`
 public func emitIdentity(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    guard willLog(type: IdentitySignal.self, on: beacon) else { return }
+    guard willEmit(type: IdentitySignal.self, on: beacon) else { return }
     IdentitySignal().emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 

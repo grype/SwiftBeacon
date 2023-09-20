@@ -49,7 +49,6 @@ public protocol Signaling {
  rather than directly interfacing with instances of `Signal` and `SignalLogger`.
  */
 public func emit<T: Signaling>(_ value: T, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    guard willLog(type: type(of: value).SignalType, on: beacon) else { return }
     value.beaconSignal.emit(on: [beacon],
                             userInfo: userInfo,
                             fileName: fileName,
@@ -64,7 +63,9 @@ public func emit<T: Signaling>(_ value: T, on beacon: Beacon = Beacon.shared, us
  rather than directly interfacing with instances of `Signal` and `SignalLogger`.
  */
 public func emit<T: Signaling>(_ value: T, on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    beacons.forEach { aBeacon in
-        emit(value, on: aBeacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
-    }
+    value.beaconSignal.emit(on: beacons,
+                            userInfo: userInfo,
+                            fileName: fileName,
+                            line: line,
+                            functionName: functionName)
 }

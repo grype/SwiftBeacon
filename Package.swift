@@ -1,12 +1,13 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import CompilerPluginSupport
 
 let package = Package(
     name: "Beacon",
     platforms: [
-        .macOS(.v10_12),
+        .macOS(.v10_15),
         .iOS(.v13),
         .tvOS(.v10),
         .watchOS(.v3),
@@ -31,12 +32,20 @@ let package = Package(
         .package(url: "https://github.com/Brightify/Cuckoo", .upToNextMajor(from: "1.3.0")),
         .package(url: "https://github.com/Flight-School/AnyCodable", .upToNextMajor(from: "0.5.0")),
         .package(url: "https://github.com/kyouko-taiga/LogicKit", .upToNextMajor(from: "2.1.0")),
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0-swift-5.9-DEVELOPMENT-SNAPSHOT-2023-04-25-b"),
     ],
     targets: {
         var targets: [Target] = [
+            .macro(
+                name: "BeaconMacros",
+                dependencies: [
+                    .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                    .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+                ]
+            ),
             .target(
                 name: "Beacon",
-                dependencies: ["SwiftAnnouncements", "RWLock", "AnyCodable", "LogicKit"],
+                dependencies: ["SwiftAnnouncements", .product(name: "RWLock", package: "RWLock-Swift"), "AnyCodable", "LogicKit", "BeaconMacros"],
                 exclude: ["../BeaconObjcRuntime"]),
             .testTarget(
                 name: "BeaconTests",

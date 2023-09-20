@@ -587,27 +587,27 @@ class SignalFilteringTests: XCTestCase {
     
     private func expectToLogAllSignals(on beacons: [Beacon]) {
         beacons.forEach { beacon in
-            expect(willLog(type: Signal.self, on: beacon)).to(beTrue())
-            expect(willLog(type: ContextSignal.self, on: beacon)).to(beTrue())
-            expect(willLog(type: StringSignal.self, on: beacon)).to(beTrue())
-            expect(willLog(type: WrapperSignal.self, on: beacon)).to(beTrue())
-            expect(willLog(type: TestSubsignal.self, on: beacon)).to(beTrue())
+            expect(willEmit(type: Signal.self, on: beacon)).to(beTrue())
+            expect(willEmit(type: ContextSignal.self, on: beacon)).to(beTrue())
+            expect(willEmit(type: StringSignal.self, on: beacon)).to(beTrue())
+            expect(willEmit(type: WrapperSignal.self, on: beacon)).to(beTrue())
+            expect(willEmit(type: TestSubsignal.self, on: beacon)).to(beTrue())
         }
     }
     
     private func expectTologOnlyBaseSignal(on beacons: [Beacon]) {
         beacons.forEach { beacon in
-            expect(willLog(type: Signal.self, on: beacon)).to(beTrue())
-            expect(willLog(type: ContextSignal.self, on: beacon)).to(beFalse())
-            expect(willLog(type: StringSignal.self, on: beacon)).to(beFalse())
-            expect(willLog(type: WrapperSignal.self, on: beacon)).to(beFalse())
-            expect(willLog(type: TestSubsignal.self, on: beacon)).to(beFalse())
+            expect(willEmit(type: Signal.self, on: beacon)).to(beTrue())
+            expect(willEmit(type: ContextSignal.self, on: beacon)).to(beFalse())
+            expect(willEmit(type: StringSignal.self, on: beacon)).to(beFalse())
+            expect(willEmit(type: WrapperSignal.self, on: beacon)).to(beFalse())
+            expect(willEmit(type: TestSubsignal.self, on: beacon)).to(beFalse())
         }
     }
     
     private func expectToLog<T: Signal>(_ signalType: T.Type, on beacons: [Beacon]) {
         beacons.forEach { beacon in
-            expect(willLog(type: signalType, on: beacon)).to(beTrue())
+            expect(willEmit(type: signalType, on: beacon)).to(beTrue())
         }
     }
     
@@ -615,9 +615,9 @@ class SignalFilteringTests: XCTestCase {
         let others = [Signal.self, ContextSignal.self, StringSignal.self, WrapperSignal.self, TestSubsignal.self].filter { $0 !== signalType }
         beacons.forEach { beacon in
             others.forEach { aType in
-                expect(willLog(type: aType, on: beacon)).to(beFalse())
+                expect(willEmit(type: aType, on: beacon)).to(beFalse())
             }
-            expect(willLog(type: signalType, on: beacon)).to(beTrue())
+            expect(willEmit(type: signalType, on: beacon)).to(beTrue())
         }
     }
     
@@ -628,10 +628,10 @@ class SignalFilteringTests: XCTestCase {
         }
         beacons.forEach { beacon in
             others.forEach { aType in
-                expect(willLog(type: aType, on: beacon)).to(beFalse())
+                expect(willEmit(type: aType, on: beacon)).to(beFalse())
             }
             ours.forEach { aType in
-                expect(willLog(type: aType, on: beacon)).to(beTrue())
+                expect(willEmit(type: aType, on: beacon)).to(beTrue())
             }
         }
     }
@@ -643,10 +643,10 @@ class SignalFilteringTests: XCTestCase {
         }
         beacons.forEach { beacon in
             others.forEach { aType in
-                expect(willLog(type: aType, on: beacon)).to(beTrue())
+                expect(willEmit(type: aType, on: beacon)).to(beTrue())
             }
             ours.forEach { aType in
-                expect(willLog(type: aType, on: beacon)).to(beFalse())
+                expect(willEmit(type: aType, on: beacon)).to(beFalse())
             }
         }
     }
@@ -655,9 +655,9 @@ class SignalFilteringTests: XCTestCase {
         let others = [Signal.self, ContextSignal.self, StringSignal.self, WrapperSignal.self, TestSubsignal.self].filter { $0 !== signalType }
         beacons.forEach { beacon in
             others.forEach { aType in
-                expect(willLog(type: aType, on: beacon)).to(beTrue())
+                expect(willEmit(type: aType, on: beacon)).to(beTrue())
             }
-            expect(willLog(type: signalType, on: beacon)).to(beFalse())
+            expect(willEmit(type: signalType, on: beacon)).to(beFalse())
         }
     }
     
@@ -667,21 +667,21 @@ class SignalFilteringTests: XCTestCase {
         }
         beacons.forEach { beacon in
             others.forEach { aType in
-                expect(willLog(type: aType, on: beacon)).to(beTrue())
+                expect(willEmit(type: aType, on: beacon)).to(beTrue())
             }
             signalTypes.forEach { aType in
-                expect(willLog(type: aType, on: beacon)).to(beFalse())
+                expect(willEmit(type: aType, on: beacon)).to(beFalse())
             }
         }
     }
     
     private func expectToLogNoSignals(on beacons: [Beacon]) {
         beacons.forEach { beacon in
-            expect(willLog(type: Signal.self, on: beacon)).to(beFalse())
-            expect(willLog(type: ContextSignal.self, on: beacon)).to(beFalse())
-            expect(willLog(type: StringSignal.self, on: beacon)).to(beFalse())
-            expect(willLog(type: WrapperSignal.self, on: beacon)).to(beFalse())
-            expect(willLog(type: TestSubsignal.self, on: beacon)).to(beFalse())
+            expect(willEmit(type: Signal.self, on: beacon)).to(beFalse())
+            expect(willEmit(type: ContextSignal.self, on: beacon)).to(beFalse())
+            expect(willEmit(type: StringSignal.self, on: beacon)).to(beFalse())
+            expect(willEmit(type: WrapperSignal.self, on: beacon)).to(beFalse())
+            expect(willEmit(type: TestSubsignal.self, on: beacon)).to(beFalse())
         }
     }
 }
