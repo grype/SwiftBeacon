@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 /**
  I am a console logger of `Signal`s.
@@ -16,11 +17,19 @@ import Foundation
  */
 
 open class ConsoleLogger: SignalLogger {
+    // MARK: - Types
+    
+    public typealias Input = Signal
+    
+    public typealias Failure = Error
+    
     // MARK: - Instance Creation
 
-    @objc public static let shared = ConsoleLogger(name: "Shared Console Logger")
+    public static let shared = ConsoleLogger(name: "Shared Console Logger")
     
-    // MARK: - Variables
+    // MARK: - Properties
+    
+    open private(set) var name: String
     
     /// Period of time since receiving the last signal, after which I am considered idle.
     /// When the value is > 0, I will prefix the next signal with a special `inactivityDelimiter`.
@@ -30,17 +39,30 @@ open class ConsoleLogger: SignalLogger {
     
     @objc private var lastPrintDate: Date?
     
-    private var queue = DispatchQueue(label: "Beacon.ConsoleLogger")
+    // MARK: - Init
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    // MARK: - Receiving
+    
+    public func receive(_ input: Signal) -> Subscribers.Demand {
+        nextPut(input)
+        return .unlimited
+    }
+    
+    public func receive(completion: Subscribers.Completion<Failure>) {
+        // Nothing to do
+    }
+    
+    public func receive(subscription: Subscription) {
+        subscription.request(.unlimited)
+    }
     
     // MARK: - Logging
     
-    override open func nextPut(_ aSignal: Signal) {
-        queue.sync {
-            self.doPut(aSignal)
-        }
-    }
-    
-    private func doPut(_ aSignal: Signal) {
+    open func nextPut(_ aSignal: Signal) {
         if markedInactvitiyPeriod > 0, let lastPrintDate = lastPrintDate, Date().timeIntervalSince(lastPrintDate) > markedInactvitiyPeriod {
             print(inactivityDelimiter)
         }

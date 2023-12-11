@@ -83,7 +83,6 @@ public func emit(error: Error?, on beacon: Beacon = Beacon.shared, userInfo: [An
         emit(on: beacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
         return
     }
-    guard willLog(type: ErrorSignal.self, on: beacon) else { return }
     ErrorSignal(error: error).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 

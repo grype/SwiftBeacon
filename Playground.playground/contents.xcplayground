@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='macos' buildActiveScheme='true' executeOnSourceChanges='true' importAppTypes='true'>
+<playground version='6.0' target-platform='macos' buildActiveScheme='true' importAppTypes='true'>
     <pages>
         <page name='JRPC'/>
         <page name='Custom Signal'/>
         <page name='Scratchpad'/>
+        <page name='Combine'/>
         <page name='Filtering'/>
+        <page name='Combine (Clean)'/>
+        <page name='Combine (Signal Aggregation)'/>
+        <page name='Combine (Networking)'/>
+        <page name='Combine (Simplified)'/>
     </pages>
 </playground>

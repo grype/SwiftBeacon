@@ -62,7 +62,6 @@ open class ContextSignal: Signal {
 
 /// Signal current context
 public func emit(on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    guard willLog(type: ContextSignal.self, on: beacon) else { return }
     ContextSignal().emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 

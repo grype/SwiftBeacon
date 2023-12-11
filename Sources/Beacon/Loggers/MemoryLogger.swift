@@ -6,8 +6,8 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
+import Combine
 import Foundation
-import RWLock
 
 /**
  I am memory-based logger of `Signal`s.
@@ -18,18 +18,49 @@ import RWLock
  */
 
 open class MemoryLogger: SignalLogger {
-    @objc public static var shared = MemoryLogger(name: "MemoryLogger")
+    // MARK: - Types
     
-    @objc @RWLocked open private(set) var recordings = [Signal]()
-    @objc open var limit: Int = 100
+    public typealias Input = Signal
     
-    override open func nextPut(_ aSignal: Signal) {
+    public typealias Failure = Error
+    
+    // MARK: - Instance creation
+
+    public static var shared = MemoryLogger(name: "MemoryLogger")
+    
+    // MARK: - Properties
+
+    public var name: String
+    
+    open private(set) var recordings = [Signal]()
+    open var limit: Int = 100
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    // MARK: - Receiving
+    
+    public func receive(subscription: Subscription) {
+        subscription.request(.unlimited)
+    }
+    
+    public func receive(_ input: Signal) -> Subscribers.Demand {
+        nextPut(input)
+        return .unlimited
+    }
+    
+    public func receive(completion: Subscribers.Completion<Failure>) {
+        // Nothing to do
+    }
+    
+    open func nextPut(_ aSignal: Signal) {
         recordings.append(aSignal)
         guard limit > 0, recordings.count - limit > 0 else { return }
         recordings.removeFirst(recordings.count - limit)
     }
     
-    @objc open func clear() {
+    open func clear() {
         recordings.removeAll()
     }
 }

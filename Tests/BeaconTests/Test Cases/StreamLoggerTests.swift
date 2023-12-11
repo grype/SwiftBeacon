@@ -1,18 +1,17 @@
 //
 //  StreamLoggerTests.swift
-//  
+//
 //
 //  Created by Pavel Skaldin on 12/18/19.
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
-import XCTest
+@testable import Beacon
 import Cuckoo
 import Nimble
-@testable import Beacon
+import XCTest
 
-class StreamLoggerTests : XCTestCase {
-    
+class StreamLoggerTests: XCTestCase {
     private var logger: MockStreamLogger!
     
     private var writer: MockEncodedStreamSignalWriter!
@@ -26,19 +25,18 @@ class StreamLoggerTests : XCTestCase {
         return String(data: separator, encoding: encoder.encoding)
     }
     
-    // MARK:- Setup/Teardown
+    // MARK: - Setup/Teardown
     
     override func setUp() {
         super.setUp()
         writer = MockEncodedStreamSignalWriter(on: OutputStream.toMemory(), encoder: SignalDescriptionEncoder(encoding: .utf8)).withEnabledSuperclassSpy()
         writer.separator = "\n".data(using: encoder.encoding)!
-        logger = MockStreamLogger(name: "Beacon-Test-File-Logger", writer: writer).withEnabledSuperclassSpy()
+        logger = MockStreamLogger(name: "Beacon-Test-Stream-Logger", writer: writer).withEnabledSuperclassSpy()
         logger.beForTesting()
     }
     
     override func tearDown() {
         super.tearDown()
-        logger?.stop()
         logger = nil
     }
     
@@ -49,12 +47,11 @@ class StreamLoggerTests : XCTestCase {
         return String(data: data, encoding: .utf8)
     }
     
-    // MARK:- Tests
+    // MARK: - Tests
     
     func testNextPut() {
-        logger.start()
         let signal = StringSignal("Hello world")
-        logger.nextPut(signal)
+        logger.receive(signal)
         let result = streamContents()
         expect(result).toNot(beNil())
         if let result = result {
@@ -66,14 +63,14 @@ class StreamLoggerTests : XCTestCase {
         logger.start()
         var expectations = [XCTestExpectation]()
         let count = 10
-        let signals: [Signal] = (0..<count).map { (i) in
+        let signals: [Signal] = (0..<count).map { i in
             expectations.append(XCTestExpectation(description: "Expectation \(1)"))
             return StringSignal("Signal \(i)")
         }
         
         let queue = DispatchQueue(label: "FileLoggerConcurrencyTest", qos: .default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
         
-        (0..<count).forEach { (i) in
+        (0..<count).forEach { i in
             queue.async {
                 self.logger.nextPut(signals[i])
                 expectations[i].fulfill()
@@ -92,5 +89,4 @@ class StreamLoggerTests : XCTestCase {
         expect(gotSorted.count) == count
         expect(gotSorted).to(equal(expectSorted))
     }
-    
 }

@@ -1,8 +1,8 @@
 import Cuckoo
 @testable import Beacon
 
+import Combine
 import Foundation
-import SwiftAnnouncements
 
 
 
@@ -35,19 +35,19 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
     
     
     
-    public override func signal(_ aSignal: Signal)  {
+    public override func send(_ value: Signal)  {
         
     return cuckoo_manager.call(
     """
-    signal(_: Signal)
+    send(_: Signal)
     """,
-            parameters: (aSignal),
-            escapingParameters: (aSignal),
+            parameters: (value),
+            escapingParameters: (value),
             superclassCall:
                 
-                super.signal(aSignal)
+                super.send(value)
                 ,
-            defaultCall: __defaultImplStub!.signal(aSignal))
+            defaultCall: __defaultImplStub!.send(value))
         
     }
     
@@ -55,19 +55,19 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
     
     
     
-    public override func when<T: Announceable>(_ aType: T.Type, subscriber: AnyObject?, do aBlock: @escaping (T, Announcer) -> Void)  {
+    public override func send(completion: Subscribers.Completion<Never>)  {
         
     return cuckoo_manager.call(
     """
-    when(_: T.Type, subscriber: AnyObject?, do: @escaping (T, Announcer) -> Void)
+    send(completion: Subscribers.Completion<Never>)
     """,
-            parameters: (aType, subscriber, aBlock),
-            escapingParameters: (aType, subscriber, aBlock),
+            parameters: (completion),
+            escapingParameters: (completion),
             superclassCall:
                 
-                super.when(aType, subscriber: subscriber, do: aBlock)
+                super.send(completion: completion)
                 ,
-            defaultCall: __defaultImplStub!.when(aType, subscriber: subscriber, do: aBlock))
+            defaultCall: __defaultImplStub!.send(completion: completion))
         
     }
     
@@ -75,19 +75,19 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
     
     
     
-    public override func remove<T: Announceable>(subscription: Subscription<T>)  {
+    public override func send(subscription: Subscription)  {
         
     return cuckoo_manager.call(
     """
-    remove(subscription: Subscription<T>)
+    send(subscription: Subscription)
     """,
             parameters: (subscription),
             escapingParameters: (subscription),
             superclassCall:
                 
-                super.remove(subscription: subscription)
+                super.send(subscription: subscription)
                 ,
-            defaultCall: __defaultImplStub!.remove(subscription: subscription))
+            defaultCall: __defaultImplStub!.send(subscription: subscription))
         
     }
     
@@ -95,19 +95,19 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
     
     
     
-    public override func unsubscribe(_ anObject: AnyObject)  {
+    public override func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, Signal == S.Input {
         
     return cuckoo_manager.call(
     """
-    unsubscribe(_: AnyObject)
+    receive(subscriber: S) where S: Subscriber, Never == S.Failure, Signal == S.Input
     """,
-            parameters: (anObject),
-            escapingParameters: (anObject),
+            parameters: (subscriber),
+            escapingParameters: (subscriber),
             superclassCall:
                 
-                super.unsubscribe(anObject)
+                super.receive(subscriber: subscriber)
                 ,
-            defaultCall: __defaultImplStub!.unsubscribe(anObject))
+            defaultCall: __defaultImplStub!.receive(subscriber: subscriber))
         
     }
     
@@ -123,44 +123,44 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
         
         
         
-        func signal<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnFunction<(Signal)> where M1.MatchedType == Signal {
-            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+        func send<M1: Cuckoo.Matchable>(_ value: M1) -> Cuckoo.ClassStubNoReturnFunction<(Signal)> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: value) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockBeacon.self, method:
     """
-    signal(_: Signal)
+    send(_: Signal)
     """, parameterMatchers: matchers))
         }
         
         
         
         
-        func when<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable, M3: Cuckoo.Matchable, T: Announceable>(_ aType: M1, subscriber: M2, do aBlock: M3) -> Cuckoo.ClassStubNoReturnFunction<(T.Type, AnyObject?, (T, Announcer) -> Void)> where M1.MatchedType == T.Type, M2.OptionalMatchedType == AnyObject, M3.MatchedType == (T, Announcer) -> Void {
-            let matchers: [Cuckoo.ParameterMatcher<(T.Type, AnyObject?, (T, Announcer) -> Void)>] = [wrap(matchable: aType) { $0.0 }, wrap(matchable: subscriber) { $0.1 }, wrap(matchable: aBlock) { $0.2 }]
+        func send<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Never>)> where M1.MatchedType == Subscribers.Completion<Never> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Never>)>] = [wrap(matchable: completion) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockBeacon.self, method:
     """
-    when(_: T.Type, subscriber: AnyObject?, do: @escaping (T, Announcer) -> Void)
+    send(completion: Subscribers.Completion<Never>)
     """, parameterMatchers: matchers))
         }
         
         
         
         
-        func remove<M1: Cuckoo.Matchable, T: Announceable>(subscription: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscription<T>)> where M1.MatchedType == Subscription<T> {
-            let matchers: [Cuckoo.ParameterMatcher<(Subscription<T>)>] = [wrap(matchable: subscription) { $0 }]
+        func send<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscription)> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockBeacon.self, method:
     """
-    remove(subscription: Subscription<T>)
+    send(subscription: Subscription)
     """, parameterMatchers: matchers))
         }
         
         
         
         
-        func unsubscribe<M1: Cuckoo.Matchable>(_ anObject: M1) -> Cuckoo.ClassStubNoReturnFunction<(AnyObject)> where M1.MatchedType == AnyObject {
-            let matchers: [Cuckoo.ParameterMatcher<(AnyObject)>] = [wrap(matchable: anObject) { $0 }]
+        func receive<M1: Cuckoo.Matchable, S>(subscriber: M1) -> Cuckoo.ClassStubNoReturnFunction<(S)> where M1.MatchedType == S, S: Subscriber, Never == S.Failure, Signal == S.Input {
+            let matchers: [Cuckoo.ParameterMatcher<(S)>] = [wrap(matchable: subscriber) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockBeacon.self, method:
     """
-    unsubscribe(_: AnyObject)
+    receive(subscriber: S) where S: Subscriber, Never == S.Failure, Signal == S.Input
     """, parameterMatchers: matchers))
         }
         
@@ -184,11 +184,11 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func signal<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
-            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+        func send<M1: Cuckoo.Matchable>(_ value: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: value) { $0 }]
             return cuckoo_manager.verify(
     """
-    signal(_: Signal)
+    send(_: Signal)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -196,11 +196,11 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func when<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable, M3: Cuckoo.Matchable, T: Announceable>(_ aType: M1, subscriber: M2, do aBlock: M3) -> Cuckoo.__DoNotUse<(T.Type, AnyObject?, (T, Announcer) -> Void), Void> where M1.MatchedType == T.Type, M2.OptionalMatchedType == AnyObject, M3.MatchedType == (T, Announcer) -> Void {
-            let matchers: [Cuckoo.ParameterMatcher<(T.Type, AnyObject?, (T, Announcer) -> Void)>] = [wrap(matchable: aType) { $0.0 }, wrap(matchable: subscriber) { $0.1 }, wrap(matchable: aBlock) { $0.2 }]
+        func send<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Never>), Void> where M1.MatchedType == Subscribers.Completion<Never> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Never>)>] = [wrap(matchable: completion) { $0 }]
             return cuckoo_manager.verify(
     """
-    when(_: T.Type, subscriber: AnyObject?, do: @escaping (T, Announcer) -> Void)
+    send(completion: Subscribers.Completion<Never>)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -208,11 +208,11 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func remove<M1: Cuckoo.Matchable, T: Announceable>(subscription: M1) -> Cuckoo.__DoNotUse<(Subscription<T>), Void> where M1.MatchedType == Subscription<T> {
-            let matchers: [Cuckoo.ParameterMatcher<(Subscription<T>)>] = [wrap(matchable: subscription) { $0 }]
+        func send<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.__DoNotUse<(Subscription), Void> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
             return cuckoo_manager.verify(
     """
-    remove(subscription: Subscription<T>)
+    send(subscription: Subscription)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -220,11 +220,11 @@ public class MockBeacon: Beacon, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func unsubscribe<M1: Cuckoo.Matchable>(_ anObject: M1) -> Cuckoo.__DoNotUse<(AnyObject), Void> where M1.MatchedType == AnyObject {
-            let matchers: [Cuckoo.ParameterMatcher<(AnyObject)>] = [wrap(matchable: anObject) { $0 }]
+        func receive<M1: Cuckoo.Matchable, S>(subscriber: M1) -> Cuckoo.__DoNotUse<(S), Void> where M1.MatchedType == S, S: Subscriber, Never == S.Failure, Signal == S.Input {
+            let matchers: [Cuckoo.ParameterMatcher<(S)>] = [wrap(matchable: subscriber) { $0 }]
             return cuckoo_manager.verify(
     """
-    unsubscribe(_: AnyObject)
+    receive(subscriber: S) where S: Subscriber, Never == S.Failure, Signal == S.Input
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -242,7 +242,7 @@ public class BeaconStub: Beacon {
     
     
     
-    public override func signal(_ aSignal: Signal)   {
+    public override func send(_ value: Signal)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
@@ -250,7 +250,7 @@ public class BeaconStub: Beacon {
     
     
     
-    public override func when<T: Announceable>(_ aType: T.Type, subscriber: AnyObject?, do aBlock: @escaping (T, Announcer) -> Void)   {
+    public override func send(completion: Subscribers.Completion<Never>)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
@@ -258,7 +258,7 @@ public class BeaconStub: Beacon {
     
     
     
-    public override func remove<T: Announceable>(subscription: Subscription<T>)   {
+    public override func send(subscription: Subscription)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
@@ -266,7 +266,7 @@ public class BeaconStub: Beacon {
     
     
     
-    public override func unsubscribe(_ anObject: AnyObject)   {
+    public override func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, Signal == S.Input  {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     

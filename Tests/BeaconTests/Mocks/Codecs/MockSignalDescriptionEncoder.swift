@@ -35,9 +35,9 @@ public class MockSignalDescriptionEncoder: SignalDescriptionEncoder, Cuckoo.Clas
             return cuckoo_manager.getter("encoding",
                 superclassCall:
                     
-                    super.encoding
+                                    super.encoding
                     ,
-                defaultCall: __defaultImplStub!.encoding)
+                defaultCall:  __defaultImplStub!.encoding)
         }
         
         set {

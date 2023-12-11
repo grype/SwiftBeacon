@@ -11,7 +11,7 @@ import Foundation
 
 extension SignalLogger {
     func beForTesting() {
-        identifiesOnStart = false
-        tracksMachImageImports = false
+//        identifiesOnStart = false
+//        tracksMachImageImports = false
     }
 }

@@ -1,6 +1,7 @@
 import Cuckoo
 @testable import Beacon
 
+import Combine
 import Foundation
 
 
@@ -30,14 +31,30 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
     
     
     
+    public override var name: String {
+        get {
+            return cuckoo_manager.getter("name",
+                superclassCall:
+                    
+                                    super.name
+                    ,
+                defaultCall:  __defaultImplStub!.name)
+        }
+        
+    }
+    
+    
+    
+    
+    
     public override var url: URL! {
         get {
             return cuckoo_manager.getter("url",
                 superclassCall:
                     
-                    super.url
+                                    super.url
                     ,
-                defaultCall: __defaultImplStub!.url)
+                defaultCall:  __defaultImplStub!.url)
         }
         
     }
@@ -51,9 +68,9 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
             return cuckoo_manager.getter("method",
                 superclassCall:
                     
-                    super.method
+                                    super.method
                     ,
-                defaultCall: __defaultImplStub!.method)
+                defaultCall:  __defaultImplStub!.method)
         }
         
     }
@@ -67,9 +84,9 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
             return cuckoo_manager.getter("encoder",
                 superclassCall:
                     
-                    super.encoder
+                                    super.encoder
                     ,
-                defaultCall: __defaultImplStub!.encoder)
+                defaultCall:  __defaultImplStub!.encoder)
         }
         
         set {
@@ -88,66 +105,24 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
     
     
     
-    public override var urlSessionTask: URLSessionTask? {
+    public override var urlSessionTasks: [URLSessionTask] {
         get {
-            return cuckoo_manager.getter("urlSessionTask",
+            return cuckoo_manager.getter("urlSessionTasks",
                 superclassCall:
                     
-                    super.urlSessionTask
+                                    super.urlSessionTasks
                     ,
-                defaultCall: __defaultImplStub!.urlSessionTask)
+                defaultCall:  __defaultImplStub!.urlSessionTasks)
         }
         
         set {
-            cuckoo_manager.setter("urlSessionTask",
+            cuckoo_manager.setter("urlSessionTasks",
                 value: newValue,
                 superclassCall:
                     
-                    super.urlSessionTask = newValue
+                    super.urlSessionTasks = newValue
                     ,
-                defaultCall: __defaultImplStub!.urlSessionTask = newValue)
-        }
-        
-    }
-    
-    
-    
-    
-    
-    public override var lastCompletionDate: Date? {
-        get {
-            return cuckoo_manager.getter("lastCompletionDate",
-                superclassCall:
-                    
-                    super.lastCompletionDate
-                    ,
-                defaultCall: __defaultImplStub!.lastCompletionDate)
-        }
-        
-        set {
-            cuckoo_manager.setter("lastCompletionDate",
-                value: newValue,
-                superclassCall:
-                    
-                    super.lastCompletionDate = newValue
-                    ,
-                defaultCall: __defaultImplStub!.lastCompletionDate = newValue)
-        }
-        
-    }
-    
-    
-    
-    
-    
-    public override var shouldFlush: Bool {
-        get {
-            return cuckoo_manager.getter("shouldFlush",
-                superclassCall:
-                    
-                    super.shouldFlush
-                    ,
-                defaultCall: __defaultImplStub!.shouldFlush)
+                defaultCall: __defaultImplStub!.urlSessionTasks = newValue)
         }
         
     }
@@ -160,19 +135,19 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
     
     
     
-    public override func encodeSignal(_ aSignal: Signal) -> Data? {
+    public override func receive(subscription: Subscription)  {
         
     return cuckoo_manager.call(
     """
-    encodeSignal(_: Signal) -> Data?
+    receive(subscription: Subscription)
     """,
-            parameters: (aSignal),
-            escapingParameters: (aSignal),
+            parameters: (subscription),
+            escapingParameters: (subscription),
             superclassCall:
                 
-                super.encodeSignal(aSignal)
+                super.receive(subscription: subscription)
                 ,
-            defaultCall: __defaultImplStub!.encodeSignal(aSignal))
+            defaultCall: __defaultImplStub!.receive(subscription: subscription))
         
     }
     
@@ -180,19 +155,19 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
     
     
     
-    public override func flush()  {
+    public override func receive(_ input: Input) -> Subscribers.Demand {
         
     return cuckoo_manager.call(
     """
-    flush()
+    receive(_: Input) -> Subscribers.Demand
     """,
-            parameters: (),
-            escapingParameters: (),
+            parameters: (input),
+            escapingParameters: (input),
             superclassCall:
                 
-                super.flush()
+                super.receive(input)
                 ,
-            defaultCall: __defaultImplStub!.flush())
+            defaultCall: __defaultImplStub!.receive(input))
         
     }
     
@@ -200,11 +175,31 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
     
     
     
-    public override func createUrlRequest(with data: [Data]) -> URLRequest? {
+    public override func receive(completion: Subscribers.Completion<Error>)  {
         
     return cuckoo_manager.call(
     """
-    createUrlRequest(with: [Data]) -> URLRequest?
+    receive(completion: Subscribers.Completion<Error>)
+    """,
+            parameters: (completion),
+            escapingParameters: (completion),
+            superclassCall:
+                
+                super.receive(completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.receive(completion: completion))
+        
+    }
+    
+    
+    
+    
+    
+    public override func createUrlRequest(with data: [Data]) -> URLRequest {
+        
+    return cuckoo_manager.call(
+    """
+    createUrlRequest(with: [Data]) -> URLRequest
     """,
             parameters: (data),
             escapingParameters: (data),
@@ -220,19 +215,39 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
     
     
     
-    public override func perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)  {
+    public override func perform(urlRequest: URLRequest)  {
         
     return cuckoo_manager.call(
     """
-    perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)
+    perform(urlRequest: URLRequest)
     """,
-            parameters: (urlRequest, completion),
-            escapingParameters: (urlRequest, completion),
+            parameters: (urlRequest),
+            escapingParameters: (urlRequest),
             superclassCall:
                 
-                super.perform(urlRequest: urlRequest, completion: completion)
+                super.perform(urlRequest: urlRequest)
                 ,
-            defaultCall: __defaultImplStub!.perform(urlRequest: urlRequest, completion: completion))
+            defaultCall: __defaultImplStub!.perform(urlRequest: urlRequest))
+        
+    }
+    
+    
+    
+    
+    
+    public override func cleanSessionTasks()  {
+        
+    return cuckoo_manager.call(
+    """
+    cleanSessionTasks()
+    """,
+            parameters: (),
+            escapingParameters: (),
+            superclassCall:
+                
+                super.cleanSessionTasks()
+                ,
+            defaultCall: __defaultImplStub!.cleanSessionTasks())
         
     }
     
@@ -244,6 +259,13 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         public init(manager: Cuckoo.MockManager) {
             self.cuckoo_manager = manager
         }
+        
+        
+        
+        var name: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockJRPCLogger, String> {
+            return .init(manager: cuckoo_manager, name: "name")
+        }
+        
         
         
         
@@ -268,66 +290,74 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         
-        var urlSessionTask: Cuckoo.ClassToBeStubbedOptionalProperty<MockJRPCLogger, URLSessionTask> {
-            return .init(manager: cuckoo_manager, name: "urlSessionTask")
-        }
-        
-        
-        
-        
-        var lastCompletionDate: Cuckoo.ClassToBeStubbedOptionalProperty<MockJRPCLogger, Date> {
-            return .init(manager: cuckoo_manager, name: "lastCompletionDate")
-        }
-        
-        
-        
-        
-        var shouldFlush: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockJRPCLogger, Bool> {
-            return .init(manager: cuckoo_manager, name: "shouldFlush")
+        var urlSessionTasks: Cuckoo.ClassToBeStubbedProperty<MockJRPCLogger, [URLSessionTask]> {
+            return .init(manager: cuckoo_manager, name: "urlSessionTasks")
         }
         
         
         
         
         
-        func encodeSignal<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubFunction<(Signal), Data?> where M1.MatchedType == Signal {
-            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscription)> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockJRPCLogger.self, method:
     """
-    encodeSignal(_: Signal) -> Data?
+    receive(subscription: Subscription)
     """, parameterMatchers: matchers))
         }
         
         
         
         
-        func flush() -> Cuckoo.ClassStubNoReturnFunction<()> {
-            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.ClassStubFunction<(Input), Subscribers.Demand> where M1.MatchedType == Input {
+            let matchers: [Cuckoo.ParameterMatcher<(Input)>] = [wrap(matchable: input) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockJRPCLogger.self, method:
     """
-    flush()
+    receive(_: Input) -> Subscribers.Demand
     """, parameterMatchers: matchers))
         }
         
         
         
         
-        func createUrlRequest<M1: Cuckoo.Matchable>(with data: M1) -> Cuckoo.ClassStubFunction<([Data]), URLRequest?> where M1.MatchedType == [Data] {
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Error>)> where M1.MatchedType == Subscribers.Completion<Error> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Error>)>] = [wrap(matchable: completion) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockJRPCLogger.self, method:
+    """
+    receive(completion: Subscribers.Completion<Error>)
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func createUrlRequest<M1: Cuckoo.Matchable>(with data: M1) -> Cuckoo.ClassStubFunction<([Data]), URLRequest> where M1.MatchedType == [Data] {
             let matchers: [Cuckoo.ParameterMatcher<([Data])>] = [wrap(matchable: data) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockJRPCLogger.self, method:
     """
-    createUrlRequest(with: [Data]) -> URLRequest?
+    createUrlRequest(with: [Data]) -> URLRequest
     """, parameterMatchers: matchers))
         }
         
         
         
         
-        func perform<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable>(urlRequest: M1, completion: M2) -> Cuckoo.ClassStubNoReturnFunction<(URLRequest, ((Bool) -> Void)?)> where M1.MatchedType == URLRequest, M2.OptionalMatchedType == ((Bool) -> Void) {
-            let matchers: [Cuckoo.ParameterMatcher<(URLRequest, ((Bool) -> Void)?)>] = [wrap(matchable: urlRequest) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+        func perform<M1: Cuckoo.Matchable>(urlRequest: M1) -> Cuckoo.ClassStubNoReturnFunction<(URLRequest)> where M1.MatchedType == URLRequest {
+            let matchers: [Cuckoo.ParameterMatcher<(URLRequest)>] = [wrap(matchable: urlRequest) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockJRPCLogger.self, method:
     """
-    perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)
+    perform(urlRequest: URLRequest)
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func cleanSessionTasks() -> Cuckoo.ClassStubNoReturnFunction<()> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return .init(stub: cuckoo_manager.createStub(for: MockJRPCLogger.self, method:
+    """
+    cleanSessionTasks()
     """, parameterMatchers: matchers))
         }
         
@@ -345,6 +375,13 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
             self.sourceLocation = sourceLocation
         }
     
+        
+        
+        
+        var name: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "name", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
         
         
         
@@ -369,22 +406,8 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         
-        var urlSessionTask: Cuckoo.VerifyOptionalProperty<URLSessionTask> {
-            return .init(manager: cuckoo_manager, name: "urlSessionTask", callMatcher: callMatcher, sourceLocation: sourceLocation)
-        }
-        
-        
-        
-        
-        var lastCompletionDate: Cuckoo.VerifyOptionalProperty<Date> {
-            return .init(manager: cuckoo_manager, name: "lastCompletionDate", callMatcher: callMatcher, sourceLocation: sourceLocation)
-        }
-        
-        
-        
-        
-        var shouldFlush: Cuckoo.VerifyReadOnlyProperty<Bool> {
-            return .init(manager: cuckoo_manager, name: "shouldFlush", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        var urlSessionTasks: Cuckoo.VerifyProperty<[URLSessionTask]> {
+            return .init(manager: cuckoo_manager, name: "urlSessionTasks", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
         
         
@@ -393,11 +416,11 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func encodeSignal<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Data?> where M1.MatchedType == Signal {
-            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.__DoNotUse<(Subscription), Void> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
             return cuckoo_manager.verify(
     """
-    encodeSignal(_: Signal) -> Data?
+    receive(subscription: Subscription)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -405,11 +428,11 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func flush() -> Cuckoo.__DoNotUse<(), Void> {
-            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.__DoNotUse<(Input), Subscribers.Demand> where M1.MatchedType == Input {
+            let matchers: [Cuckoo.ParameterMatcher<(Input)>] = [wrap(matchable: input) { $0 }]
             return cuckoo_manager.verify(
     """
-    flush()
+    receive(_: Input) -> Subscribers.Demand
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -417,11 +440,23 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func createUrlRequest<M1: Cuckoo.Matchable>(with data: M1) -> Cuckoo.__DoNotUse<([Data]), URLRequest?> where M1.MatchedType == [Data] {
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Error>), Void> where M1.MatchedType == Subscribers.Completion<Error> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Error>)>] = [wrap(matchable: completion) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    receive(completion: Subscribers.Completion<Error>)
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func createUrlRequest<M1: Cuckoo.Matchable>(with data: M1) -> Cuckoo.__DoNotUse<([Data]), URLRequest> where M1.MatchedType == [Data] {
             let matchers: [Cuckoo.ParameterMatcher<([Data])>] = [wrap(matchable: data) { $0 }]
             return cuckoo_manager.verify(
     """
-    createUrlRequest(with: [Data]) -> URLRequest?
+    createUrlRequest(with: [Data]) -> URLRequest
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -429,11 +464,23 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func perform<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable>(urlRequest: M1, completion: M2) -> Cuckoo.__DoNotUse<(URLRequest, ((Bool) -> Void)?), Void> where M1.MatchedType == URLRequest, M2.OptionalMatchedType == ((Bool) -> Void) {
-            let matchers: [Cuckoo.ParameterMatcher<(URLRequest, ((Bool) -> Void)?)>] = [wrap(matchable: urlRequest) { $0.0 }, wrap(matchable: completion) { $0.1 }]
+        func perform<M1: Cuckoo.Matchable>(urlRequest: M1) -> Cuckoo.__DoNotUse<(URLRequest), Void> where M1.MatchedType == URLRequest {
+            let matchers: [Cuckoo.ParameterMatcher<(URLRequest)>] = [wrap(matchable: urlRequest) { $0 }]
             return cuckoo_manager.verify(
     """
-    perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)
+    perform(urlRequest: URLRequest)
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func cleanSessionTasks() -> Cuckoo.__DoNotUse<(), Void> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return cuckoo_manager.verify(
+    """
+    cleanSessionTasks()
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -443,6 +490,17 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
 
 
 public class JRPCLoggerStub: JRPCLogger {
+    
+    
+    
+    
+    public override var name: String {
+        get {
+            return DefaultValueRegistry.defaultValue(for: (String).self)
+        }
+        
+    }
+    
     
     
     
@@ -482,36 +540,12 @@ public class JRPCLoggerStub: JRPCLogger {
     
     
     
-    public override var urlSessionTask: URLSessionTask? {
+    public override var urlSessionTasks: [URLSessionTask] {
         get {
-            return DefaultValueRegistry.defaultValue(for: (URLSessionTask?).self)
+            return DefaultValueRegistry.defaultValue(for: ([URLSessionTask]).self)
         }
         
         set { }
-        
-    }
-    
-    
-    
-    
-    
-    public override var lastCompletionDate: Date? {
-        get {
-            return DefaultValueRegistry.defaultValue(for: (Date?).self)
-        }
-        
-        set { }
-        
-    }
-    
-    
-    
-    
-    
-    public override var shouldFlush: Bool {
-        get {
-            return DefaultValueRegistry.defaultValue(for: (Bool).self)
-        }
         
     }
     
@@ -523,15 +557,7 @@ public class JRPCLoggerStub: JRPCLogger {
     
     
     
-    public override func encodeSignal(_ aSignal: Signal) -> Data?  {
-        return DefaultValueRegistry.defaultValue(for: (Data?).self)
-    }
-    
-    
-    
-    
-    
-    public override func flush()   {
+    public override func receive(subscription: Subscription)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
@@ -539,15 +565,39 @@ public class JRPCLoggerStub: JRPCLogger {
     
     
     
-    public override func createUrlRequest(with data: [Data]) -> URLRequest?  {
-        return DefaultValueRegistry.defaultValue(for: (URLRequest?).self)
+    public override func receive(_ input: Input) -> Subscribers.Demand  {
+        return DefaultValueRegistry.defaultValue(for: (Subscribers.Demand).self)
     }
     
     
     
     
     
-    public override func perform(urlRequest: URLRequest, completion: ((Bool) -> Void)?)   {
+    public override func receive(completion: Subscribers.Completion<Error>)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+    
+    
+    
+    
+    public override func createUrlRequest(with data: [Data]) -> URLRequest  {
+        return DefaultValueRegistry.defaultValue(for: (URLRequest).self)
+    }
+    
+    
+    
+    
+    
+    public override func perform(urlRequest: URLRequest)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+    
+    
+    
+    
+    public override func cleanSessionTasks()   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     

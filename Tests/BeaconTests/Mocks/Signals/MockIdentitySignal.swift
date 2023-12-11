@@ -35,9 +35,9 @@ public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("beaconVersion",
                 superclassCall:
                     
-                    super.beaconVersion
+                                    super.beaconVersion
                     ,
-                defaultCall: __defaultImplStub!.beaconVersion)
+                defaultCall:  __defaultImplStub!.beaconVersion)
         }
         
     }
@@ -51,9 +51,9 @@ public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("systemInfo",
                 superclassCall:
                     
-                    super.systemInfo
+                                    super.systemInfo
                     ,
-                defaultCall: __defaultImplStub!.systemInfo)
+                defaultCall:  __defaultImplStub!.systemInfo)
         }
         
         set {
@@ -77,9 +77,9 @@ public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("signalName",
                 superclassCall:
                     
-                    super.signalName
+                                    super.signalName
                     ,
-                defaultCall: __defaultImplStub!.signalName)
+                defaultCall:  __defaultImplStub!.signalName)
         }
         
     }
@@ -93,9 +93,9 @@ public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("valueDescription",
                 superclassCall:
                     
-                    super.valueDescription
+                                    super.valueDescription
                     ,
-                defaultCall: __defaultImplStub!.valueDescription)
+                defaultCall:  __defaultImplStub!.valueDescription)
         }
         
     }

@@ -35,9 +35,9 @@ public class MockJSONSignalEncoder: JSONSignalEncoder, Cuckoo.ClassMock {
             return cuckoo_manager.getter("encoder",
                 superclassCall:
                     
-                    super.encoder
+                                    super.encoder
                     ,
-                defaultCall: __defaultImplStub!.encoder)
+                defaultCall:  __defaultImplStub!.encoder)
         }
         
         set {

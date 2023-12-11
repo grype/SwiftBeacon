@@ -3,8 +3,6 @@ import Cuckoo
 
 import AnyCodable
 import Foundation
-import LogicKit
-import SwiftAnnouncements
 
 
 
@@ -38,9 +36,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("source",
                 superclassCall:
                     
-                    super.source
+                                    super.source
                     ,
-                defaultCall: __defaultImplStub!.source)
+                defaultCall:  __defaultImplStub!.source)
         }
         
     }
@@ -54,9 +52,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("userInfo",
                 superclassCall:
                     
-                    super.userInfo
+                                    super.userInfo
                     ,
-                defaultCall: __defaultImplStub!.userInfo)
+                defaultCall:  __defaultImplStub!.userInfo)
         }
         
         set {
@@ -80,9 +78,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("signalName",
                 superclassCall:
                     
-                    super.signalName
+                                    super.signalName
                     ,
-                defaultCall: __defaultImplStub!.signalName)
+                defaultCall:  __defaultImplStub!.signalName)
         }
         
     }
@@ -96,9 +94,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("descriptionDateFormatter",
                 superclassCall:
                     
-                    super.descriptionDateFormatter
+                                    super.descriptionDateFormatter
                     ,
-                defaultCall: __defaultImplStub!.descriptionDateFormatter)
+                defaultCall:  __defaultImplStub!.descriptionDateFormatter)
         }
         
         set {
@@ -122,9 +120,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("bundleName",
                 superclassCall:
                     
-                    super.bundleName
+                                    super.bundleName
                     ,
-                defaultCall: __defaultImplStub!.bundleName)
+                defaultCall:  __defaultImplStub!.bundleName)
         }
         
     }
@@ -138,9 +136,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("sourceDescription",
                 superclassCall:
                     
-                    super.sourceDescription
+                                    super.sourceDescription
                     ,
-                defaultCall: __defaultImplStub!.sourceDescription)
+                defaultCall:  __defaultImplStub!.sourceDescription)
         }
         
     }
@@ -154,9 +152,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("userInfoDescription",
                 superclassCall:
                     
-                    super.userInfoDescription
+                                    super.userInfoDescription
                     ,
-                defaultCall: __defaultImplStub!.userInfoDescription)
+                defaultCall:  __defaultImplStub!.userInfoDescription)
         }
         
     }
@@ -170,9 +168,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("valueDescription",
                 superclassCall:
                     
-                    super.valueDescription
+                                    super.valueDescription
                     ,
-                defaultCall: __defaultImplStub!.valueDescription)
+                defaultCall:  __defaultImplStub!.valueDescription)
         }
         
     }
@@ -186,9 +184,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("valueDebugDescription",
                 superclassCall:
                     
-                    super.valueDebugDescription
+                                    super.valueDebugDescription
                     ,
-                defaultCall: __defaultImplStub!.valueDebugDescription)
+                defaultCall:  __defaultImplStub!.valueDebugDescription)
         }
         
     }
@@ -202,9 +200,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("description",
                 superclassCall:
                     
-                    super.description
+                                    super.description
                     ,
-                defaultCall: __defaultImplStub!.description)
+                defaultCall:  __defaultImplStub!.description)
         }
         
     }
@@ -218,9 +216,9 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("debugDescription",
                 superclassCall:
                     
-                    super.debugDescription
+                                    super.debugDescription
                     ,
-                defaultCall: __defaultImplStub!.debugDescription)
+                defaultCall:  __defaultImplStub!.debugDescription)
         }
         
     }

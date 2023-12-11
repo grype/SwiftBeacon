@@ -36,9 +36,9 @@ public class MockContextSignal: ContextSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("stack",
                 superclassCall:
                     
-                    super.stack
+                                    super.stack
                     ,
-                defaultCall: __defaultImplStub!.stack)
+                defaultCall:  __defaultImplStub!.stack)
         }
         
         set {
@@ -62,9 +62,9 @@ public class MockContextSignal: ContextSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("symbols",
                 superclassCall:
                     
-                    super.symbols
+                                    super.symbols
                     ,
-                defaultCall: __defaultImplStub!.symbols)
+                defaultCall:  __defaultImplStub!.symbols)
         }
         
         set {
@@ -88,9 +88,9 @@ public class MockContextSignal: ContextSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("signalName",
                 superclassCall:
                     
-                    super.signalName
+                                    super.signalName
                     ,
-                defaultCall: __defaultImplStub!.signalName)
+                defaultCall:  __defaultImplStub!.signalName)
         }
         
     }
@@ -104,9 +104,9 @@ public class MockContextSignal: ContextSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("debugDescription",
                 superclassCall:
                     
-                    super.debugDescription
+                                    super.debugDescription
                     ,
-                defaultCall: __defaultImplStub!.debugDescription)
+                defaultCall:  __defaultImplStub!.debugDescription)
         }
         
     }

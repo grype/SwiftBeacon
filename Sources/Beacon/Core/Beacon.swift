@@ -6,8 +6,8 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
+import Combine
 import Foundation
-import SwiftAnnouncements
 
 /**
  I am the central object around signaling and provide an interface for notifying subscribed loggers with signals.
@@ -40,60 +40,31 @@ import SwiftAnnouncements
  
  */
 
-open class Beacon: NSObject {
+open class Beacon: NSObject, Subject {
+    public typealias Output = Signal
+    
+    public typealias Failure = Never
+    
     @objc public static var beaconVersion = "2.1.4"
     
     /// Shared general-purpose instance
     @objc public static var shared = Beacon()
     
-    // MARK: - Properties
+    private var passthroughSubject: PassthroughSubject<Output, Failure> = .init()
     
-    internal let announcer = Announcer()
-    
-    // MARK: - Announcements
-
-    @objc open func signal(_ aSignal: Signal) {
-        announcer.announce(aSignal)
+    public func send(_ value: Signal) {
+        passthroughSubject.send(value)
     }
     
-    open func when<T: Announceable>(_ aType: T.Type, subscriber: AnyObject? = nil, do aBlock: @escaping (T, Announcer) -> Void) {
-        announcer.when(aType, subscriber: subscriber, do: aBlock)
+    public func send(completion: Subscribers.Completion<Never>) {
+        passthroughSubject.send(completion: completion)
     }
     
-    open func remove<T: Announceable>(subscription: Subscription<T>) {
-        announcer.remove(subscription: subscription)
+    public func send(subscription: Subscription) {
+        passthroughSubject.send(subscription: subscription)
     }
     
-    open func unsubscribe(_ anObject: AnyObject) {
-        announcer.unsubscribe(anObject)
+    public func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, Signal == S.Input {
+        passthroughSubject.receive(subscriber: subscriber)
     }
-}
-
-@available(*, deprecated)
-public func +(lhs: Beacon, rhs: Beacon) -> [Beacon] {
-    return [lhs, rhs]
-}
-
-@available(*, deprecated)
-public func +(lhs: [Beacon], rhs: Beacon) -> [Beacon] {
-    var result = [Beacon]()
-    result.append(contentsOf: lhs)
-    result.append(rhs)
-    return result
-}
-
-@available(*, deprecated)
-public func +(lhs: Beacon, rhs: [Beacon]) -> [Beacon] {
-    var result = [Beacon]()
-    result.append(lhs)
-    result.append(contentsOf: rhs)
-    return result
-}
-
-@available(*, deprecated)
-public func +(lhs: [Beacon], rhs: [Beacon]) -> [Beacon] {
-    var result = [Beacon]()
-    result.append(contentsOf: lhs)
-    result.append(contentsOf: rhs)
-    return result
 }

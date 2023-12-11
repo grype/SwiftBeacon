@@ -19,12 +19,10 @@ class ContextSignalTests : XCTestCase {
         super.setUp()
         logger = MemoryLogger(name: "BeaconTestLogger")
         logger.beForTesting()
-        logger.start()
     }
     
     override func tearDown() {
         super.tearDown()
-        logger.stop()
     }
     
     func testEmitStringOnly() {

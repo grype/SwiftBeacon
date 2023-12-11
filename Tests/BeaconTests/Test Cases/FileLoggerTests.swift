@@ -9,6 +9,7 @@
 import XCTest
 import Nimble
 import Cuckoo
+import Combine
 @testable import Beacon
 
 class FileLoggerTests : XCTestCase {
@@ -19,8 +20,12 @@ class FileLoggerTests : XCTestCase {
     
     private var wheel: MockFileWheel!
     
+    private var publisher: PassthroughSubject<Signal, Error>!
+    
     override func setUp() {
         super.setUp()
+        
+        publisher = .init()
         
         wheel = MockFileWheel(when: { _ -> Bool in
             return true
@@ -34,7 +39,6 @@ class FileLoggerTests : XCTestCase {
     
     override func tearDown() {
         super.tearDown()
-        logger.stop()
         logger = nil
     }
     
@@ -52,28 +56,28 @@ class FileLoggerTests : XCTestCase {
     
     func testRotateOnStartWhenWheelShould() {
         stubForRotation(true)
-        logger.rotateOnStart = true
-        logger.start()
+        logger.rotateOnSubscription = true
+        publisher
         verify(wheel, times(1)).rotate(fileAt: any())
     }
     
     func testRotateOnStartWhenWheelShouldNot() {
         stubForRotation(false)
-        logger.rotateOnStart = true
+        logger.rotateOnSubscription = true
         logger.start()
         verify(wheel, times(1)).rotate(fileAt: any())
     }
     
     func testDoesNotRotateOnStartWhenWheelShould() {
         stubForRotation(true)
-        logger.rotateOnStart = false
+        logger.rotateOnSubscription = false
         logger.start()
         verify(wheel, times(0)).rotate(fileAt: any())
     }
     
     func testDoesNotRotateOnStartWhenWheelShouldNot() {
         stubForRotation(false)
-        logger.rotateOnStart = false
+        logger.rotateOnSubscription = false
         logger.start()
         verify(wheel, times(0)).rotate(fileAt: any())
     }

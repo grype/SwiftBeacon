@@ -1,6 +1,7 @@
 import Cuckoo
 @testable import Beacon
 
+import Combine
 import Foundation
 
 
@@ -35,9 +36,9 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
             return cuckoo_manager.getter("url",
                 superclassCall:
                     
-                    super.url
+                                    super.url
                     ,
-                defaultCall: __defaultImplStub!.url)
+                defaultCall:  __defaultImplStub!.url)
         }
         
     }
@@ -46,14 +47,14 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
     
     
     
-    public override var rotateOnStart: Bool {
+    public override var rotateOnSubscription: Bool {
         get {
             return cuckoo_manager.getter("rotateOnStart",
                 superclassCall:
                     
-                    super.rotateOnStart
+                                    super.rotateOnSubscription
                     ,
-                defaultCall: __defaultImplStub!.rotateOnStart)
+                defaultCall:  __defaultImplStub!.rotateOnSubscription)
         }
         
         set {
@@ -61,9 +62,9 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
                 value: newValue,
                 superclassCall:
                     
-                    super.rotateOnStart = newValue
+                    super.rotateOnSubscription = newValue
                     ,
-                defaultCall: __defaultImplStub!.rotateOnStart = newValue)
+                defaultCall: __defaultImplStub!.rotateOnSubscription = newValue)
         }
         
     }
@@ -77,9 +78,9 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
             return cuckoo_manager.getter("wheel",
                 superclassCall:
                     
-                    super.wheel
+                                    super.wheel
                     ,
-                defaultCall: __defaultImplStub!.wheel)
+                defaultCall:  __defaultImplStub!.wheel)
         }
         
         set {
@@ -95,26 +96,18 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
     }
     
     
-
-    
-
     
     
     
-    
-    public override func didStart(on beacons: [Beacon])  {
-        
-    return cuckoo_manager.call(
-    """
-    didStart(on: [Beacon])
-    """,
-            parameters: (beacons),
-            escapingParameters: (beacons),
-            superclassCall:
-                
-                super.didStart(on: beacons)
-                ,
-            defaultCall: __defaultImplStub!.didStart(on: beacons))
+    public override var name: String {
+        get {
+            return cuckoo_manager.getter("name",
+                superclassCall:
+                    
+                                    super.name
+                    ,
+                defaultCall:  __defaultImplStub!.name)
+        }
         
     }
     
@@ -122,19 +115,99 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
     
     
     
-    public override func nextPut(_ aSignal: Signal)  {
+    public override var writer: EncodedStreamSignalWriter! {
+        get {
+            return cuckoo_manager.getter("writer",
+                superclassCall:
+                    
+                                    super.writer
+                    ,
+                defaultCall:  __defaultImplStub!.writer)
+        }
+        
+    }
+    
+    
+
+    
+
+    
+    
+    
+    
+    public override func receive(subscription: Subscription)  {
         
     return cuckoo_manager.call(
     """
-    nextPut(_: Signal)
+    receive(subscription: Subscription)
     """,
-            parameters: (aSignal),
-            escapingParameters: (aSignal),
+            parameters: (subscription),
+            escapingParameters: (subscription),
             superclassCall:
                 
-                super.nextPut(aSignal)
+                super.receive(subscription: subscription)
                 ,
-            defaultCall: __defaultImplStub!.nextPut(aSignal))
+            defaultCall: __defaultImplStub!.receive(subscription: subscription))
+        
+    }
+    
+    
+    
+    
+    
+    public override func receive(_ input: Signal) -> Subscribers.Demand {
+        
+    return cuckoo_manager.call(
+    """
+    receive(_: Signal) -> Subscribers.Demand
+    """,
+            parameters: (input),
+            escapingParameters: (input),
+            superclassCall:
+                
+                super.receive(input)
+                ,
+            defaultCall: __defaultImplStub!.receive(input))
+        
+    }
+    
+    
+    
+    
+    
+    public override func rotateFileIfNeeded()  {
+        
+    return cuckoo_manager.call(
+    """
+    rotateFileIfNeeded()
+    """,
+            parameters: (),
+            escapingParameters: (),
+            superclassCall:
+                
+                super.rotateFileIfNeeded()
+                ,
+            defaultCall: __defaultImplStub!.rotateFileIfNeeded())
+        
+    }
+    
+    
+    
+    
+    
+    public override func receive(completion: Subscribers.Completion<Error>)  {
+        
+    return cuckoo_manager.call(
+    """
+    receive(completion: Subscribers.Completion<Error>)
+    """,
+            parameters: (completion),
+            escapingParameters: (completion),
+            superclassCall:
+                
+                super.receive(completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.receive(completion: completion))
         
     }
     
@@ -190,23 +263,59 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
         
         
         
+        var name: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockFileLogger, String> {
+            return .init(manager: cuckoo_manager, name: "name")
+        }
         
-        func didStart<M1: Cuckoo.Matchable>(on beacons: M1) -> Cuckoo.ClassStubNoReturnFunction<([Beacon])> where M1.MatchedType == [Beacon] {
-            let matchers: [Cuckoo.ParameterMatcher<([Beacon])>] = [wrap(matchable: beacons) { $0 }]
+        
+        
+        
+        var writer: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockFileLogger, EncodedStreamSignalWriter?> {
+            return .init(manager: cuckoo_manager, name: "writer")
+        }
+        
+        
+        
+        
+        
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscription)> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockFileLogger.self, method:
     """
-    didStart(on: [Beacon])
+    receive(subscription: Subscription)
     """, parameterMatchers: matchers))
         }
         
         
         
         
-        func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnFunction<(Signal)> where M1.MatchedType == Signal {
-            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.ClassStubFunction<(Signal), Subscribers.Demand> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: input) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockFileLogger.self, method:
     """
-    nextPut(_: Signal)
+    receive(_: Signal) -> Subscribers.Demand
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func rotateFileIfNeeded() -> Cuckoo.ClassStubNoReturnFunction<()> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return .init(stub: cuckoo_manager.createStub(for: MockFileLogger.self, method:
+    """
+    rotateFileIfNeeded()
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Error>)> where M1.MatchedType == Subscribers.Completion<Error> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Error>)>] = [wrap(matchable: completion) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockFileLogger.self, method:
+    """
+    receive(completion: Subscribers.Completion<Error>)
     """, parameterMatchers: matchers))
         }
         
@@ -257,16 +366,30 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
         }
         
         
+        
+        
+        var name: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "name", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        var writer: Cuckoo.VerifyReadOnlyProperty<EncodedStreamSignalWriter?> {
+            return .init(manager: cuckoo_manager, name: "writer", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
     
         
         
         
         @discardableResult
-        func didStart<M1: Cuckoo.Matchable>(on beacons: M1) -> Cuckoo.__DoNotUse<([Beacon]), Void> where M1.MatchedType == [Beacon] {
-            let matchers: [Cuckoo.ParameterMatcher<([Beacon])>] = [wrap(matchable: beacons) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.__DoNotUse<(Subscription), Void> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
             return cuckoo_manager.verify(
     """
-    didStart(on: [Beacon])
+    receive(subscription: Subscription)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -274,11 +397,35 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.__DoNotUse<(Signal), Void> where M1.MatchedType == Signal {
-            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.__DoNotUse<(Signal), Subscribers.Demand> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: input) { $0 }]
             return cuckoo_manager.verify(
     """
-    nextPut(_: Signal)
+    receive(_: Signal) -> Subscribers.Demand
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func rotateFileIfNeeded() -> Cuckoo.__DoNotUse<(), Void> {
+            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+            return cuckoo_manager.verify(
+    """
+    rotateFileIfNeeded()
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Error>), Void> where M1.MatchedType == Subscribers.Completion<Error> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Error>)>] = [wrap(matchable: completion) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    receive(completion: Subscribers.Completion<Error>)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -315,7 +462,7 @@ public class FileLoggerStub: FileLogger {
     
     
     
-    public override var rotateOnStart: Bool {
+    public override var rotateOnSubscription: Bool {
         get {
             return DefaultValueRegistry.defaultValue(for: (Bool).self)
         }
@@ -338,14 +485,36 @@ public class FileLoggerStub: FileLogger {
     }
     
     
-
+    
+    
+    
+    public override var name: String {
+        get {
+            return DefaultValueRegistry.defaultValue(for: (String).self)
+        }
+        
+    }
+    
+    
+    
+    
+    
+    public override var writer: EncodedStreamSignalWriter! {
+        get {
+            return DefaultValueRegistry.defaultValue(for: (EncodedStreamSignalWriter?).self)
+        }
+        
+    }
+    
     
 
     
+
     
     
     
-    public override func didStart(on beacons: [Beacon])   {
+    
+    public override func receive(subscription: Subscription)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
@@ -353,7 +522,23 @@ public class FileLoggerStub: FileLogger {
     
     
     
-    public override func nextPut(_ aSignal: Signal)   {
+    public override func receive(_ input: Signal) -> Subscribers.Demand  {
+        return DefaultValueRegistry.defaultValue(for: (Subscribers.Demand).self)
+    }
+    
+    
+    
+    
+    
+    public override func rotateFileIfNeeded()   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+    
+    
+    
+    
+    public override func receive(completion: Subscribers.Completion<Error>)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     

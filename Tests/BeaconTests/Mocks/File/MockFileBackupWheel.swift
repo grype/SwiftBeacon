@@ -35,9 +35,9 @@ public class MockFileBackupWheel: FileBackupWheel, Cuckoo.ClassMock {
             return cuckoo_manager.getter("maxFileSize",
                 superclassCall:
                     
-                    super.maxFileSize
+                                    super.maxFileSize
                     ,
-                defaultCall: __defaultImplStub!.maxFileSize)
+                defaultCall:  __defaultImplStub!.maxFileSize)
         }
         
         set {
@@ -61,9 +61,9 @@ public class MockFileBackupWheel: FileBackupWheel, Cuckoo.ClassMock {
             return cuckoo_manager.getter("maxNumberOfBackups",
                 superclassCall:
                     
-                    super.maxNumberOfBackups
+                                    super.maxNumberOfBackups
                     ,
-                defaultCall: __defaultImplStub!.maxNumberOfBackups)
+                defaultCall:  __defaultImplStub!.maxNumberOfBackups)
         }
         
         set {
@@ -87,9 +87,9 @@ public class MockFileBackupWheel: FileBackupWheel, Cuckoo.ClassMock {
             return cuckoo_manager.getter("fileManager",
                 superclassCall:
                     
-                    super.fileManager
+                                    super.fileManager
                     ,
-                defaultCall: __defaultImplStub!.fileManager)
+                defaultCall:  __defaultImplStub!.fileManager)
         }
         
         set {
@@ -113,9 +113,9 @@ public class MockFileBackupWheel: FileBackupWheel, Cuckoo.ClassMock {
             return cuckoo_manager.getter("dateFormatter",
                 superclassCall:
                     
-                    super.dateFormatter
+                                    super.dateFormatter
                     ,
-                defaultCall: __defaultImplStub!.dateFormatter)
+                defaultCall:  __defaultImplStub!.dateFormatter)
         }
         
         set {

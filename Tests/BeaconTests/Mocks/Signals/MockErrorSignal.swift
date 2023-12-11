@@ -36,9 +36,9 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("error",
                 superclassCall:
                     
-                    super.error
+                                    super.error
                     ,
-                defaultCall: __defaultImplStub!.error)
+                defaultCall:  __defaultImplStub!.error)
         }
         
     }
@@ -52,9 +52,9 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("stack",
                 superclassCall:
                     
-                    super.stack
+                                    super.stack
                     ,
-                defaultCall: __defaultImplStub!.stack)
+                defaultCall:  __defaultImplStub!.stack)
         }
         
         set {
@@ -78,9 +78,9 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("signalName",
                 superclassCall:
                     
-                    super.signalName
+                                    super.signalName
                     ,
-                defaultCall: __defaultImplStub!.signalName)
+                defaultCall:  __defaultImplStub!.signalName)
         }
         
     }
@@ -94,9 +94,9 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("errorDescription",
                 superclassCall:
                     
-                    super.errorDescription
+                                    super.errorDescription
                     ,
-                defaultCall: __defaultImplStub!.errorDescription)
+                defaultCall:  __defaultImplStub!.errorDescription)
         }
         
     }
@@ -110,9 +110,9 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("description",
                 superclassCall:
                     
-                    super.description
+                                    super.description
                     ,
-                defaultCall: __defaultImplStub!.description)
+                defaultCall:  __defaultImplStub!.description)
         }
         
     }
@@ -126,9 +126,9 @@ public class MockErrorSignal: ErrorSignal, Cuckoo.ClassMock {
             return cuckoo_manager.getter("debugDescription",
                 superclassCall:
                     
-                    super.debugDescription
+                                    super.debugDescription
                     ,
-                defaultCall: __defaultImplStub!.debugDescription)
+                defaultCall:  __defaultImplStub!.debugDescription)
         }
         
     }

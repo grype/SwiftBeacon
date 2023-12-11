@@ -6,6 +6,7 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
+import Combine
 import Foundation
 
 /**
@@ -22,53 +23,53 @@ import Foundation
  */
 
 open class StreamLogger: SignalLogger {
+    public typealias Input = Signal
+    
+    public typealias Failure = Error
+    
     // MARK: - Properties
     
-    private(set) var writer: EncodedStreamSignalWriter
+    public private(set) var name: String
     
-    // MARK: - Instance Creation
-    
-    public class func starting<T: StreamLogger>(name aName: String, writer aWriter: EncodedStreamSignalWriter, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
-        let me = self.init(name: aName, writer: aWriter)
-        me.subscribe(to: beacons, filter: filter)
-        return me as! T
-    }
-    
-    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T: SignalLogger {
-        fatalError("Use StreamLogger.starting(name:writer:on:filter:)")
-    }
+    public private(set) var writer: EncodedStreamSignalWriter
     
     // MARK: - Init
     
+    public required init(name aName: String, stream aStream: OutputStream, encoder anEncoder: SignalEncoder) {
+        name = aName
+        writer = EncodedStreamSignalWriter(on: aStream, encoder: anEncoder)
+    }
+    
     public required init(name aName: String, writer aWriter: EncodedStreamSignalWriter) {
+        name = aName
         writer = aWriter
-        super.init(name: aName)
     }
     
-    @objc public required init(name aName: String) {
-        fatalError("Instantiate with init(name:on:)")
-    }
+    // MARK: - Receiving
     
-    // MARK: - Starting/Stopping
-    
-    override func didStart(on beacons: [Beacon]) {
-        super.didStart(on: beacons)
+    public func receive(subscription: Subscription) {
         writer.open()
+        subscription.request(.unlimited)
     }
     
-    override func didStop() {
-        super.didStop()
-        writer.close()
-    }
-    
-    // MARK: - Logging
-    
-    override open func nextPut(_ aSignal: Signal) {
+    public func receive(_ input: Signal) -> Subscribers.Demand {
         do {
-            try writer.write(aSignal)
+            try nextPut(input)
         }
         catch {
-            print("Error writing signal: \(error)")
+            print("Error: \(error)")
+            return .none
         }
+        return .unlimited
+    }
+
+    public func receive(completion: Subscribers.Completion<Failure>) {
+        writer.close()
+    }
+
+    // MARK: - Logging
+    
+    open func nextPut(_ aSignal: Signal) throws {
+        try writer.write(aSignal)
     }
 }

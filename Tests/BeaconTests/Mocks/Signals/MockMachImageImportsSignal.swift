@@ -35,9 +35,9 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
             return cuckoo_manager.getter("added",
                 superclassCall:
                     
-                    super.added
+                                    super.added
                     ,
-                defaultCall: __defaultImplStub!.added)
+                defaultCall:  __defaultImplStub!.added)
         }
         
         set {
@@ -61,9 +61,9 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
             return cuckoo_manager.getter("removed",
                 superclassCall:
                     
-                    super.removed
+                                    super.removed
                     ,
-                defaultCall: __defaultImplStub!.removed)
+                defaultCall:  __defaultImplStub!.removed)
         }
         
         set {
@@ -87,9 +87,9 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
             return cuckoo_manager.getter("signalName",
                 superclassCall:
                     
-                    super.signalName
+                                    super.signalName
                     ,
-                defaultCall: __defaultImplStub!.signalName)
+                defaultCall:  __defaultImplStub!.signalName)
         }
         
     }
@@ -103,9 +103,9 @@ public class MockMachImageImportsSignal: MachImageImportsSignal, Cuckoo.ClassMoc
             return cuckoo_manager.getter("valueDescription",
                 superclassCall:
                     
-                    super.valueDescription
+                                    super.valueDescription
                     ,
-                defaultCall: __defaultImplStub!.valueDescription)
+                defaultCall:  __defaultImplStub!.valueDescription)
         }
         
     }

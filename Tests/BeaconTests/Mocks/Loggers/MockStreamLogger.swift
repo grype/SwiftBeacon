@@ -1,6 +1,7 @@
 import Cuckoo
 @testable import Beacon
 
+import Combine
 import Foundation
 
 
@@ -30,14 +31,30 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
     
     
     
+    public override var name: String {
+        get {
+            return cuckoo_manager.getter("name",
+                superclassCall:
+                    
+                                    super.name
+                    ,
+                defaultCall:  __defaultImplStub!.name)
+        }
+        
+    }
+    
+    
+    
+    
+    
     public override var writer: EncodedStreamSignalWriter {
         get {
             return cuckoo_manager.getter("writer",
                 superclassCall:
                     
-                    super.writer
+                                    super.writer
                     ,
-                defaultCall: __defaultImplStub!.writer)
+                defaultCall:  __defaultImplStub!.writer)
         }
         
     }
@@ -50,19 +67,19 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
     
     
     
-    public override func didStart(on beacons: [Beacon])  {
+    public override func receive(subscription: Subscription)  {
         
     return cuckoo_manager.call(
     """
-    didStart(on: [Beacon])
+    receive(subscription: Subscription)
     """,
-            parameters: (beacons),
-            escapingParameters: (beacons),
+            parameters: (subscription),
+            escapingParameters: (subscription),
             superclassCall:
                 
-                super.didStart(on: beacons)
+                super.receive(subscription: subscription)
                 ,
-            defaultCall: __defaultImplStub!.didStart(on: beacons))
+            defaultCall: __defaultImplStub!.receive(subscription: subscription))
         
     }
     
@@ -70,19 +87,19 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
     
     
     
-    public override func didStop()  {
+    public override func receive(_ input: Signal) -> Subscribers.Demand {
         
     return cuckoo_manager.call(
     """
-    didStop()
+    receive(_: Signal) -> Subscribers.Demand
     """,
-            parameters: (),
-            escapingParameters: (),
+            parameters: (input),
+            escapingParameters: (input),
             superclassCall:
                 
-                super.didStop()
+                super.receive(input)
                 ,
-            defaultCall: __defaultImplStub!.didStop())
+            defaultCall: __defaultImplStub!.receive(input))
         
     }
     
@@ -90,11 +107,31 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
     
     
     
-    public override func nextPut(_ aSignal: Signal)  {
+    public override func receive(completion: Subscribers.Completion<Failure>)  {
         
     return cuckoo_manager.call(
     """
-    nextPut(_: Signal)
+    receive(completion: Subscribers.Completion<Failure>)
+    """,
+            parameters: (completion),
+            escapingParameters: (completion),
+            superclassCall:
+                
+                super.receive(completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.receive(completion: completion))
+        
+    }
+    
+    
+    
+    
+    
+    public override func nextPut(_ aSignal: Signal) throws {
+        
+    return try cuckoo_manager.callThrows(
+    """
+    nextPut(_: Signal) throws
     """,
             parameters: (aSignal),
             escapingParameters: (aSignal),
@@ -117,6 +154,13 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
         
         
         
+        var name: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockStreamLogger, String> {
+            return .init(manager: cuckoo_manager, name: "name")
+        }
+        
+        
+        
+        
         var writer: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockStreamLogger, EncodedStreamSignalWriter> {
             return .init(manager: cuckoo_manager, name: "writer")
         }
@@ -125,33 +169,44 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
         
         
         
-        func didStart<M1: Cuckoo.Matchable>(on beacons: M1) -> Cuckoo.ClassStubNoReturnFunction<([Beacon])> where M1.MatchedType == [Beacon] {
-            let matchers: [Cuckoo.ParameterMatcher<([Beacon])>] = [wrap(matchable: beacons) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscription)> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockStreamLogger.self, method:
     """
-    didStart(on: [Beacon])
+    receive(subscription: Subscription)
     """, parameterMatchers: matchers))
         }
         
         
         
         
-        func didStop() -> Cuckoo.ClassStubNoReturnFunction<()> {
-            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.ClassStubFunction<(Signal), Subscribers.Demand> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: input) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockStreamLogger.self, method:
     """
-    didStop()
+    receive(_: Signal) -> Subscribers.Demand
     """, parameterMatchers: matchers))
         }
         
         
         
         
-        func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnFunction<(Signal)> where M1.MatchedType == Signal {
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Failure>)> where M1.MatchedType == Subscribers.Completion<Failure> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Failure>)>] = [wrap(matchable: completion) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockStreamLogger.self, method:
+    """
+    receive(completion: Subscribers.Completion<Failure>)
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func nextPut<M1: Cuckoo.Matchable>(_ aSignal: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Signal)> where M1.MatchedType == Signal {
             let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockStreamLogger.self, method:
     """
-    nextPut(_: Signal)
+    nextPut(_: Signal) throws
     """, parameterMatchers: matchers))
         }
         
@@ -172,6 +227,13 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
         
         
         
+        var name: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "name", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
         var writer: Cuckoo.VerifyReadOnlyProperty<EncodedStreamSignalWriter> {
             return .init(manager: cuckoo_manager, name: "writer", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
@@ -182,11 +244,11 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func didStart<M1: Cuckoo.Matchable>(on beacons: M1) -> Cuckoo.__DoNotUse<([Beacon]), Void> where M1.MatchedType == [Beacon] {
-            let matchers: [Cuckoo.ParameterMatcher<([Beacon])>] = [wrap(matchable: beacons) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.__DoNotUse<(Subscription), Void> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
             return cuckoo_manager.verify(
     """
-    didStart(on: [Beacon])
+    receive(subscription: Subscription)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -194,11 +256,23 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func didStop() -> Cuckoo.__DoNotUse<(), Void> {
-            let matchers: [Cuckoo.ParameterMatcher<Void>] = []
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.__DoNotUse<(Signal), Subscribers.Demand> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: input) { $0 }]
             return cuckoo_manager.verify(
     """
-    didStop()
+    receive(_: Signal) -> Subscribers.Demand
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Failure>), Void> where M1.MatchedType == Subscribers.Completion<Failure> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Failure>)>] = [wrap(matchable: completion) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    receive(completion: Subscribers.Completion<Failure>)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -210,7 +284,7 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
             let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: aSignal) { $0 }]
             return cuckoo_manager.verify(
     """
-    nextPut(_: Signal)
+    nextPut(_: Signal) throws
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -220,6 +294,17 @@ public class MockStreamLogger: StreamLogger, Cuckoo.ClassMock {
 
 
 public class StreamLoggerStub: StreamLogger {
+    
+    
+    
+    
+    public override var name: String {
+        get {
+            return DefaultValueRegistry.defaultValue(for: (String).self)
+        }
+        
+    }
+    
     
     
     
@@ -239,7 +324,7 @@ public class StreamLoggerStub: StreamLogger {
     
     
     
-    public override func didStart(on beacons: [Beacon])   {
+    public override func receive(subscription: Subscription)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
@@ -247,7 +332,15 @@ public class StreamLoggerStub: StreamLogger {
     
     
     
-    public override func didStop()   {
+    public override func receive(_ input: Signal) -> Subscribers.Demand  {
+        return DefaultValueRegistry.defaultValue(for: (Subscribers.Demand).self)
+    }
+    
+    
+    
+    
+    
+    public override func receive(completion: Subscribers.Completion<Failure>)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     
@@ -255,7 +348,7 @@ public class StreamLoggerStub: StreamLogger {
     
     
     
-    public override func nextPut(_ aSignal: Signal)   {
+    public override func nextPut(_ aSignal: Signal) throws  {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     

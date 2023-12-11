@@ -1,6 +1,7 @@
 import Cuckoo
 @testable import Beacon
 
+import Combine
 import Foundation
 
 
@@ -30,14 +31,30 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
     
     
     
+    public override var name: String {
+        get {
+            return cuckoo_manager.getter("name",
+                superclassCall:
+                    
+                                    super.name
+                    ,
+                defaultCall:  __defaultImplStub!.name)
+        }
+        
+    }
+    
+    
+    
+    
+    
     public override var markedInactvitiyPeriod: TimeInterval {
         get {
             return cuckoo_manager.getter("markedInactvitiyPeriod",
                 superclassCall:
                     
-                    super.markedInactvitiyPeriod
+                                    super.markedInactvitiyPeriod
                     ,
-                defaultCall: __defaultImplStub!.markedInactvitiyPeriod)
+                defaultCall:  __defaultImplStub!.markedInactvitiyPeriod)
         }
         
         set {
@@ -61,9 +78,9 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
             return cuckoo_manager.getter("inactivityDelimiter",
                 superclassCall:
                     
-                    super.inactivityDelimiter
+                                    super.inactivityDelimiter
                     ,
-                defaultCall: __defaultImplStub!.inactivityDelimiter)
+                defaultCall:  __defaultImplStub!.inactivityDelimiter)
         }
         
         set {
@@ -82,6 +99,66 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
 
     
 
+    
+    
+    
+    
+    public override func receive(_ input: Signal) -> Subscribers.Demand {
+        
+    return cuckoo_manager.call(
+    """
+    receive(_: Signal) -> Subscribers.Demand
+    """,
+            parameters: (input),
+            escapingParameters: (input),
+            superclassCall:
+                
+                super.receive(input)
+                ,
+            defaultCall: __defaultImplStub!.receive(input))
+        
+    }
+    
+    
+    
+    
+    
+    public override func receive(completion: Subscribers.Completion<Failure>)  {
+        
+    return cuckoo_manager.call(
+    """
+    receive(completion: Subscribers.Completion<Never>)
+    """,
+            parameters: (completion),
+            escapingParameters: (completion),
+            superclassCall:
+                
+                super.receive(completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.receive(completion: completion))
+        
+    }
+    
+    
+    
+    
+    
+    public override func receive(subscription: Subscription)  {
+        
+    return cuckoo_manager.call(
+    """
+    receive(subscription: Subscription)
+    """,
+            parameters: (subscription),
+            escapingParameters: (subscription),
+            superclassCall:
+                
+                super.receive(subscription: subscription)
+                ,
+            defaultCall: __defaultImplStub!.receive(subscription: subscription))
+        
+    }
+    
     
     
     
@@ -113,6 +190,13 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
         
         
         
+        var name: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockConsoleLogger, String> {
+            return .init(manager: cuckoo_manager, name: "name")
+        }
+        
+        
+        
+        
         var markedInactvitiyPeriod: Cuckoo.ClassToBeStubbedProperty<MockConsoleLogger, TimeInterval> {
             return .init(manager: cuckoo_manager, name: "markedInactvitiyPeriod")
         }
@@ -124,6 +208,39 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
             return .init(manager: cuckoo_manager, name: "inactivityDelimiter")
         }
         
+        
+        
+        
+        
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.ClassStubFunction<(Signal), Subscribers.Demand> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: input) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockConsoleLogger.self, method:
+    """
+    receive(_: Signal) -> Subscribers.Demand
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Never>)> where M1.MatchedType == Subscribers.Completion<Never> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Never>)>] = [wrap(matchable: completion) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockConsoleLogger.self, method:
+    """
+    receive(completion: Subscribers.Completion<Never>)
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscription)> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockConsoleLogger.self, method:
+    """
+    receive(subscription: Subscription)
+    """, parameterMatchers: matchers))
+        }
         
         
         
@@ -153,6 +270,13 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
         
         
         
+        var name: Cuckoo.VerifyReadOnlyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "name", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
         var markedInactvitiyPeriod: Cuckoo.VerifyProperty<TimeInterval> {
             return .init(manager: cuckoo_manager, name: "markedInactvitiyPeriod", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
@@ -166,6 +290,42 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
         
         
     
+        
+        
+        
+        @discardableResult
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.__DoNotUse<(Signal), Subscribers.Demand> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: input) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    receive(_: Signal) -> Subscribers.Demand
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Never>), Void> where M1.MatchedType == Subscribers.Completion<Never> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Never>)>] = [wrap(matchable: completion) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    receive(completion: Subscribers.Completion<Never>)
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.__DoNotUse<(Subscription), Void> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    receive(subscription: Subscription)
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
         
         
         
@@ -184,6 +344,17 @@ public class MockConsoleLogger: ConsoleLogger, Cuckoo.ClassMock {
 
 
 public class ConsoleLoggerStub: ConsoleLogger {
+    
+    
+    
+    
+    public override var name: String {
+        get {
+            return DefaultValueRegistry.defaultValue(for: (String).self)
+        }
+        
+    }
+    
     
     
     
@@ -214,6 +385,30 @@ public class ConsoleLoggerStub: ConsoleLogger {
 
     
 
+    
+    
+    
+    
+    public override func receive(_ input: Signal) -> Subscribers.Demand  {
+        return DefaultValueRegistry.defaultValue(for: (Subscribers.Demand).self)
+    }
+    
+    
+    
+    
+    
+    public override func receive(completion: Subscribers.Completion<Failure>)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+    
+    
+    
+    
+    public override func receive(subscription: Subscription)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
     
     
     

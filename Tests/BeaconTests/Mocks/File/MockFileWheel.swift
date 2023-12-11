@@ -35,9 +35,9 @@ public class MockFileWheel: FileWheel, Cuckoo.ClassMock {
             return cuckoo_manager.getter("conditionBlock",
                 superclassCall:
                     
-                    super.conditionBlock
+                                    super.conditionBlock
                     ,
-                defaultCall: __defaultImplStub!.conditionBlock)
+                defaultCall:  __defaultImplStub!.conditionBlock)
         }
         
         set {
@@ -61,9 +61,9 @@ public class MockFileWheel: FileWheel, Cuckoo.ClassMock {
             return cuckoo_manager.getter("rotationBlock",
                 superclassCall:
                     
-                    super.rotationBlock
+                                    super.rotationBlock
                     ,
-                defaultCall: __defaultImplStub!.rotationBlock)
+                defaultCall:  __defaultImplStub!.rotationBlock)
         }
         
         set {

@@ -1,8 +1,8 @@
 import Cuckoo
 @testable import Beacon
 
+import Combine
 import Foundation
-import RWLock
 
 
 
@@ -31,14 +31,40 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
     
     
     
+    public override var name: String {
+        get {
+            return cuckoo_manager.getter("name",
+                superclassCall:
+                    
+                                    super.name
+                    ,
+                defaultCall:  __defaultImplStub!.name)
+        }
+        
+        set {
+            cuckoo_manager.setter("name",
+                value: newValue,
+                superclassCall:
+                    
+                    super.name = newValue
+                    ,
+                defaultCall: __defaultImplStub!.name = newValue)
+        }
+        
+    }
+    
+    
+    
+    
+    
     public override var recordings: [Signal] {
         get {
             return cuckoo_manager.getter("recordings",
                 superclassCall:
                     
-                    super.recordings
+                                    super.recordings
                     ,
-                defaultCall: __defaultImplStub!.recordings)
+                defaultCall:  __defaultImplStub!.recordings)
         }
         
     }
@@ -52,9 +78,9 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
             return cuckoo_manager.getter("limit",
                 superclassCall:
                     
-                    super.limit
+                                    super.limit
                     ,
-                defaultCall: __defaultImplStub!.limit)
+                defaultCall:  __defaultImplStub!.limit)
         }
         
         set {
@@ -73,6 +99,66 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
 
     
 
+    
+    
+    
+    
+    public override func receive(subscription: Subscription)  {
+        
+    return cuckoo_manager.call(
+    """
+    receive(subscription: Subscription)
+    """,
+            parameters: (subscription),
+            escapingParameters: (subscription),
+            superclassCall:
+                
+                super.receive(subscription: subscription)
+                ,
+            defaultCall: __defaultImplStub!.receive(subscription: subscription))
+        
+    }
+    
+    
+    
+    
+    
+    public override func receive(_ input: Signal) -> Subscribers.Demand {
+        
+    return cuckoo_manager.call(
+    """
+    receive(_: Signal) -> Subscribers.Demand
+    """,
+            parameters: (input),
+            escapingParameters: (input),
+            superclassCall:
+                
+                super.receive(input)
+                ,
+            defaultCall: __defaultImplStub!.receive(input))
+        
+    }
+    
+    
+    
+    
+    
+    public override func receive(completion: Subscribers.Completion<Failure>)  {
+        
+    return cuckoo_manager.call(
+    """
+    receive(completion: Subscribers.Completion<Never>)
+    """,
+            parameters: (completion),
+            escapingParameters: (completion),
+            superclassCall:
+                
+                super.receive(completion: completion)
+                ,
+            defaultCall: __defaultImplStub!.receive(completion: completion))
+        
+    }
+    
     
     
     
@@ -124,6 +210,13 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
         
         
         
+        var name: Cuckoo.ClassToBeStubbedProperty<MockMemoryLogger, String> {
+            return .init(manager: cuckoo_manager, name: "name")
+        }
+        
+        
+        
+        
         var recordings: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockMemoryLogger, [Signal]> {
             return .init(manager: cuckoo_manager, name: "recordings")
         }
@@ -135,6 +228,39 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
             return .init(manager: cuckoo_manager, name: "limit")
         }
         
+        
+        
+        
+        
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscription)> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockMemoryLogger.self, method:
+    """
+    receive(subscription: Subscription)
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.ClassStubFunction<(Signal), Subscribers.Demand> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: input) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockMemoryLogger.self, method:
+    """
+    receive(_: Signal) -> Subscribers.Demand
+    """, parameterMatchers: matchers))
+        }
+        
+        
+        
+        
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Never>)> where M1.MatchedType == Subscribers.Completion<Never> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Never>)>] = [wrap(matchable: completion) { $0 }]
+            return .init(stub: cuckoo_manager.createStub(for: MockMemoryLogger.self, method:
+    """
+    receive(completion: Subscribers.Completion<Never>)
+    """, parameterMatchers: matchers))
+        }
         
         
         
@@ -175,6 +301,13 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
         
         
         
+        var name: Cuckoo.VerifyProperty<String> {
+            return .init(manager: cuckoo_manager, name: "name", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
         var recordings: Cuckoo.VerifyReadOnlyProperty<[Signal]> {
             return .init(manager: cuckoo_manager, name: "recordings", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
@@ -188,6 +321,42 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
         
         
     
+        
+        
+        
+        @discardableResult
+        func receive<M1: Cuckoo.Matchable>(subscription: M1) -> Cuckoo.__DoNotUse<(Subscription), Void> where M1.MatchedType == Subscription {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscription)>] = [wrap(matchable: subscription) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    receive(subscription: Subscription)
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func receive<M1: Cuckoo.Matchable>(_ input: M1) -> Cuckoo.__DoNotUse<(Signal), Subscribers.Demand> where M1.MatchedType == Signal {
+            let matchers: [Cuckoo.ParameterMatcher<(Signal)>] = [wrap(matchable: input) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    receive(_: Signal) -> Subscribers.Demand
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
+        
+        
+        
+        @discardableResult
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Never>), Void> where M1.MatchedType == Subscribers.Completion<Never> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Never>)>] = [wrap(matchable: completion) { $0 }]
+            return cuckoo_manager.verify(
+    """
+    receive(completion: Subscribers.Completion<Never>)
+    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
+        }
+        
         
         
         
@@ -222,6 +391,19 @@ public class MemoryLoggerStub: MemoryLogger {
     
     
     
+    public override var name: String {
+        get {
+            return DefaultValueRegistry.defaultValue(for: (String).self)
+        }
+        
+        set { }
+        
+    }
+    
+    
+    
+    
+    
     public override var recordings: [Signal] {
         get {
             return DefaultValueRegistry.defaultValue(for: ([Signal]).self)
@@ -246,6 +428,30 @@ public class MemoryLoggerStub: MemoryLogger {
 
     
 
+    
+    
+    
+    
+    public override func receive(subscription: Subscription)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
+    
+    
+    
+    
+    public override func receive(_ input: Signal) -> Subscribers.Demand  {
+        return DefaultValueRegistry.defaultValue(for: (Subscribers.Demand).self)
+    }
+    
+    
+    
+    
+    
+    public override func receive(completion: Subscribers.Completion<Failure>)   {
+        return DefaultValueRegistry.defaultValue(for: (Void).self)
+    }
+    
     
     
     

@@ -6,6 +6,7 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
+import Combine
 import Foundation
 
 /**
@@ -15,14 +16,37 @@ import Foundation
  One such mechanism is support for file rotation.
  */
 
-open class FileLogger: StreamLogger {
+open class FileLogger: SignalLogger {
+    // MARK: - Types
+
+    enum Error: Swift.Error, CustomStringConvertible {
+        case createStream(URL)
+        case writeStream(Swift.Error)
+        case rotate(URL, Swift.Error)
+        
+        public var description: String {
+            return switch self {
+            case let .createStream(url):
+                "Error creating stream at: \(url)"
+            case let .rotate(url, error):
+                "Error rotating log at '\(url)': \(error)"
+            default:
+                "Error"
+            }
+        }
+    }
+    
+    public typealias Input = Signal
+    
+    public typealias Failure = Swift.Error
+    
     // MARK: - Properties
     
     open private(set) var url: URL
     
-    // Whether to rotate log file when starting.
+    // Whether to rotate log file when receiving subscription.
     // This would only make sense if `wheel` is set.
-    open var rotateOnStart = false
+    open var rotateOnSubscription = false
     
     // Optional object responsible for log rotation.
     // When provided, it will be given a chance to rotate
@@ -31,64 +55,71 @@ open class FileLogger: StreamLogger {
     // writing data into the curernt log file.
     open var wheel: FileRotation?
     
-    // MARK: - Instance Creation
+    public private(set) var name: String
     
-    public class func starting<T: FileLogger>(name aName: String, url anURL: URL, encoder anEncoder: SignalEncoder, on beacons: [Beacon] = [Beacon.shared], filter: Filter? = nil) -> T {
-        let me = self.init(name: aName, on: anURL, encoder: anEncoder)!
-        me.subscribe(to: beacons, filter: filter)
-        return me as! T
-    }
-    
-    override open class func starting<T>(name aName: String, on beacons: [Beacon] = [Beacon.shared], filter: SignalLogger.Filter? = nil) -> T where T: SignalLogger {
-        fatalError("Use StreamLogger.starting(name:url:encoder:on:filter:)")
-    }
+    public private(set) var writer: EncodedStreamSignalWriter!
     
     // MARK: - Init
     
     public required init?(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoder) {
+        name = aName
         url = anUrl
         guard let stream = OutputStream(url: anUrl, append: true) else {
-            print("Error creating output stream on \(anUrl)")
+            handle(error: Error.createStream(anUrl))
             return nil
         }
-        let writer = EncodedStreamSignalWriter(on: stream, encoder: anEncoder)
-        super.init(name: aName, writer: writer)
+        writer = EncodedStreamSignalWriter(on: stream, encoder: anEncoder)
     }
     
-    @objc public required init(name aName: String) {
-        fatalError("Use init(name:on:encoder:) to instantiate")
-    }
+    // MARK: - Receiving
     
-    public required init(name aName: String, writer aWriter: EncodedStreamSignalWriter) {
-        fatalError("init(name:writer:) has not been implemented")
-    }
-    
-    // MARK: - Starting/Stopping
-    
-    override func didStart(on beacons: [Beacon]) {
-        if rotateOnStart, let wheel = wheel {
-            do {
-                try wheel.rotate(fileAt: url)
-            }
-            catch {
-                print("Error: \(error)")
-            }
+    public func receive(subscription: Subscription) {
+        defer { writer.open() }
+        
+        guard rotateOnSubscription else { return }
+        
+        do {
+            try forceRotate()
+            subscription.request(.unlimited)
         }
-        super.didStart(on: beacons)
+        catch {
+            handle(error: .rotate(url, error))
+            subscription.cancel()
+        }
     }
     
-    // MARK: - Logging
+    public func receive(_ input: Signal) -> Subscribers.Demand {
+        rotateFileIfNeeded()
+        
+        do {
+            try writer.write(input)
+        }
+        catch {
+            handle(error: .writeStream(error))
+            return .none
+        }
+        return .unlimited
+    }
     
-    override open func nextPut(_ aSignal: Signal) {
+    func rotateFileIfNeeded() {
         if wheel?.shouldRotate(fileAt: url) ?? false {
             do {
                 try forceRotate()
             }
             catch {
-                print("Error rotating file \(url): \(error)")
+                handle(error: .rotate(url, error))
             }
         }
-        super.nextPut(aSignal)
+    }
+    
+    public func receive(completion: Subscribers.Completion<Failure>) {
+        writer.close()
+    }
+    
+    // MARK: - Error handling
+    
+    private func handle(error: Error) {
+        print("Error: \(error)")
     }
     
     // MARK: - File

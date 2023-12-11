@@ -81,7 +81,6 @@ open class WrapperSignal: Signal {
 
 /// Wraps any value into WrapperSignal and emits the resulting signal
 public func emit(_ value: Any, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    guard willLog(type: WrapperSignal.self, on: beacon) else { return }
     WrapperSignal(value).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
 }
 

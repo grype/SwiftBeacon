@@ -9,15 +9,8 @@
 import Foundation
 import MachO
 import RWLock
-import SwiftAnnouncements
 
 open class MachImageMonitor {
-    // MARK: - Types
-    
-    public enum Announcement: Announceable {
-        case didAddImage(MachImage), didRemoveImage(MachImage)
-    }
-    
     // MARK: - API
     
     public static var shared = MachImageMonitor()
@@ -46,8 +39,6 @@ open class MachImageMonitor {
     
     @RWLocked public private(set) var images = [MachImage]()
     
-    public private(set) var announcer = Announcer()
-    
     // MARK: - Adding/Removing Images
     
     private func didAddImage(_ aHeader: UnsafePointer<mach_header>) {
@@ -60,7 +51,7 @@ open class MachImageMonitor {
         }
         let image = MachImage(at: index)
         images.append(image)
-        announcer.announce(Announcement.didAddImage(image))
+//        announcer.announce(Announcement.didAddImage(image))
     }
     
     private func didRemoveImage(_ aHeader: UnsafePointer<mach_header>) {
@@ -70,6 +61,6 @@ open class MachImageMonitor {
             print("Could not find image to remove at: \(String(describing: aHeader))")
             return
         }
-        announcer.announce(Announcement.didRemoveImage(image))
+//        announcer.announce(Announcement.didRemoveImage(image))
     }
 }
