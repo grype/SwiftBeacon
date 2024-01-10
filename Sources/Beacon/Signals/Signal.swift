@@ -16,7 +16,7 @@ import Foundation
  any object and act as its signal. For everything else I am expected to be subclassed.
  
  My instances are signaled to loggers via `emit()`. Calling `emit()` captures the invocation context
- (using `Signal.Source` struct) and then announces me via relevant `Beacon` instances.
+ (using `Signal.Source` struct) and then announces an appropriate instance of a subclass of mine.
  
  */
 
@@ -29,10 +29,10 @@ open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebug
         public var module: String?
         public var fileName: String
         public var line: Int
-        public var functionName: String?
+        public var functionName: String
         
-        public init(module aModule: String?, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
-            module = aModule
+        public init(bundle aBundle: Bundle = .main, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String = #function) {
+            module = aBundle.infoDictionary?["CFBundleName"] as? String
             fileName = aFileName
             line = aLine
             functionName = aFunctionName
@@ -40,12 +40,8 @@ open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebug
         
         public var description: String {
             var functionDescription = ""
-            if var functionName = functionName {
-                if !functionName.hasSuffix(")") {
-                    functionName += "()"
-                }
-                functionDescription = " #\(functionName)"
-            }
+            let functionNameSuffix = functionName.hasSuffix(")") ? "" : "()"
+            functionDescription = " #\(functionName)\(functionNameSuffix)"
             let filePrintName = fileName.components(separatedBy: "/").last ?? fileName
             let originName = (module != nil) ? "\(module!)." : ""
             return "[\(originName)\(filePrintName):\(line)]\(functionDescription)"
