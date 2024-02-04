@@ -8,7 +8,9 @@
         <page name='Filtering'/>
         <page name='Combine (Clean)'/>
         <page name='Combine (Signal Aggregation)'/>
-        <page name='Combine (Networking)'/>
         <page name='Combine (Simplified)'/>
+        <page name='Combine (Error Handling)'/>
+        <page name='Combine (Finalizing)'/>
+        <page name='Unified Logging'/>
     </pages>
 </playground>

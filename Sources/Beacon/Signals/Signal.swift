@@ -82,33 +82,6 @@ open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebug
         Bundle.main.infoDictionary?["CFBundleName"] as? String
     }()
     
-    // MARK: - Emitting
-    
-    /// Emits signal to all running instances of `SignalLogger`
-    open func emit(on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-        let source = Signal.Source(module: bundleName, fileName: fileName, line: line, functionName: functionName)
-        emit(on: beacons, source: source, userInfo: userInfo)
-    }
-    
-    /// Emits signal to all running instances of `SignalLogger`
-    private func emit(on beacons: [Beacon], source aSource: Signal.Source, userInfo anUserInfo: [AnyHashable: Any]? = nil) {
-        if let anUserInfo = anUserInfo {
-            if let userInfo = userInfo {
-                self.userInfo = userInfo.merging(anUserInfo) { _, incoming in incoming }
-            }
-            else {
-                userInfo = anUserInfo
-            }
-        }
-        source = aSource
-        beacons.forEach { $0.send(self) }
-    }
-    
-    func sourcedFromHere(fileName: String = #file, line: Int = #line, functionName: String = #function) -> Self {
-        source = Signal.Source(module: bundleName, fileName: fileName, line: line, functionName: functionName)
-        return self
-    }
-    
     // MARK: - Encodable
     
     private enum CodingKeys: String, CodingKey {

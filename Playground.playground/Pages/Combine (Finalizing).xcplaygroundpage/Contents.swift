@@ -9,77 +9,61 @@ PlaygroundPage.current.needsIndefiniteExecution = true
 // MARK: - Implementation
 
 extension Publisher {
-    func emit<S: Subject>(on aSubject: S, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) -> AnyCancellable 
-    where Output: Signaling, S.Output == Signal {
-        return map { $0.signal }.emit(on: aSubject, fileName: aFileName, line: aLine, functionName: aFunctionName)
-    }
-
-    func emit<S: Subject>(on aSubject: S, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) -> AnyCancellable 
-    where Output == Signal, S.Output == Output {
+    func emit<S: Subject>(on aSubject: S, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) -> AnyCancellable
+        where Output: Emittable, S.Output == any Signal
+    {
+        let source = Source(fileName: aFileName, line: aLine, functionName: aFunctionName)
         var result: AnyCancellable!
         let subscriber = AnySubscriber<Output, Failure> { aSubscription in
             aSubscription.request(.unlimited)
             result = AnyCancellable { aSubscription.cancel() }
-        } receiveValue: { signal in
-            signal.source = Source(origin: nil, fileName: aFileName, line: aLine, functionName: aFunctionName)
+        } receiveValue: { anEmittable in
+            var signal = anEmittable.signalValue
+            signal.source = source
             aSubject.send(signal)
             return .unlimited
         } receiveCompletion: { completion in
             guard case let .failure(error) = completion else { return }
-            let signal = ErrorSignal(error: error)
-            signal.source = Source(origin: nil, fileName: aFileName, line: aLine, functionName: aFunctionName)
+            var signal = ErrorSignal(error: error, source: Source(fileName: aFileName, line: aLine, functionName: aFunctionName))
+            signal.source = source
             aSubject.send(signal)
         }
-
         subscribe(subscriber)
         return result
     }
 
-    func emit<S: Logger>(on aSubscriber: S, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) where Output == Signaling {
-        map { $0.signal }.subscribe(aSubscriber)
-    }
-
-    func emit<S: Logger>(on aSubscriber: S, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
-        subscribe(aSubscriber)
+    func emit<S: Subscriber>(on aSubscriber: S, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function)
+        where Output: Emittable, S.Input == any Signal, Failure == S.Failure
+    {
+        let source = Source(fileName: aFileName, line: aLine, functionName: aFunctionName)
+        map { aValue in
+            var signal = aValue.signalValue
+            signal.source = source
+            return signal
+        }.subscribe(aSubscriber)
     }
 }
 
 // MARK: - Logger
 
-class PluggableLogger<Input: Signal, Failure: Error>: Subscriber {
+protocol Logger: AnyObject, Subscriber where Input: Emittable {}
+
+class SimpleLogger<Input: Emittable, Failure: Error>: Logger {
     func receive(subscription: Subscription) {
         subscription.request(.unlimited)
     }
 
     func receive(completion: Subscribers.Completion<Failure>) {
-        print("Done")
+        print("SimpleLogger Done")
     }
 
     func receive(_ input: Input) -> Subscribers.Demand {
-        print("\(input)")
+        print("\(input.signalValue.debugDescription)")
         return .unlimited
     }
 }
 
-class Logger: Subscriber {
-    typealias Input = Signal
-    typealias Failure = Error
-
-    func receive(subscription: Subscription) {
-        subscription.request(.unlimited)
-    }
-
-    func receive(completion: Subscribers.Completion<Failure>) {
-        print("Done")
-    }
-
-    func receive(_ input: Input) -> Subscribers.Demand {
-        print("\(input)")
-        return .unlimited
-    }
-}
-
-class CollectingLogger: Subscriber {
+class CollectingLogger: Logger {
     typealias Input = [Signal]
     typealias Failure = Error
 
@@ -88,12 +72,12 @@ class CollectingLogger: Subscriber {
     }
 
     func receive(completion: Subscribers.Completion<Failure>) {
-        print("Done")
+        print("CollectingLogger Done")
     }
 
     func receive(_ input: Input) -> Subscribers.Demand {
         input.forEach {
-            print("+\($0)")
+            print("+\($0.debugDescription)")
         }
         return .unlimited
     }
@@ -101,41 +85,72 @@ class CollectingLogger: Subscriber {
 
 // MARK: - Signal
 
-class Signal: CustomStringConvertible {
-    var source: Source?
-    var description: String { "\(source?.description ?? "")" }
+protocol Signal: CustomStringConvertible, CustomDebugStringConvertible, Encodable, Emittable {
+    var source: Source? { get set }
 }
 
-class StringSignal: Signal {
+extension Signal {
+    var description: String { "<\(type(of: self))>" }
+    var debugDescription: String { "\(source?.description ?? "") \(description)" }
+    var signalValue: Signal { self }
+}
+
+struct WrappedSignal<V: Encodable>: Signal {
+    var value: V
+    var source: Source?
+
+    var description: String { "<Wrapped(\(type(of: value))): \"\(value)\">" }
+
+    init(value: V, source: Source? = nil) {
+        self.value = value
+        self.source = source
+    }
+}
+
+struct StringSignal: Signal {
+    var source: Source?
+
     var string: String
 
-    override var description: String { "\(source?.description ?? "") <String: \"\(string)\">" }
+    var description: String { "<String: \"\(string)\">" }
 
-    init(string: String, source: Source = .init(origin: "Playground")) {
+    init(string: String, source: Source? = nil) {
         self.string = string
         self.source = source
     }
 }
 
-class ErrorSignal: Signal {
+struct ErrorSignal: Signal {
+    var source: Source?
+
     var error: Error
 
-    override var description: String { "\(source?.description ?? "") Error: \(error)" }
+    var description: String { "<Error(\(type(of: error)): \(error)>" }
 
-    init(error: Error, source: Source = .init(origin: "Playground")) {
+    enum CodingKeys: String, CodingKey {
+        case source, error
+    }
+
+    init(error: Error, source: Source? = nil) {
         self.error = error
         self.source = source
     }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(source, forKey: .source)
+        try container.encode(error.localizedDescription, forKey: .error)
+    }
 }
 
-// MARK: - Signaling
+// MARK: - Emittable
 
-protocol Signaling {
-    var signal: Signal { get }
+protocol Emittable {
+    var signalValue: Signal { get }
 }
 
-extension String: Signaling {
-    var signal: Signal { StringSignal(string: self) }
+extension String: Emittable {
+    var signalValue: Signal { StringSignal(string: self) }
 }
 
 // MARK: - Source
@@ -162,8 +177,8 @@ public struct Source: CustomStringConvertible, Codable, Equatable {
     public var line: Int
     public var functionName: String?
 
-    public init(origin anOrigin: String? = nil, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
-        module = anOrigin
+    public init(bundle aBundle: Bundle = .main, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function) {
+        module = aBundle.infoDictionary?["CFBundleName"] as? String
         fileName = aFileName
         line = aLine
         functionName = aFunctionName
@@ -183,26 +198,20 @@ public struct Source: CustomStringConvertible, Codable, Equatable {
     }
 }
 
-func emit<S, V>(_ aValue: V, on aSubject: S, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function)
-    where S: Subject, S.Output == Signal, V: Signaling
+// MARK: - Emitting
+
+func emit<S: Subject, V: Emittable>(_ aValue: V, on aSubject: S, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function)
+    where S.Output == Signal
 {
-    let signal = aValue.signal
-    signal.source = Source(origin: nil, fileName: aFileName, line: aLine, functionName: aFunctionName)
+    var signal = aValue.signalValue
+    signal.source = Source(fileName: aFileName, line: aLine, functionName: aFunctionName)
     aSubject.send(signal)
 }
 
-func emit<S, V>(_ aValue: V, on aSubscriber: S, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String? = #function)
-    where S: Logger, V: Signaling
-{
-    let signal = aValue.signal
-    signal.source = Source(origin: nil, fileName: aFileName, line: aLine, functionName: aFunctionName)
-    Just(signal).eraseToAnyPublisher().subscribe(aSubscriber)
-}
-
-
 // MARK: - Loggers
 
-let logger = Logger()
+let logger = SimpleLogger()
+
 let pluggableLogger = PluggableLogger<StringSignal, URLError>()
 
 let collectingLogger = CollectingLogger()
@@ -237,13 +246,18 @@ let c = dataTaskPublisher
 
 numberPublisher
     .map { "#️⃣ \($0)" }
-    .emit(on: logger)
+    .emit(on: loggingSubject)
+//
+//let ll = PluggableLogger<StringSignal, Never>()
+//let cc = numberPublisher
+//    .map { StringSignal(string: "#️⃣ \($0)") }
+//    .emit(on: ll)
+
 
 // MARK: - Emitting without publishers
 
 func directTest() {
-    emit("Via Subject", on: loggingSubject)
-    emit("Via Logger", on: logger)
+    emit("Direct", on: loggingSubject)
 }
 
 directTest()
