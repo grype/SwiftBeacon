@@ -6,142 +6,78 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
-import XCTest
-import Nimble
 @testable import Beacon
+import Combine
+import Nimble
+import XCTest
 
 class SignalLoggerTests: XCTestCase {
-    
-    private var activeBeacon: Beacon!
-    private var inactiveBeacon: Beacon!
+    private var activeBeacon: PassthroughSubject<Signal, Never>!
+    private var inactiveBeacon: PassthroughSubject<Signal, Never>!
     private var logger: MemoryLogger!
     
     override func setUp() {
         super.setUp()
-        activeBeacon = Beacon()
-        inactiveBeacon = Beacon()
+        activeBeacon = .init()
+        inactiveBeacon = .init()
         logger = MemoryLogger(name: "Test logger")
-        logger.beForTesting()
-        Constraint.enableAllSignals()
     }
     
     override func tearDown() {
         super.tearDown()
-        logger.stop()
-    }
-    
-    func testInit() {
-        expect(self.logger.isRunning).to(beFalse())
+        [activeBeacon, inactiveBeacon].forEach { $0?.send(completion: .finished) }
     }
     
     func testStart() {
-        logger.start(on: [activeBeacon])
-        expect(self.logger.isRunning).to(beTrue())
+        activeBeacon.subscribe(logger)
         expect(self.logger.recordings.count) == 0
-        emit(on: [activeBeacon])
+        #emit(on: activeBeacon)
         expect(self.logger.recordings.count) == 1
     }
     
     func testInitAndStart() {
-        let logger: MemoryLogger = MemoryLogger.starting(name: "Another logger", on: [activeBeacon])
-        logger.beForTesting()
-        expect(logger.isRunning).to(beTrue())
+        let logger = MemoryLogger(name: "Another logger")
+        activeBeacon.subscribe(logger)
         expect(logger.recordings.count) == 0
     }
     
-    func testStartStop() {
-        logger.start()
-        logger.stop()
-        expect(self.logger.isRunning).to(beFalse())
-    }
-    
-    func testStartStopOnBeacon() {
-        logger.start(on: [activeBeacon])
-        logger.stop(on: [activeBeacon])
-        expect(self.logger.isRunning).to(beFalse())
-    }
-    
-    func testStopAll() {
-        logger.stop()
-        expect(self.logger.isRunning).to(beFalse())
-    }
-    
     func testFilter() {
-        logger.start(on: [activeBeacon]) { (aSignal) -> Bool in
-            return aSignal is ErrorSignal
-        }
-        emit(on: [activeBeacon])
+        activeBeacon.filter { $0 is ErrorSignal }.subscribe(logger)
+        #emit(on: activeBeacon)
         expect(self.logger.recordings.count) == 0
         do {
             throw NSError(domain: String(describing: type(of: self)), code: 0, userInfo: nil)
         }
         catch {
-            emit(error: error, on: [activeBeacon, inactiveBeacon])
+            #emit(error: error, on: activeBeacon)
         }
         expect(self.logger.recordings.count) == 1
-    }
-    
-    func testRunDuring() {
-        logger.run(on: [activeBeacon]) { _ in
-            expect(self.logger.isRunning).to(beTrue())
-            emit(on: [activeBeacon])
-            expect(self.logger.recordings.count) == 1
-        }
-        expect(self.logger.isRunning).to(beFalse())
-        expect(self.logger.recordings.count) == 1
-    }
-    
-    func testRunForSignals() {
-        logger.run(for: [ErrorSignal.self, WrapperSignal.self], on: [activeBeacon]) { (_) in
-            expect(self.logger.isRunning).to(beTrue())
-            emit(on: [activeBeacon])
-            expect(self.logger.recordings.count) == 0
-            
-            emit(1, on: [activeBeacon])
-            expect(self.logger.recordings.count) == 1
-            
-            do {
-                throw NSError(domain: String(describing: type(of: self)), code: 0, userInfo: nil)
-            }
-            catch {
-                emit(error: error, on: [activeBeacon])
-            }
-            expect(self.logger.recordings.count) == 2
-        }
-        expect(self.logger.isRunning).to(beFalse())
     }
     
     func testMultipleBeaconSubscription() {
-        logger.start(on: [activeBeacon, inactiveBeacon])
-        expect(self.logger.isRunning).to(beTrue())
-        emit(on: [activeBeacon, inactiveBeacon])
+        [activeBeacon, inactiveBeacon].forEach { $0?.subscribe(logger) }
+        #emit(on: activeBeacon)
+        #emit(on: inactiveBeacon)
         expect(self.logger.recordings.count) == 2
     }
     
     func testMultipleSubscriptionsToSameBeacon() {
-        logger.start(on: [activeBeacon])
-        logger.start(on: [activeBeacon])
-        expect(self.logger.isRunning).to(beTrue())
-        emit(on: [activeBeacon])
+        [activeBeacon, activeBeacon].forEach { $0.subscribe(logger) }
+        #emit(on: activeBeacon)
         expect(self.logger.recordings.count) == 1
     }
     
     func testMultipleSubscriptionsToSameBeaconWithDifferentFilters() {
-        logger.start(on: [activeBeacon]) { (aSignal) -> Bool in
-            return aSignal is ContextSignal
-        }
-        logger.start(on: [activeBeacon]) { (aSignal) -> Bool in
-            return aSignal is ErrorSignal
-        }
-        expect(self.logger.isRunning).to(beTrue())
-        emit(on: [activeBeacon])
-        expect(self.logger.recordings.count) == 0
+        activeBeacon.filter { $0 is ContextSignal }.subscribe(logger)
+        activeBeacon.filter { $0 is ErrorSignal }.subscribe(logger)
+        #emit(on: activeBeacon)
+        expect(self.logger.recordings.count) == 1
         do {
             throw NSError(domain: String(describing: type(of: self)), code: 0, userInfo: nil)
         }
         catch {
-            emit(error: error, on: [activeBeacon])
-            expect(self.logger.recordings.count) == 1
+            #emit(error: error, on: activeBeacon)
+            expect(self.logger.recordings.count) == 2
         }
     }
 }

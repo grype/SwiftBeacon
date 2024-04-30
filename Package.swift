@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import CompilerPluginSupport
 
 let package = Package(
     name: "Beacon",
@@ -25,6 +26,7 @@ let package = Package(
         return libs
     }(),
     dependencies: [
+        .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0"),
         .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "11.2.0")),
         .package(name: "RWLock", url: "https://github.com/grype/RWLock-Swift", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/Brightify/Cuckoo", .upToNextMajor(from: "1.3.0")),
@@ -32,13 +34,19 @@ let package = Package(
     ],
     targets: {
         var targets: [Target] = [
+            .macro(
+                name: "BeaconMacros",
+                dependencies: [
+                    .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                    .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                ]),
             .target(
                 name: "Beacon",
-                dependencies: ["RWLock", "AnyCodable"],
+                dependencies: ["BeaconMacros", "RWLock", "AnyCodable"],
                 exclude: ["../BeaconObjcRuntime"]),
             .testTarget(
                 name: "BeaconTests",
-                dependencies: ["Beacon", "Nimble", "Cuckoo", "AnyCodable"]),
+                dependencies: ["Beacon", "BeaconMacros", "Nimble", "Cuckoo", "AnyCodable"]),
         ]
         #if _runtime(_ObjC)
         targets.append(contentsOf: [

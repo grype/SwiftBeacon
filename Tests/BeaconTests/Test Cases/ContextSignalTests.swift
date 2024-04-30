@@ -18,7 +18,6 @@ class ContextSignalTests : XCTestCase {
     override func setUp() {
         super.setUp()
         logger = MemoryLogger(name: "BeaconTestLogger")
-        logger.beForTesting()
     }
     
     override func tearDown() {
@@ -26,7 +25,7 @@ class ContextSignalTests : XCTestCase {
     }
     
     func testEmitStringOnly() {
-        emit()
+        #emit()
         if let signal = logger.recordings.first {
             expect(signal).to(beAKindOf(ContextSignal.self))
         }
@@ -36,13 +35,13 @@ class ContextSignalTests : XCTestCase {
     }
     
     func testSymbols() {
-        emit()
+        #emit()
         let signal = logger.recordings.first as! ContextSignal
         expect(signal.symbols).toNot(beEmpty())
     }
     
     func testJsonSerialization() {
-        emit()
+        #emit()
         let signal = logger.recordings.first as! ContextSignal
         let json = try! JSONEncoder().encode(signal)
         let jsonObject = try! JSONSerialization.jsonObject(with: json, options: .allowFragments) as! [String: Any]

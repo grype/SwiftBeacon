@@ -7,12 +7,15 @@
 //
 
 @testable import Beacon
+import Combine
 import Cuckoo
 import Nimble
 import XCTest
 
 class StreamLoggerTests: XCTestCase {
     private var logger: MockStreamLogger!
+    
+    private var subject: PassthroughSubject<Signal, Never>!
     
     private var writer: MockEncodedStreamSignalWriter!
     
@@ -32,11 +35,12 @@ class StreamLoggerTests: XCTestCase {
         writer = MockEncodedStreamSignalWriter(on: OutputStream.toMemory(), encoder: SignalDescriptionEncoder(encoding: .utf8)).withEnabledSuperclassSpy()
         writer.separator = "\n".data(using: encoder.encoding)!
         logger = MockStreamLogger(name: "Beacon-Test-Stream-Logger", writer: writer).withEnabledSuperclassSpy()
-        logger.beForTesting()
+        subject = .init()
     }
     
     override func tearDown() {
         super.tearDown()
+        subject.send(completion: .finished)
         logger = nil
     }
     
@@ -49,9 +53,10 @@ class StreamLoggerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func testNextPut() {
+    func testNextPut() throws {
+        subject.subscribe(logger)
         let signal = StringSignal("Hello world")
-        logger.receive(signal)
+        try logger.nextPut(signal)
         let result = streamContents()
         expect(result).toNot(beNil())
         if let result = result {
@@ -60,7 +65,7 @@ class StreamLoggerTests: XCTestCase {
     }
     
     func testThreadSafety() {
-        logger.start()
+        subject.subscribe(logger)
         var expectations = [XCTestExpectation]()
         let count = 10
         let signals: [Signal] = (0..<count).map { i in
@@ -72,7 +77,7 @@ class StreamLoggerTests: XCTestCase {
         
         (0..<count).forEach { i in
             queue.async {
-                self.logger.nextPut(signals[i])
+                try? self.logger.nextPut(signals[i])
                 expectations[i].fulfill()
             }
         }

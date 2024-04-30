@@ -35,10 +35,29 @@ import Foundation
  
  - See Also: `ConsoleLogger`, `MemoryLogger`
  */
-public protocol SignalLogger: Subscriber {
+
+public protocol Logger: Subscriber where Failure == Never {
     // MARK: - Properties
     
     /// Logger name.
     /// Used to distinguish one logger from another.
     var name: String { get }
+}
+
+public protocol SignalLogger: Logger, Cancellable where Input: Signal {}
+
+public extension SignalLogger {
+    func cancel() {}
+}
+
+public protocol CollectingSignalLogger: Logger where Input == [Signal] {}
+
+public protocol ErroringLogger: Logger {
+    func handle(_ error: Error)
+}
+
+public extension ErroringLogger {
+    func handle(_ error: Error) {
+        print("Logger error: \(error)")
+    }
 }

@@ -19,12 +19,8 @@ import Foundation
  I am finished with the current one.
  */
 
-open class JRPCLogger: SignalLogger {
+open class JRPCLogger: CollectingSignalLogger, ErroringLogger {
     // MARK: - Types
-    
-    public typealias Input = [Signal]
-    
-    public typealias Failure = Error
     
     public enum Error: Swift.Error {
         case encoding
@@ -45,7 +41,7 @@ open class JRPCLogger: SignalLogger {
     
     // MARK: - Variables (private)
     
-    internal var urlSessionTasks: [URLSessionTask] = []
+    var urlSessionTasks: [URLSessionTask] = []
     
     // MARK: - Structs
     
@@ -101,11 +97,12 @@ open class JRPCLogger: SignalLogger {
             return .unlimited
         }
         catch {
+            handle(error)
             return .none
         }
     }
     
-    public func receive(completion: Subscribers.Completion<Failure>) {
+    public func receive(completion: Subscribers.Completion<Never>) {
         urlSessionTasks.forEach { $0.cancel() }
     }
     

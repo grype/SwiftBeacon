@@ -41,6 +41,16 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
                 defaultCall:  __defaultImplStub!.source)
         }
         
+        set {
+            cuckoo_manager.setter("source",
+                value: newValue,
+                superclassCall:
+                    
+                    super.source = newValue
+                    ,
+                defaultCall: __defaultImplStub!.source = newValue)
+        }
+        
     }
     
     
@@ -123,6 +133,16 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
                                     super.bundleName
                     ,
                 defaultCall:  __defaultImplStub!.bundleName)
+        }
+        
+        set {
+            cuckoo_manager.setter("bundleName",
+                value: newValue,
+                superclassCall:
+                    
+                    super.bundleName = newValue
+                    ,
+                defaultCall: __defaultImplStub!.bundleName = newValue)
         }
         
     }
@@ -231,46 +251,6 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
     
     
     
-    public override func emit(on beacons: [Beacon], userInfo: [AnyHashable: Any]?, fileName: String, line: Int, functionName: String)  {
-        
-    return cuckoo_manager.call(
-    """
-    emit(on: [Beacon], userInfo: [AnyHashable: Any]?, fileName: String, line: Int, functionName: String)
-    """,
-            parameters: (beacons, userInfo, fileName, line, functionName),
-            escapingParameters: (beacons, userInfo, fileName, line, functionName),
-            superclassCall:
-                
-                super.emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
-                ,
-            defaultCall: __defaultImplStub!.emit(on: beacons, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName))
-        
-    }
-    
-    
-    
-    
-    
-    public override func sourcedFromHere(fileName: String, line: Int, functionName: String) -> Self {
-        
-    return cuckoo_manager.call(
-    """
-    sourcedFromHere(fileName: String, line: Int, functionName: String) -> Self
-    """,
-            parameters: (fileName, line, functionName),
-            escapingParameters: (fileName, line, functionName),
-            superclassCall:
-                
-                super.sourcedFromHere(fileName: fileName, line: line, functionName: functionName)
-                ,
-            defaultCall: __defaultImplStub!.sourcedFromHere(fileName: fileName, line: line, functionName: functionName)) as! Self
-        
-    }
-    
-    
-    
-    
-    
     public override func encode(to encoder: Encoder) throws {
         
     return try cuckoo_manager.callThrows(
@@ -298,7 +278,7 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
         
         
         
-        var source: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockSignal, Source?> {
+        var source: Cuckoo.ClassToBeStubbedOptionalProperty<MockSignal, Source> {
             return .init(manager: cuckoo_manager, name: "source")
         }
         
@@ -326,7 +306,7 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
         
         
         
-        var bundleName: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockSignal, String?> {
+        var bundleName: Cuckoo.ClassToBeStubbedOptionalProperty<MockSignal, String> {
             return .init(manager: cuckoo_manager, name: "bundleName")
         }
         
@@ -376,28 +356,6 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
         
         
         
-        func emit<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable, M3: Cuckoo.Matchable, M4: Cuckoo.Matchable, M5: Cuckoo.Matchable>(on beacons: M1, userInfo: M2, fileName: M3, line: M4, functionName: M5) -> Cuckoo.ClassStubNoReturnFunction<([Beacon], [AnyHashable: Any]?, String, Int, String)> where M1.MatchedType == [Beacon], M2.OptionalMatchedType == [AnyHashable: Any], M3.MatchedType == String, M4.MatchedType == Int, M5.MatchedType == String {
-            let matchers: [Cuckoo.ParameterMatcher<([Beacon], [AnyHashable: Any]?, String, Int, String)>] = [wrap(matchable: beacons) { $0.0 }, wrap(matchable: userInfo) { $0.1 }, wrap(matchable: fileName) { $0.2 }, wrap(matchable: line) { $0.3 }, wrap(matchable: functionName) { $0.4 }]
-            return .init(stub: cuckoo_manager.createStub(for: MockSignal.self, method:
-    """
-    emit(on: [Beacon], userInfo: [AnyHashable: Any]?, fileName: String, line: Int, functionName: String)
-    """, parameterMatchers: matchers))
-        }
-        
-        
-        
-        
-        func sourcedFromHere<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable>(fileName: M1, line: M2, functionName: M3) -> Cuckoo.ClassStubFunction<(String, Int, String), Self> where M1.MatchedType == String, M2.MatchedType == Int, M3.MatchedType == String {
-            let matchers: [Cuckoo.ParameterMatcher<(String, Int, String)>] = [wrap(matchable: fileName) { $0.0 }, wrap(matchable: line) { $0.1 }, wrap(matchable: functionName) { $0.2 }]
-            return .init(stub: cuckoo_manager.createStub(for: MockSignal.self, method:
-    """
-    sourcedFromHere(fileName: String, line: Int, functionName: String) -> Self
-    """, parameterMatchers: matchers))
-        }
-        
-        
-        
-        
         func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.ClassStubNoReturnThrowingFunction<(Encoder)> where M1.MatchedType == Encoder {
             let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockSignal.self, method:
@@ -423,7 +381,7 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
         
         
         
-        var source: Cuckoo.VerifyReadOnlyProperty<Source?> {
+        var source: Cuckoo.VerifyOptionalProperty<Source> {
             return .init(manager: cuckoo_manager, name: "source", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
         
@@ -451,7 +409,7 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
         
         
         
-        var bundleName: Cuckoo.VerifyReadOnlyProperty<String?> {
+        var bundleName: Cuckoo.VerifyOptionalProperty<String> {
             return .init(manager: cuckoo_manager, name: "bundleName", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
         
@@ -503,30 +461,6 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func emit<M1: Cuckoo.Matchable, M2: Cuckoo.OptionalMatchable, M3: Cuckoo.Matchable, M4: Cuckoo.Matchable, M5: Cuckoo.Matchable>(on beacons: M1, userInfo: M2, fileName: M3, line: M4, functionName: M5) -> Cuckoo.__DoNotUse<([Beacon], [AnyHashable: Any]?, String, Int, String), Void> where M1.MatchedType == [Beacon], M2.OptionalMatchedType == [AnyHashable: Any], M3.MatchedType == String, M4.MatchedType == Int, M5.MatchedType == String {
-            let matchers: [Cuckoo.ParameterMatcher<([Beacon], [AnyHashable: Any]?, String, Int, String)>] = [wrap(matchable: beacons) { $0.0 }, wrap(matchable: userInfo) { $0.1 }, wrap(matchable: fileName) { $0.2 }, wrap(matchable: line) { $0.3 }, wrap(matchable: functionName) { $0.4 }]
-            return cuckoo_manager.verify(
-    """
-    emit(on: [Beacon], userInfo: [AnyHashable: Any]?, fileName: String, line: Int, functionName: String)
-    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-        }
-        
-        
-        
-        
-        @discardableResult
-        func sourcedFromHere<M1: Cuckoo.Matchable, M2: Cuckoo.Matchable, M3: Cuckoo.Matchable>(fileName: M1, line: M2, functionName: M3) -> Cuckoo.__DoNotUse<(String, Int, String), Self> where M1.MatchedType == String, M2.MatchedType == Int, M3.MatchedType == String {
-            let matchers: [Cuckoo.ParameterMatcher<(String, Int, String)>] = [wrap(matchable: fileName) { $0.0 }, wrap(matchable: line) { $0.1 }, wrap(matchable: functionName) { $0.2 }]
-            return cuckoo_manager.verify(
-    """
-    sourcedFromHere(fileName: String, line: Int, functionName: String) -> Self
-    """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
-        }
-        
-        
-        
-        
-        @discardableResult
         func encode<M1: Cuckoo.Matchable>(to encoder: M1) -> Cuckoo.__DoNotUse<(Encoder), Void> where M1.MatchedType == Encoder {
             let matchers: [Cuckoo.ParameterMatcher<(Encoder)>] = [wrap(matchable: encoder) { $0 }]
             return cuckoo_manager.verify(
@@ -549,6 +483,8 @@ public class SignalStub: Signal {
         get {
             return DefaultValueRegistry.defaultValue(for: (Source?).self)
         }
+        
+        set { }
         
     }
     
@@ -597,6 +533,8 @@ public class SignalStub: Signal {
         get {
             return DefaultValueRegistry.defaultValue(for: (String?).self)
         }
+        
+        set { }
         
     }
     
@@ -670,22 +608,6 @@ public class SignalStub: Signal {
 
     
 
-    
-    
-    
-    
-    public override func emit(on beacons: [Beacon], userInfo: [AnyHashable: Any]?, fileName: String, line: Int, functionName: String)   {
-        return DefaultValueRegistry.defaultValue(for: (Void).self)
-    }
-    
-    
-    
-    
-    
-    public override func sourcedFromHere(fileName: String, line: Int, functionName: String) -> Self  {
-        return DefaultValueRegistry.defaultValue(for: (Self).self)
-    }
-    
     
     
     

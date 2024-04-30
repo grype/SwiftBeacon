@@ -30,20 +30,6 @@ public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
     
     
     
-    public override var beaconVersion: String {
-        get {
-            return cuckoo_manager.getter("beaconVersion",
-                superclassCall:
-                    
-                                    super.beaconVersion
-                    ,
-                defaultCall:  __defaultImplStub!.beaconVersion)
-        }
-        
-    }
-    
-    
-    
     
     
     public override var systemInfo: SystemInfo {
@@ -238,13 +224,7 @@ public class IdentitySignalStub: IdentitySignal {
     
     
     
-    public override var beaconVersion: String {
-        get {
-            return DefaultValueRegistry.defaultValue(for: (String).self)
-        }
-        
-    }
-    
+   
     
     
     

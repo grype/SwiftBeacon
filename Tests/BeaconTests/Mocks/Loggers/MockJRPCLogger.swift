@@ -175,11 +175,11 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
     
     
     
-    public override func receive(completion: Subscribers.Completion<Error>)  {
+    public override func receive(completion: Subscribers.Completion<Failure>)  {
         
     return cuckoo_manager.call(
     """
-    receive(completion: Subscribers.Completion<Error>)
+    receive(completion: Subscribers.Completion<Failure>)
     """,
             parameters: (completion),
             escapingParameters: (completion),
@@ -320,11 +320,11 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         
-        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Error>)> where M1.MatchedType == Subscribers.Completion<Error> {
-            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Error>)>] = [wrap(matchable: completion) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Failure>)> where M1.MatchedType == Subscribers.Completion<Failure> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Failure>)>] = [wrap(matchable: completion) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockJRPCLogger.self, method:
     """
-    receive(completion: Subscribers.Completion<Error>)
+    receive(completion: Subscribers.Completion<Failure>)
     """, parameterMatchers: matchers))
         }
         
@@ -440,11 +440,11 @@ public class MockJRPCLogger: JRPCLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Error>), Void> where M1.MatchedType == Subscribers.Completion<Error> {
-            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Error>)>] = [wrap(matchable: completion) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Failure>), Void> where M1.MatchedType == Subscribers.Completion<Failure> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Failure>)>] = [wrap(matchable: completion) { $0 }]
             return cuckoo_manager.verify(
     """
-    receive(completion: Subscribers.Completion<Error>)
+    receive(completion: Subscribers.Completion<Failure>)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -573,7 +573,7 @@ public class JRPCLoggerStub: JRPCLogger {
     
     
     
-    public override func receive(completion: Subscribers.Completion<Error>)   {
+    public override func receive(completion: Subscribers.Completion<Failure>)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     

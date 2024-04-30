@@ -76,17 +76,3 @@ open class WrapperSignal: Signal {
         return "\(value)"
     }
 }
-
-// MARK: - Globals
-
-/// Wraps any value into WrapperSignal and emits the resulting signal
-public func emit(_ value: Any, on beacon: Beacon = Beacon.shared, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    WrapperSignal(value).emit(on: [beacon], userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
-}
-
-/// Wraps any value into WrapperSignal and emits the resulting signal
-public func emit(_ value: Any, on beacons: [Beacon], userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) {
-    beacons.forEach { aBeacon in
-        emit(value, on: aBeacon, userInfo: userInfo, fileName: fileName, line: line, functionName: functionName)
-    }
-}

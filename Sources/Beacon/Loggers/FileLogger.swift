@@ -36,10 +36,6 @@ open class FileLogger: SignalLogger {
         }
     }
     
-    public typealias Input = Signal
-    
-    public typealias Failure = Swift.Error
-    
     // MARK: - Properties
     
     open private(set) var url: URL

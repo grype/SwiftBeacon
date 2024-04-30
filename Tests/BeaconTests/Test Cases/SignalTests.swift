@@ -8,22 +8,24 @@
 
 import XCTest
 import Nimble
+import Combine
 @testable import Beacon
 
 class SignalTests : XCTestCase {
     
     private var logger: MemoryLogger!
     
+    private var subject: PassthroughSubject<Signal, Never>!
+    
     override func setUp() {
         super.setUp()
         logger = MemoryLogger(name: "BeaconTestLogger")
-        logger.beForTesting()
-        logger.start()
+        subject.subscribe(logger)
     }
     
     override func tearDown() {
         super.tearDown()
-        logger.stop()
+        subject.send(completion: .finished)
     }
     
     func throwup() throws {
@@ -33,7 +35,7 @@ class SignalTests : XCTestCase {
     // MARK:- Emitting various signals
     
     func testEmitContextSignal() {
-        emit()
+        #emit(on: subject)
         let logger = self.logger!
         expect(logger.recordings.count) == 1
         let signal = logger.recordings.first!
@@ -42,7 +44,7 @@ class SignalTests : XCTestCase {
     
     func testEmitStringSignal() {
         let value = 123
-        emit(value)
+        #emit(value, on: subject)
         expect(self.logger.recordings.count) == 1
         let signal = logger.recordings.first as? WrapperSignal
         expect(signal).toNot(beNil())
@@ -52,23 +54,15 @@ class SignalTests : XCTestCase {
     func testErrorSignal() {
         do { try throwup() }
         catch {
-            emit(error: error)
+            #emit(error: error, on: subject)
         }
         expect(self.logger.recordings.count) == 1
         let signal = logger.recordings.first as? ErrorSignal
         expect(signal).toNot(beNil())
     }
     
-    func testOptionalErrorSignal() {
-        let err: Error? = nil
-        emit(error: err)
-        expect(self.logger.recordings.count) == 1
-        let signal = logger.recordings.first as? ContextSignal
-        expect(signal).toNot(beNil())
-    }
-    
     func testWrapperSignal() {
-        emit(self)
+        #emit(self, on: subject)
         expect(self.logger.recordings.count) == 1
         let signal = logger.recordings.first as? WrapperSignal
         expect(signal).toNot(beNil())
@@ -80,7 +74,7 @@ class SignalTests : XCTestCase {
     func testEmitFromMainThread() {
         waitUntil { done in
             DispatchQueue.main.async {
-                emit(self)
+                #emit(self, on: subject)
                 done()
             }
         }
@@ -93,25 +87,23 @@ class SignalTests : XCTestCase {
     
     func testEmitPerformance() {
         measure {
-            emit()
+            #emit()
         }
     }
     
     // MARK:- Scaling
     @inline(__always) private func perform(across count: Int, block: ()->Void) {
         let loggers: [MemoryLogger] = (1...count).map {
-            let logger = MemoryLogger(name: "\($0)")
-            logger.beForTesting()
-            return logger
+            return MemoryLogger(name: "\($0)")
         }
         block()
-        loggers.forEach { $0.stop() }
+        subject.send(completion: .finished)
     }
     
     func testEmitSmallScaling() {
         perform(across: 10) {
             measure {
-                emit()
+                #emit(on: self.subject)
             }
         }
     }
@@ -119,7 +111,7 @@ class SignalTests : XCTestCase {
     func testEmitLargeScaling() {
         perform(across: 1000) {
             measure {
-                emit()
+                #emit(on: self.subject)
             }
         }
     }

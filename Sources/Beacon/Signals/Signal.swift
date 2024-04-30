@@ -21,33 +21,6 @@ import Foundation
  */
 
 open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebugStringConvertible {
-    // MARK: - Structs
-    
-    /// Used to capture `emit()` invocation context
-    public struct Source: CustomStringConvertible, Codable {
-        public var identifier: String? = UniqueDeviceIdentifier
-        public var module: String?
-        public var fileName: String
-        public var line: Int
-        public var functionName: String
-        
-        public init(bundle aBundle: Bundle = .main, fileName aFileName: String = #file, line aLine: Int = #line, functionName aFunctionName: String = #function) {
-            module = aBundle.infoDictionary?["CFBundleName"] as? String
-            fileName = aFileName
-            line = aLine
-            functionName = aFunctionName
-        }
-        
-        public var description: String {
-            var functionDescription = ""
-            let functionNameSuffix = functionName.hasSuffix(")") ? "" : "()"
-            functionDescription = " #\(functionName)\(functionNameSuffix)"
-            let filePrintName = fileName.components(separatedBy: "/").last ?? fileName
-            let originName = (module != nil) ? "\(module!)." : ""
-            return "[\(originName)\(filePrintName):\(line)]\(functionDescription)"
-        }
-    }
-
     // MARK: - Properties
     
     open class var portableClassName: String? {
@@ -78,9 +51,7 @@ open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebug
     ///
     open lazy var descriptionDateFormatter: DateFormatter = .init(format: .default)
     
-    open lazy var bundleName: String? = {
-        Bundle.main.infoDictionary?["CFBundleName"] as? String
-    }()
+    open lazy var bundleName: String? = Bundle.main.infoDictionary?["CFBundleName"] as? String
     
     // MARK: - Encodable
     
@@ -154,5 +125,11 @@ open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebug
             result += "\n\(userInfoDescription)"
         }
         return result
+    }
+}
+
+extension Signal: Equatable {
+    public static func == (lhs: Signal, rhs: Signal) -> Bool {
+        return lhs === rhs
     }
 }

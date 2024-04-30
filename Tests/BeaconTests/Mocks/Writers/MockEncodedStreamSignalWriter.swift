@@ -35,9 +35,9 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
             return cuckoo_manager.getter("encoder",
                 superclassCall:
                     
-                    super.encoder
+                                    super.encoder
                     ,
-                defaultCall: __defaultImplStub!.encoder)
+                defaultCall:  __defaultImplStub!.encoder)
         }
         
         set {
@@ -61,9 +61,9 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
             return cuckoo_manager.getter("stream",
                 superclassCall:
                     
-                    super.stream
+                                    super.stream
                     ,
-                defaultCall: __defaultImplStub!.stream)
+                defaultCall:  __defaultImplStub!.stream)
         }
         
         set {
@@ -87,9 +87,9 @@ public class MockEncodedStreamSignalWriter: EncodedStreamSignalWriter, Cuckoo.Cl
             return cuckoo_manager.getter("separator",
                 superclassCall:
                     
-                    super.separator
+                                    super.separator
                     ,
-                defaultCall: __defaultImplStub!.separator)
+                defaultCall:  __defaultImplStub!.separator)
         }
         
         set {

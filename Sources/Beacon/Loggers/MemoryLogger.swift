@@ -22,8 +22,6 @@ open class MemoryLogger: SignalLogger {
     
     public typealias Input = Signal
     
-    public typealias Failure = Error
-    
     // MARK: - Instance creation
 
     public static var shared = MemoryLogger(name: "MemoryLogger")
@@ -50,7 +48,7 @@ open class MemoryLogger: SignalLogger {
         return .unlimited
     }
     
-    public func receive(completion: Subscribers.Completion<Failure>) {
+    public func receive(completion: Subscribers.Completion<Never>) {
         // Nothing to do
     }
     

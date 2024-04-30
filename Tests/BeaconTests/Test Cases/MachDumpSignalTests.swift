@@ -17,9 +17,6 @@ class MachDumpSignalTests : XCTestCase {
     override func setUp() {
         super.setUp()
         logger = MemoryLogger(name: "BeaconTestLogger")
-        logger.identifiesOnStart = false
-        logger.tracksMachImageImports = true
-        logger.start()
     }
     
     func testLogsImage() {

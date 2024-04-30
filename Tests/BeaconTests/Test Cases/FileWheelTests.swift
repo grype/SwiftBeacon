@@ -9,6 +9,7 @@
 import XCTest
 import Cuckoo
 import Nimble
+import Combine
 @testable import Beacon
 
 class FileWheelTests : XCTestCase {
@@ -17,9 +18,12 @@ class FileWheelTests : XCTestCase {
     
     var wheel: MockFileWheel!
     
+    private var subject: PassthroughSubject<Signal, Never>!
+    
     override func setUp() {
         super.setUp()
         wheel = MockFileWheel(when: { _ in true }, rotate: { _ in }).withEnabledSuperclassSpy()
+        subject = .init()
     }
     
     override func tearDown() {
@@ -28,6 +32,7 @@ class FileWheelTests : XCTestCase {
         if fileManager.fileExists(atPath: url.path) {
             try? fileManager.removeItem(at: url)
         }
+        subject.send(completion: .finished)
     }
     
     func testRotatesWhenShould() {
@@ -53,11 +58,8 @@ class FileWheelTests : XCTestCase {
     private func logSignal() {
         let logger = FileLogger(name: "Test logger", on: url, encoder: SignalDescriptionEncoder(encoding: .utf8))!
         logger.wheel = wheel
-        logger.tracksMachImageImports = false
-        logger.identifiesOnStart = false
-        logger.run { _ in
-            emit("Testing...")
-        }
+        subject.subscribe(logger)
+        #emit("Testing...", on: subject)
     }
     
 }

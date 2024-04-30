@@ -38,6 +38,7 @@ public struct MachImage: Encodable {
         name = String(cString: _dyld_get_image_name(index))
         address = Int(bitPattern: header)
         slide = _dyld_get_image_vmaddr_slide(index)
+
         if let cpuType = NXGetArchInfoFromCpuType(header.pointee.cputype, header.pointee.cpusubtype) {
             arch = String(cString: cpuType.pointee.name)
         }

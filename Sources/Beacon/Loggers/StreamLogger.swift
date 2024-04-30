@@ -23,10 +23,6 @@ import Foundation
  */
 
 open class StreamLogger: SignalLogger {
-    public typealias Input = Signal
-    
-    public typealias Failure = Error
-    
     // MARK: - Properties
     
     public private(set) var name: String
@@ -63,7 +59,7 @@ open class StreamLogger: SignalLogger {
         return .unlimited
     }
 
-    public func receive(completion: Subscribers.Completion<Failure>) {
+    public func receive(completion: Subscribers.Completion<Never>) {
         writer.close()
     }
 

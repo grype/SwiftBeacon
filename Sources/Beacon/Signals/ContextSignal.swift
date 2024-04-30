@@ -57,19 +57,3 @@ open class ContextSignal: Signal {
         return result
     }
 }
-
-// MARK: - Globals
-
-public func emit<S: Subject>(on aSubject: S, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) where S.Output == Signal {
-    let signal = ContextSignal()
-    signal.source = Signal.Source(bundle: .main, fileName: fileName, line: line, functionName: functionName)
-    signal.userInfo = userInfo
-    aSubject.send(signal)
-}
-
-public func emit<S: Subscriber>(on aSubscriber: S, userInfo: [AnyHashable: Any]? = nil, fileName: String = #file, line: Int = #line, functionName: String = #function) where S.Input == Signal {
-    let signal = ContextSignal()
-    signal.source = Signal.Source(bundle: .main, fileName: fileName, line: line, functionName: functionName)
-    signal.userInfo = userInfo
-    Just(signal).emit(on: aSubscriber)
-}

@@ -49,7 +49,7 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
     
     public override var rotateOnSubscription: Bool {
         get {
-            return cuckoo_manager.getter("rotateOnStart",
+            return cuckoo_manager.getter("rotateOnSubscription",
                 superclassCall:
                     
                                     super.rotateOnSubscription
@@ -58,7 +58,7 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
         }
         
         set {
-            cuckoo_manager.setter("rotateOnStart",
+            cuckoo_manager.setter("rotateOnSubscription",
                 value: newValue,
                 superclassCall:
                     
@@ -195,11 +195,11 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
     
     
     
-    public override func receive(completion: Subscribers.Completion<Error>)  {
+    public override func receive(completion: Subscribers.Completion<Failure>)  {
         
     return cuckoo_manager.call(
     """
-    receive(completion: Subscribers.Completion<Error>)
+    receive(completion: Subscribers.Completion<Failure>)
     """,
             parameters: (completion),
             escapingParameters: (completion),
@@ -249,8 +249,8 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
         
         
         
-        var rotateOnStart: Cuckoo.ClassToBeStubbedProperty<MockFileLogger, Bool> {
-            return .init(manager: cuckoo_manager, name: "rotateOnStart")
+        var rotateOnSubscription: Cuckoo.ClassToBeStubbedProperty<MockFileLogger, Bool> {
+            return .init(manager: cuckoo_manager, name: "rotateOnSubscription")
         }
         
         
@@ -311,11 +311,11 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
         
         
         
-        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Error>)> where M1.MatchedType == Subscribers.Completion<Error> {
-            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Error>)>] = [wrap(matchable: completion) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Failure>)> where M1.MatchedType == Subscribers.Completion<Failure> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Failure>)>] = [wrap(matchable: completion) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockFileLogger.self, method:
     """
-    receive(completion: Subscribers.Completion<Error>)
+    receive(completion: Subscribers.Completion<Failure>)
     """, parameterMatchers: matchers))
         }
         
@@ -354,8 +354,8 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
         
         
         
-        var rotateOnStart: Cuckoo.VerifyProperty<Bool> {
-            return .init(manager: cuckoo_manager, name: "rotateOnStart", callMatcher: callMatcher, sourceLocation: sourceLocation)
+        var rotateOnSubscription: Cuckoo.VerifyProperty<Bool> {
+            return .init(manager: cuckoo_manager, name: "rotateOnSubscription", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
         
         
@@ -421,11 +421,11 @@ public class MockFileLogger: FileLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Error>), Void> where M1.MatchedType == Subscribers.Completion<Error> {
-            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Error>)>] = [wrap(matchable: completion) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Failure>), Void> where M1.MatchedType == Subscribers.Completion<Failure> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Failure>)>] = [wrap(matchable: completion) { $0 }]
             return cuckoo_manager.verify(
     """
-    receive(completion: Subscribers.Completion<Error>)
+    receive(completion: Subscribers.Completion<Failure>)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -538,7 +538,7 @@ public class FileLoggerStub: FileLogger {
     
     
     
-    public override func receive(completion: Subscribers.Completion<Error>)   {
+    public override func receive(completion: Subscribers.Completion<Failure>)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     

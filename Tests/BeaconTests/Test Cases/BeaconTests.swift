@@ -8,58 +8,56 @@
 
 import XCTest
 import Nimble
+import Combine
 @testable import Beacon
 
 class BeaconTest: XCTestCase {
-    private var beacon: Beacon!
+    private var beacon: PassthroughSubject<Signal,Never>!
     private var logger: MemoryLogger!
+    private var bag: [AnyCancellable]!
     
     override func setUp() {
-        beacon = Beacon()
+        bag = []
+        beacon = .init()
         logger = MemoryLogger(name: "Test Logger")
-        logger.beForTesting()
-        logger.start(on: [beacon])
     }
     
     override func tearDown() {
-        logger.stop()
+        logger.cancel()
         logger = nil
         beacon = nil
     }
     
     func testSignaling() {
-        beacon.signal(ContextSignal())
+        beacon.subscribe(logger)
+        beacon.send(ContextSignal())
         expect(self.logger.recordings.count) == 1
     }
     
     func testSignalingWhileStopped() {
-        logger.stop()
-        beacon.signal(ContextSignal())
+        logger.cancel()
+        beacon.send(ContextSignal())
         expect(self.logger.recordings.count) == 0
     }
     
     func testSignalingWhileFiltering() {
-        logger.stop()
-        logger.start(on: [beacon]) { (aSignal) -> Bool in
-            return aSignal is ContextSignal
-        }
-        beacon.signal(WrapperSignal("Wrapped signal should be ignored"))
+        beacon.filter { $0 is ContextSignal }.subscribe(logger)
+        beacon.send(WrapperSignal("Wrapped signal should be ignored"))
         expect(self.logger.recordings.count) == 0
-        beacon.signal(ContextSignal())
+        beacon.send(ContextSignal())
         expect(self.logger.recordings.count) == 1
     }
     
     func testPerformance() {
-        let beacon = Beacon()
+        let beacon = PassthroughSubject<Signal,Never>()
         let logger = MemoryLogger(name: "Memory Test Logger")
-        logger.beForTesting()
-        logger.start(on: [beacon], filter: nil)
+        beacon.subscribe(logger)
         measure {
             for _ in 1..<10000 {
-                Signal().emit(on: [beacon])
+                beacon.send(Signal())
             }
         }
-        logger.stop()
+        
     }
 
 }

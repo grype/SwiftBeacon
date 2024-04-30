@@ -37,7 +37,7 @@ class MemoryLoggerTests: XCTestCase {
         logger.nextPut(signals.second)
         logger.nextPut(signals.third)
         expect(logger.recordings.count).to(equal(2))
-        expect(logger.recordings.contains(signals.second)).to(beTrue())
-        expect(logger.recordings.contains(signals.third)).to(beTrue())
+        expect(logger.recordings).to(contain(signals.second))
+        expect(logger.recordings).to(contain(signals.third))
     }
 }

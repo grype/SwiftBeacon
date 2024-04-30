@@ -6,8 +6,8 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 /**
  I am a console logger of `Signal`s.
@@ -17,12 +17,6 @@ import Combine
  */
 
 open class ConsoleLogger: SignalLogger {
-    // MARK: - Types
-    
-    public typealias Input = Signal
-    
-    public typealias Failure = Error
-    
     // MARK: - Instance Creation
 
     public static let shared = ConsoleLogger(name: "Shared Console Logger")
@@ -52,7 +46,7 @@ open class ConsoleLogger: SignalLogger {
         return .unlimited
     }
     
-    public func receive(completion: Subscribers.Completion<Failure>) {
+    public func receive(completion: Subscribers.Completion<Never>) {
         // Nothing to do
     }
     

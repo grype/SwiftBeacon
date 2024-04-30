@@ -9,6 +9,7 @@
 import Foundation
 import MachO
 import RWLock
+import Combine
 
 open class MachImageMonitor {
     // MARK: - API
@@ -37,7 +38,7 @@ open class MachImageMonitor {
     
     // MARK: - Properties
     
-    @RWLocked public private(set) var images = [MachImage]()
+    @Published public private(set) var images = [MachImage]()
     
     // MARK: - Adding/Removing Images
     
@@ -51,16 +52,22 @@ open class MachImageMonitor {
         }
         let image = MachImage(at: index)
         images.append(image)
-//        announcer.announce(Announcement.didAddImage(image))
+//        let signal = MachImageImportsSignal()
+//        signal.added = [image]
+//        beacon.send(signal)
     }
     
     private func didRemoveImage(_ aHeader: UnsafePointer<mach_header>) {
         let address = Int(bitPattern: aHeader)
-        guard let image = images.first(where: { $0.address == address })
+        guard let index = images.firstIndex(where: { $0.address == address })
         else {
             print("Could not find image to remove at: \(String(describing: aHeader))")
             return
         }
-//        announcer.announce(Announcement.didRemoveImage(image))
+        images.remove(at: index)
+//        let signal = MachImageImportsSignal()
+//        signal.removed = [image]
+//        signal.source = Source()
+//        beacon.send(signal)
     }
 }
