@@ -46,6 +46,36 @@ open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebug
     /// Time when the signal was `emit()`ed.
     public let timestamp: Date = .init()
     
+    // MARK: - Instance Creation
+    
+    static func representing<S: Signaling>(_ aValue: S, userInfo: [AnyHashable: Any]? = nil, source: Source = .init()) -> some Signal {
+        let signal = aValue.beaconSignal
+        signal.userInfo = userInfo
+        signal.source = source
+        return signal
+    }
+    
+    static func representing(_ aValue: Any, userInfo: [AnyHashable: Any]? = nil, source: Source = .init()) -> some Signal {
+        let signal = WrapperSignal(aValue)
+        signal.userInfo = userInfo
+        signal.source = source
+        return signal
+    }
+    
+    static func representing(stack aStack: [String] = Thread.callStackSymbols, userInfo: [AnyHashable: Any]? = nil, source: Source = .init()) -> some Signal {
+        let signal = ContextSignal(stack: aStack)
+        signal.userInfo = userInfo
+        signal.source = source
+        return signal
+    }
+    
+    static func representing(error anError: Error, stack aStack: [String] = Thread.callStackSymbols, userInfo: [AnyHashable: Any]? = nil, source: Source = .init()) -> some Signal {
+        let signal = ErrorSignal(error: anError, stack: aStack)
+        signal.userInfo = userInfo
+        signal.source = source
+        return signal
+    }
+    
     // MARK: Properties - Private
     
     ///

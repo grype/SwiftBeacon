@@ -1,0 +1,43 @@
+//
+//  MacrosTests.swift
+//
+//
+//  Created by Pavel Skaldin on 4/29/24.
+//
+
+import BeaconMacros
+import SwiftSyntax
+import SwiftSyntaxMacroExpansion
+import SwiftSyntaxMacros
+import SwiftSyntaxMacrosTestSupport
+import XCTest
+
+final class MacrosTests: XCTestCase {
+    override func setUp() {
+        // Put setup code here. This method is called before the invocation of each test method in the class.
+    }
+
+    override func tearDown() {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+
+    func testEmitContextOverImplicitSubject() throws {
+        assertMacroExpansion("""
+                             #emit()
+                             """,
+                             expandedSource: """
+                             Bundle.sharedBeacon.send(Signal.representing(userInfo: nil, source: Source()))
+                             """,
+                             macros: ["emit": EmitMacro.self])
+    }
+
+    func testEmitContextOverExplicitSubject() throws {
+        assertMacroExpansion("""
+                             #emit(on: aSubject)
+                             """,
+                             expandedSource: """
+                             aSubject.send(Signal.representing(userInfo: nil, source: Source()))
+                             """,
+                             macros: ["emit": EmitMacro.self])
+    }
+}

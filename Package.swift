@@ -26,7 +26,7 @@ let package = Package(
         return libs
     }(),
     dependencies: [
-        .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0"),
+        .package(url: "https://github.com/apple/swift-syntax", from: "509.1.1"),
         .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "11.2.0")),
         .package(name: "RWLock", url: "https://github.com/grype/RWLock-Swift", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/Brightify/Cuckoo", .upToNextMajor(from: "1.3.0")),
@@ -46,7 +46,13 @@ let package = Package(
                 exclude: ["../BeaconObjcRuntime"]),
             .testTarget(
                 name: "BeaconTests",
-                dependencies: ["Beacon", "BeaconMacros", "Nimble", "Cuckoo", "AnyCodable"]),
+                dependencies: [
+                    "Beacon",
+                    "BeaconMacros",
+                    "Nimble",
+                    "Cuckoo",
+                    "AnyCodable",
+                    .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")]),
         ]
         #if _runtime(_ObjC)
         targets.append(contentsOf: [

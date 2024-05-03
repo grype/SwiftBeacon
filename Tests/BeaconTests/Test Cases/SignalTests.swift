@@ -74,7 +74,7 @@ class SignalTests : XCTestCase {
     func testEmitFromMainThread() {
         waitUntil { done in
             DispatchQueue.main.async {
-                #emit(self, on: subject)
+                #emit(self, on: self.subject)
                 done()
             }
         }
