@@ -38,37 +38,3 @@ public struct EmitMacro: ExpressionMacro {
         return "\(subject).send(\(signal))"
     }
 }
-
-// emit(error: Error, userInfo: anInfo? = nil, on: aSubject)
-public struct EmitErrorMacro: ExpressionMacro {
-    public static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> ExprSyntax {
-        let argumentList = node.argumentList
-        
-        guard let error = argumentList.first else {
-            throw EmitError.missingValue
-        }
-        
-        var userInfo: ExprSyntax = "nil"
-        if let userInfoExpression = argumentList.first(where: { $0.label == "userInfo" }) {
-            userInfo = "\(userInfoExpression.expression)"
-        }
-        
-        var subject: ExprSyntax = "Bundle.sharedBeacon"
-        if let subjectExpression = argumentList.first(where: { $0.label == "on" }) {
-            subject = "\(subjectExpression.expression)"
-        }
-        
-        return """
-        { let source = Source()
-        let signal = ErrorSignal(error: \(error.expression))
-        signal.userInfo = \(userInfo)
-        signal.source = source
-        \(subject).send(signal) }()
-        """
-    }
-}
-
-public enum EmitError: Error {
-    case missingValue
-    case missingSubject
-}

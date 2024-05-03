@@ -12,4 +12,4 @@ import Combine
 public macro emit<S:Subject>(_ aValue: Any? = nil, userInfo: Any? = nil, on: S = Bundle.sharedBeacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")
 
 @freestanding(expression)
-public macro emit<S:Subject>(error: Error, userInfo: Any? = nil, on: S = Bundle.sharedBeacon) = #externalMacro(module: "BeaconMacros", type: "EmitErrorMacro")
+public macro emit<S:Subject>(error: Error, userInfo: Any? = nil, on: S = Bundle.sharedBeacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")

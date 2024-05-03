@@ -11,6 +11,6 @@ import SwiftSyntaxMacros
 
 @main
 struct BeaconMacros: CompilerPlugin {
-    var providingMacros: [Macro.Type] = [EmitMacro.self, EmitErrorMacro.self]
+    var providingMacros: [Macro.Type] = [EmitMacro.self]
 }
 
