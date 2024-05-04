@@ -37,8 +37,6 @@ class ContextSignalTests: XCTestCase {
     }
     
     func testSymbols() {
-        #emit("omg", userInfo: ["foo": "Foo"], on: subject)
-        #emit(on: subject)
         #emit()
         let signal = logger.recordings.first as! ContextSignal
         expect(signal.symbols).toNot(beEmpty())

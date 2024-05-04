@@ -27,7 +27,7 @@ public struct EmitMacro: ExpressionMacro {
             signal = "Signal.representing(error: \(error.expression), userInfo: \(userInfo), source: Source())"
         }
         else {
-            signal = "Signal.representing(userInfo: \(userInfo), source: Source())"
+            signal = "Signal.representing(stack: Thread.callStackSymbols, userInfo: \(userInfo), source: Source())"
         }
         
         var subject: ExprSyntax = "Bundle.sharedBeacon"
