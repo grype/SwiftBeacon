@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @freestanding(expression)
-public macro emit<S:Subject>(_ aValue: Any? = nil, userInfo: Any? = nil, on: S = Bundle.sharedBeacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")
+public macro emit<S:Subject>(_ aValue: Any? = nil, userInfo: Any? = nil, on: S = Beacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")
 
 @freestanding(expression)
-public macro emit<S:Subject>(error: Error, userInfo: Any? = nil, on: S = Bundle.sharedBeacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")
+public macro emit<S:Subject>(error: Error, userInfo: Any? = nil, on: S = Beacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")

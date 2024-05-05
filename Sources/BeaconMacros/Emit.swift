@@ -30,7 +30,7 @@ public struct EmitMacro: ExpressionMacro {
             signal = "Signal.representing(stack: Thread.callStackSymbols, userInfo: \(userInfo), source: Source())"
         }
         
-        var subject: ExprSyntax = "Bundle.sharedBeacon"
+        var subject: ExprSyntax = "Beacon"
         if let subjectExpression = argumentList.first(where: { $0.label?.text == "on" }) {
             subject = "\(subjectExpression.expression)"
         }

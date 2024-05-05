@@ -26,7 +26,7 @@ final class MacrosTests: XCTestCase {
                              #emit()
                              """,
                              expandedSource: """
-                             Bundle.sharedBeacon.send(Signal.representing(stack: Thread.callStackSymbols, userInfo: nil, source: Source()))
+                             Beacon.send(Signal.representing(stack: Thread.callStackSymbols, userInfo: nil, source: Source()))
                              """,
                              macros: ["emit": EmitMacro.self])
     }
@@ -40,7 +40,7 @@ final class MacrosTests: XCTestCase {
                              """,
                              macros: ["emit": EmitMacro.self])
     }
-    
+
     func testEmitContextWithUserInfoOverExplicitSubject() throws {
         assertMacroExpansion("""
                              #emit(userInfo: ["bool": true], on: aSubject)
@@ -50,13 +50,13 @@ final class MacrosTests: XCTestCase {
                              """,
                              macros: ["emit": EmitMacro.self])
     }
-    
+
     func testEmitContextWithUserInfoOverImplicitSubject() throws {
         assertMacroExpansion("""
                              #emit(userInfo: ["bool": true])
                              """,
                              expandedSource: """
-                             Bundle.sharedBeacon.send(Signal.representing(stack: Thread.callStackSymbols, userInfo: ["bool": true], source: Source()))
+                             Beacon.send(Signal.representing(stack: Thread.callStackSymbols, userInfo: ["bool": true], source: Source()))
                              """,
                              macros: ["emit": EmitMacro.self])
     }
