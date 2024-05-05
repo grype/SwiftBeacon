@@ -16,10 +16,10 @@ public struct SystemInfo: Encodable, CustomStringConvertible {
     var name: String?
     var model: String?
     var arch: String?
-    
+
     public static var current: SystemInfo = {
         let info = NXGetLocalArchInfo()
-        
+
         #if os(macOS)
         let arch = String(utf8String: (info?.pointee.description)!)!
         let processInfo = ProcessInfo.processInfo
@@ -34,7 +34,7 @@ public struct SystemInfo: Encodable, CustomStringConvertible {
         return SystemInfo()
         #endif
     }()
-    
+
     public var description: String {
         var result = [name, model, arch].compactMap { $0 }.joined(separator: "; ")
         if result.isEmpty {
@@ -42,7 +42,7 @@ public struct SystemInfo: Encodable, CustomStringConvertible {
         }
         return result
     }
-    
+
     private static func sysctlString(for key: String) -> String {
         var size = 0
         sysctlbyname(key, nil, &size, nil, 0)

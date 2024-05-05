@@ -20,6 +20,7 @@ class SignalTests : XCTestCase {
     override func setUp() {
         super.setUp()
         logger = MemoryLogger(name: "BeaconTestLogger")
+        subject = .init()
         subject.subscribe(logger)
     }
     

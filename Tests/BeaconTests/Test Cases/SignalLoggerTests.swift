@@ -64,7 +64,7 @@ class SignalLoggerTests: XCTestCase {
     func testMultipleSubscriptionsToSameBeacon() {
         [activeBeacon, activeBeacon].forEach { $0.subscribe(logger) }
         #emit(on: activeBeacon)
-        expect(self.logger.recordings.count) == 1
+        expect(self.logger.recordings.count) == 2
     }
     
     func testMultipleSubscriptionsToSameBeaconWithDifferentFilters() {

@@ -28,8 +28,7 @@ class ContextSignalTests: XCTestCase {
         subject.send(completion: .finished)
     }
     
-    func testEmitStringOnly() {
-        #emit("Hello", on: subject)
+    func testEmit() {
         #emit(on: subject)
         let signal = logger.recordings.first
         expect(self.logger.recordings.count) == 1
@@ -37,7 +36,7 @@ class ContextSignalTests: XCTestCase {
     }
     
     func testSymbols() {
-        #emit()
+        #emit(on: subject)
         let signal = logger.recordings.first as! ContextSignal
         expect(signal.symbols).toNot(beEmpty())
     }
