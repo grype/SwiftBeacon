@@ -13,3 +13,6 @@ public macro emit<S:Subject>(_ aValue: Any? = nil, userInfo: Any? = nil, on: S =
 
 @freestanding(expression)
 public macro emit<S:Subject>(error: Error, userInfo: Any? = nil, on: S = Beacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")
+
+@freestanding(expression)
+public macro emit<V: Signal, S:Subject>(_ aSignal: V, userInfo: Any? = nil, on: S = Beacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")

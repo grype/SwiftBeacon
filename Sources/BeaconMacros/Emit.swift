@@ -26,6 +26,9 @@ public struct EmitMacro: ExpressionMacro {
         else if let error = argumentList.first(where: { $0.label?.text == "error" }) {
             signal = "Signal.representing(error: \(error.expression), userInfo: \(userInfo), source: Source())"
         }
+        else if let sig = argumentList.first(where: { $0.label?.text == "signal" }) {
+            signal = "\(sig.expression)"
+        }
         else {
             signal = "Signal.representing(stack: Thread.callStackSymbols, userInfo: \(userInfo), source: Source())"
         }

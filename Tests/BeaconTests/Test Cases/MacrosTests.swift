@@ -60,4 +60,24 @@ final class MacrosTests: XCTestCase {
                              """,
                              macros: ["emit": EmitMacro.self])
     }
+    
+    func testEmitSignalOverImplicitSubject() throws {
+        assertMacroExpansion("""
+                             #emit(signal: StringSignal("String signal"))
+                             """,
+                             expandedSource: """
+                             Beacon.send(StringSignal("String signal"))
+                             """,
+                             macros: ["emit": EmitMacro.self])
+    }
+    
+    func testEmitSignalOverExplicitSubject() throws {
+        assertMacroExpansion("""
+                             #emit(signal: StringSignal("String signal"), on: aSubject)
+                             """,
+                             expandedSource: """
+                             aSubject.send(StringSignal("String signal"))
+                             """,
+                             macros: ["emit": EmitMacro.self])
+    }
 }
