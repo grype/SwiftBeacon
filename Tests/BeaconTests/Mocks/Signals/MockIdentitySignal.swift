@@ -30,8 +30,6 @@ public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
     
     
     
-    
-    
     public override var systemInfo: SystemInfo {
         get {
             return cuckoo_manager.getter("systemInfo",
@@ -121,13 +119,6 @@ public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
         
         
         
-        var beaconVersion: Cuckoo.ClassToBeStubbedReadOnlyProperty<MockIdentitySignal, String> {
-            return .init(manager: cuckoo_manager, name: "beaconVersion")
-        }
-        
-        
-        
-        
         var systemInfo: Cuckoo.ClassToBeStubbedProperty<MockIdentitySignal, SystemInfo> {
             return .init(manager: cuckoo_manager, name: "systemInfo")
         }
@@ -175,13 +166,6 @@ public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
         
         
         
-        var beaconVersion: Cuckoo.VerifyReadOnlyProperty<String> {
-            return .init(manager: cuckoo_manager, name: "beaconVersion", callMatcher: callMatcher, sourceLocation: sourceLocation)
-        }
-        
-        
-        
-        
         var systemInfo: Cuckoo.VerifyProperty<SystemInfo> {
             return .init(manager: cuckoo_manager, name: "systemInfo", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
@@ -220,11 +204,6 @@ public class MockIdentitySignal: IdentitySignal, Cuckoo.ClassMock {
 
 
 public class IdentitySignalStub: IdentitySignal {
-    
-    
-    
-    
-   
     
     
     

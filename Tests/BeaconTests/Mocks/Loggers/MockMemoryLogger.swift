@@ -143,11 +143,11 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
     
     
     
-    public override func receive(completion: Subscribers.Completion<Failure>)  {
+    public override func receive(completion: Subscribers.Completion<Never>)  {
         
     return cuckoo_manager.call(
     """
-    receive(completion: Subscribers.Completion<Failure>)
+    receive(completion: Subscribers.Completion<Never>)
     """,
             parameters: (completion),
             escapingParameters: (completion),
@@ -254,11 +254,11 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
         
         
         
-        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Failure>)> where M1.MatchedType == Subscribers.Completion<Failure> {
-            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Failure>)>] = [wrap(matchable: completion) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.ClassStubNoReturnFunction<(Subscribers.Completion<Never>)> where M1.MatchedType == Subscribers.Completion<Never> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Never>)>] = [wrap(matchable: completion) { $0 }]
             return .init(stub: cuckoo_manager.createStub(for: MockMemoryLogger.self, method:
     """
-    receive(completion: Subscribers.Completion<Failure>)
+    receive(completion: Subscribers.Completion<Never>)
     """, parameterMatchers: matchers))
         }
         
@@ -349,11 +349,11 @@ public class MockMemoryLogger: MemoryLogger, Cuckoo.ClassMock {
         
         
         @discardableResult
-        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Failure>), Void> where M1.MatchedType == Subscribers.Completion<Failure> {
-            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Failure>)>] = [wrap(matchable: completion) { $0 }]
+        func receive<M1: Cuckoo.Matchable>(completion: M1) -> Cuckoo.__DoNotUse<(Subscribers.Completion<Never>), Void> where M1.MatchedType == Subscribers.Completion<Never> {
+            let matchers: [Cuckoo.ParameterMatcher<(Subscribers.Completion<Never>)>] = [wrap(matchable: completion) { $0 }]
             return cuckoo_manager.verify(
     """
-    receive(completion: Subscribers.Completion<Failure>)
+    receive(completion: Subscribers.Completion<Never>)
     """, callMatcher: callMatcher, parameterMatchers: matchers, sourceLocation: sourceLocation)
         }
         
@@ -448,7 +448,7 @@ public class MemoryLoggerStub: MemoryLogger {
     
     
     
-    public override func receive(completion: Subscribers.Completion<Failure>)   {
+    public override func receive(completion: Subscribers.Completion<Never>)   {
         return DefaultValueRegistry.defaultValue(for: (Void).self)
     }
     

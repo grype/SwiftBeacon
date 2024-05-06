@@ -57,7 +57,7 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
     
     
     
-    public override var userInfo: [AnyHashable: Any]? {
+    public override var userInfo: Any? {
         get {
             return cuckoo_manager.getter("userInfo",
                 superclassCall:
@@ -285,7 +285,7 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
         
         
         
-        var userInfo: Cuckoo.ClassToBeStubbedOptionalProperty<MockSignal, [AnyHashable: Any]> {
+        var userInfo: Cuckoo.ClassToBeStubbedOptionalProperty<MockSignal, Any> {
             return .init(manager: cuckoo_manager, name: "userInfo")
         }
         
@@ -388,7 +388,7 @@ public class MockSignal: Signal, Cuckoo.ClassMock {
         
         
         
-        var userInfo: Cuckoo.VerifyOptionalProperty<[AnyHashable: Any]> {
+        var userInfo: Cuckoo.VerifyOptionalProperty<Any> {
             return .init(manager: cuckoo_manager, name: "userInfo", callMatcher: callMatcher, sourceLocation: sourceLocation)
         }
         
@@ -492,9 +492,9 @@ public class SignalStub: Signal {
     
     
     
-    public override var userInfo: [AnyHashable: Any]? {
+    public override var userInfo: Any? {
         get {
-            return DefaultValueRegistry.defaultValue(for: ([AnyHashable: Any]?).self)
+            return DefaultValueRegistry.defaultValue(for: (Any?).self)
         }
         
         set { }
