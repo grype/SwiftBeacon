@@ -23,6 +23,13 @@ open class MachImageImportsSignal: Signal {
     
     override open var signalName: String { "🧩" }
     
+    // MARK: - Initialization
+    
+    public init(added: [MachImage]? = nil, removed: [MachImage]? = nil, source: Source = .init()) {
+        self.added = added
+        self.removed = removed
+    }
+    
     // MARK: - Codable
     
     private enum CodingKeys: String, CodingKey {

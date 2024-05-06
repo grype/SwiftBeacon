@@ -6,10 +6,10 @@
 //  Copyright © 2021 Pavel Skaldin. All rights reserved.
 //
 
+import Combine
 import Foundation
 import MachO
 import RWLock
-import Combine
 
 open class MachImageMonitor {
     // MARK: - API
@@ -40,6 +40,12 @@ open class MachImageMonitor {
     
     @Published public private(set) var images = [MachImage]()
     
+    public private(set) var beacon: PassthroughSubject<Signal, Never> = .init()
+    
+    // MARK: - Initialization
+    
+    init() {} // `init` is internal
+    
     // MARK: - Adding/Removing Images
     
     private func didAddImage(_ aHeader: UnsafePointer<mach_header>) {
@@ -52,9 +58,7 @@ open class MachImageMonitor {
         }
         let image = MachImage(at: index)
         images.append(image)
-//        let signal = MachImageImportsSignal()
-//        signal.added = [image]
-//        beacon.send(signal)
+        beacon.send(MachImageImportsSignal(added: [image]))
     }
     
     private func didRemoveImage(_ aHeader: UnsafePointer<mach_header>) {
@@ -64,10 +68,7 @@ open class MachImageMonitor {
             print("Could not find image to remove at: \(String(describing: aHeader))")
             return
         }
-        images.remove(at: index)
-//        let signal = MachImageImportsSignal()
-//        signal.removed = [image]
-//        signal.source = Source()
-//        beacon.send(signal)
+        let image = images.remove(at: index)
+        beacon.send(MachImageImportsSignal(removed: [image]))
     }
 }
