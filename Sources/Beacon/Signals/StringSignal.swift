@@ -16,9 +16,9 @@ import Foundation
 open class StringSignal: Signal {
     open private(set) var message: String
     
-    @objc public init(_ aMessage: String) {
+    public init(_ aMessage: String, userInfo: Any? = nil, source: Source = .init()) {
         message = aMessage
-        super.init()
+        super.init(userInfo: userInfo, source: source)
     }
     
     override open var signalName: String { "🏷" }

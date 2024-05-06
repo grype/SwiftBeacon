@@ -38,16 +38,14 @@ open class WrapperSignal: Signal {
     
     override open class var portableClassName: String? { "RemoteWrapperSignal" }
     
-    public init(_ aValue: Encodable, userInfo anUserInfo: [AnyHashable: Any]? = nil) {
+    public init(_ aValue: Encodable, userInfo: [AnyHashable: Any]? = nil, source: Source = .init()) {
         encodableValue = aValue
-        super.init()
-        userInfo = anUserInfo
+        super.init(userInfo: userInfo, source: source)
     }
     
-    @objc public init(_ aValue: Any, userInfo anUserInfo: [AnyHashable: Any]? = nil) {
+    public init(_ aValue: Any, userInfo: Any? = nil, source: Source = .init()) {
         anyValue = aValue
-        super.init()
-        userInfo = anUserInfo
+        super.init(userInfo: userInfo, source: source)
     }
     
     private enum CodingKeys: String, CodingKey {

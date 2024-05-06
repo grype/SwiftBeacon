@@ -21,10 +21,10 @@ open class ErrorSignal: Signal {
     open private(set) var error: Error
     open var stack: [String]
     
-    @objc public init(error anError: Error, stack aStack: [String] = Thread.callStackSymbols) {
+    public init(error anError: Error, stack aStack: [String] = Thread.callStackSymbols, userInfo: Any? = nil, source: Source = .init()) {
         error = anError
         stack = aStack
-        super.init()
+        super.init(userInfo: userInfo, source: source)
     }
     
     override open var signalName: String { "⚡ \(super.signalName)" }

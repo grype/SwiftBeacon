@@ -23,7 +23,7 @@ open class ContextSignal: Signal {
 
     open var symbols: [String: [Int]]
 
-    @objc public init(stack aStack: [String] = Thread.callStackSymbols) {
+    public init(stack aStack: [String] = Thread.callStackSymbols, userInfo: Any? = nil, source: Source = Source()) {
         stack = aStack
         symbols = [String: [Int]]()
         for i in 0 ..< _dyld_image_count() {
@@ -32,7 +32,7 @@ open class ContextSignal: Signal {
             let slide = _dyld_get_image_vmaddr_slide(i)
             symbols[name] = [header, slide]
         }
-        super.init()
+        super.init(userInfo: userInfo, source: source)
     }
 
     override open var signalName: String { "🌀 \(super.signalName)" }

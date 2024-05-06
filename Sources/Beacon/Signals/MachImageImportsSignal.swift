@@ -25,9 +25,10 @@ open class MachImageImportsSignal: Signal {
     
     // MARK: - Initialization
     
-    public init(added: [MachImage]? = nil, removed: [MachImage]? = nil, source: Source = .init()) {
+    public init(added: [MachImage]? = nil, removed: [MachImage]? = nil, userInfo: Any? = nil, source: Source = .init()) {
         self.added = added
         self.removed = removed
+        super.init(userInfo: userInfo, source: source)
     }
     
     // MARK: - Codable
