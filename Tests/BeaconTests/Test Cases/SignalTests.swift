@@ -94,7 +94,7 @@ class SignalTests : XCTestCase {
     
     // MARK:- Scaling
     @inline(__always) private func perform(across count: Int, block: ()->Void) {
-        let loggers: [MemoryLogger] = (1...count).map {
+        let _: [MemoryLogger] = (1...count).map {
             return MemoryLogger(name: "\($0)")
         }
         block()
