@@ -31,10 +31,10 @@ open class JRPCLogger: CollectingSignalLogger, ErroringLogger {
     open private(set) var name: String
     
     /// Base URL to the JSON RPC server
-    @objc open private(set) var url: URL!
+    open private(set) var url: URL!
     
     /// JRPC Method to call
-    @objc open private(set) var method: String!
+    open private(set) var method: String!
     
     /// JSONEncoder for encoding signals.
     var encoder: SignalEncoder = JSONSignalEncoder()

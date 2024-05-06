@@ -18,8 +18,8 @@ import Foundation
  */
 
 open class ErrorSignal: Signal {
-    @objc open private(set) var error: Error
-    @objc open var stack: [String]
+    open private(set) var error: Error
+    open var stack: [String]
     
     @objc public init(error anError: Error, stack aStack: [String] = Thread.callStackSymbols) {
         error = anError

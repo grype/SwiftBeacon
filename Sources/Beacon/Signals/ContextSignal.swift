@@ -19,9 +19,9 @@ import Combine
  */
 
 open class ContextSignal: Signal {
-    @objc open var stack: [String]
+    open var stack: [String]
 
-    @objc open var symbols: [String: [Int]]
+    open var symbols: [String: [Int]]
 
     @objc public init(stack aStack: [String] = Thread.callStackSymbols) {
         stack = aStack

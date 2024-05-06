@@ -23,7 +23,7 @@ import Foundation
 
 open class WrapperSignal: Signal {
     /// Wrapped value
-    @objc open var value: Any {
+    open var value: Any {
         if let encodable = encodableValue {
             return encodable
         }
