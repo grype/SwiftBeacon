@@ -14,6 +14,15 @@ import Foundation
  
  I am based on StreamLogger and provide additional mechanisms that are useful for managing files.
  One such mechanism is support for file rotation.
+ 
+ **File Rotation**
+ 
+ File rotation is accomplished with the assistance of `FileWheel`, which captures both:
+ the conditition and the logic for rotating files. I provide those parameters.
+ 
+ If `rotateOnSubscription` is true, I will attempt to rotate logs when I am subscribed to a publisher/subject.
+ 
+ Whenever a log entry is attempted, I will also check the `wheel` if I need to rorate the log file.
  */
 
 open class FileLogger: SignalLogger {
