@@ -28,7 +28,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax", from: "509.1.1"),
         .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "11.2.0")),
-        .package(name: "RWLock", url: "https://github.com/grype/RWLock-Swift", .upToNextMajor(from: "1.0.0")),
+        .package(url: "https://github.com/grype/RWLock-Swift", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/Brightify/Cuckoo", .upToNextMajor(from: "1.3.0")),
         .package(url: "https://github.com/Flight-School/AnyCodable", .upToNextMajor(from: "0.5.0")),
     ],
@@ -42,7 +42,10 @@ let package = Package(
                 ]),
             .target(
                 name: "Beacon",
-                dependencies: ["BeaconMacros", "RWLock", "AnyCodable"],
+                dependencies: [
+                    "BeaconMacros",
+                    .product(name: "RWLock", package: "RWLock-Swift"),
+                    "AnyCodable"],
                 exclude: ["../BeaconObjcRuntime"]),
             .testTarget(
                 name: "BeaconTests",
