@@ -81,7 +81,10 @@ open class FileLogger: SignalLogger {
     public func receive(subscription: Subscription) {
         defer { writer.open() }
         
-        guard rotateOnSubscription else { return }
+        guard rotateOnSubscription else {
+            subscription.request(.unlimited)
+            return
+        }
         
         do {
             try forceRotate()

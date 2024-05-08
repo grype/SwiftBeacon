@@ -21,17 +21,10 @@ class FileLoggerTests: XCTestCase {
     
     private var wheel: MockFileWheel!
     
-    private var publisher: PassthroughSubject<Signal, Error>!
-    
     override func setUp() {
         super.setUp()
         
-        publisher = .init()
-        
-        wheel = MockFileWheel(when: { _ -> Bool in
-            true
-        }, rotate: { _ in
-        }).withEnabledSuperclassSpy()
+        wheel = MockFileWheel(when: { _ in true }, rotate: { _ in }).withEnabledSuperclassSpy()
         
         logger = FileLogger(name: "FileLoggerTests", on: url, encoder: SignalDescriptionEncoder(encoding: .utf8))
         logger.wheel = wheel
@@ -42,17 +35,18 @@ class FileLoggerTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         subject.send(completion: .finished)
-        logger = nil
     }
     
     func testRotates() {
         stubForRotation(true)
+        subject.subscribe(logger)
         logSignal()
         verify(wheel, times(1)).rotate(fileAt: any())
     }
     
     func testDoesNotRotate() {
         stubForRotation(false)
+        subject.subscribe(logger)
         logSignal()
         verify(wheel, times(0)).rotate(fileAt: any())
     }
@@ -88,7 +82,7 @@ class FileLoggerTests: XCTestCase {
     // MARK: - Helpers
     
     private func logSignal() {
-        subject.send(StringSignal("\(Date())"))
+        #emit(on: subject)
     }
     
     private func stubForRotation(_ bool: Bool) {

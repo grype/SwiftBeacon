@@ -38,24 +38,21 @@ class FileWheelTests: XCTestCase {
         subject?.send(completion: .finished)
     }
     
-    func testRotatesWhenShould() {
+    func testRotatesOnSubscription() {
         logger.rotateOnSubscription = true
         subject.subscribe(logger)
         stub(wheel) { stub in
             when(stub.rotate(fileAt: any())).thenDoNothing()
         }
-        
-        #emit("Testing...", on: subject)
-        verify(wheel, atLeastOnce()).rotate(fileAt: any())
+        verify(wheel, times(1)).rotate(fileAt: any())
     }
     
-    func testDoesNotRotateWhenShouldNot() {
+    func testDoesNotRotateOnSubscription() {
         logger.rotateOnSubscription = false
         subject.subscribe(logger)
         stub(wheel) { stub in
             when(stub.rotate(fileAt: any())).thenDoNothing()
         }
-        #emit("Testing...", on: subject)
         verify(wheel, times(0)).rotate(fileAt: any())
     }
 }
