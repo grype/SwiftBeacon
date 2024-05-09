@@ -48,28 +48,28 @@ open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebug
     
     // MARK: - Instance Creation
     
-    static func representing<S: Signaling>(_ aValue: S, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
+    public static func representing<S: Signaling>(_ aValue: S, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
         let signal = aValue.beaconSignal
         signal.userInfo = userInfo
         signal.source = source
         return signal
     }
     
-    static func representing(_ aValue: Any, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
+    public static func representing(_ aValue: Any, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
         let signal = WrapperSignal(aValue)
         signal.userInfo = userInfo
         signal.source = source
         return signal
     }
     
-    static func representing(stack aStack: [String] = Thread.callStackSymbols, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
+    public static func representing(stack aStack: [String] = Thread.callStackSymbols, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
         let signal = ContextSignal(stack: aStack)
         signal.userInfo = userInfo
         signal.source = source
         return signal
     }
     
-    static func representing(error anError: Error, stack aStack: [String] = Thread.callStackSymbols, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
+    public static func representing(error anError: Error, stack aStack: [String] = Thread.callStackSymbols, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
         let signal = ErrorSignal(error: anError, stack: aStack)
         signal.userInfo = userInfo
         signal.source = source
@@ -78,7 +78,7 @@ open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebug
     
     // MARK: - Initialization
     
-    init(userInfo: Any? = nil, source: Source? = nil) {
+    public init(userInfo: Any? = nil, source: Source? = nil) {
         self.userInfo = userInfo
         self.source = source
     }
