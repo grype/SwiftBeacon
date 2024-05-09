@@ -60,7 +60,7 @@ final class MacrosTests: XCTestCase {
                              """,
                              macros: ["emit": EmitMacro.self])
     }
-    
+
     func testEmitSignalOverImplicitSubject() throws {
         assertMacroExpansion("""
                              #emit(signal: StringSignal("String signal"))
@@ -70,13 +70,53 @@ final class MacrosTests: XCTestCase {
                              """,
                              macros: ["emit": EmitMacro.self])
     }
-    
+
     func testEmitSignalOverExplicitSubject() throws {
         assertMacroExpansion("""
                              #emit(signal: StringSignal("String signal"), on: aSubject)
                              """,
                              expandedSource: """
                              aSubject.send(StringSignal("String signal"))
+                             """,
+                             macros: ["emit": EmitMacro.self])
+    }
+
+    func testEmitPublisherOverImplicitSubject() throws {
+        assertMacroExpansion("""
+                             #emit(publisher: aPublisher)
+                             """,
+                             expandedSource: """
+                             aPublisher.emit(userInfo: nil, source: Source(), on: Beacon)
+                             """,
+                             macros: ["emit": EmitMacro.self])
+    }
+
+    func testEmitPublisherOverExplicitSubject() throws {
+        assertMacroExpansion("""
+                             #emit(publisher: aPublisher, on: aSubject)
+                             """,
+                             expandedSource: """
+                             aPublisher.emit(userInfo: nil, source: Source(), on: aSubject)
+                             """,
+                             macros: ["emit": EmitMacro.self])
+    }
+
+    func testEmitPublisherWithUserInfoOverImplicitSubject() throws {
+        assertMacroExpansion("""
+                             #emit(publisher: aPublisher, userInfo: ["bool": true])
+                             """,
+                             expandedSource: """
+                             aPublisher.emit(userInfo: ["bool": true], source: Source(), on: Beacon)
+                             """,
+                             macros: ["emit": EmitMacro.self])
+    }
+
+    func testEmitPublisherWithUserInfoOverExplicitSubject() throws {
+        assertMacroExpansion("""
+                             #emit(publisher: aPublisher, userInfo: ["bool": true], on: aSubject)
+                             """,
+                             expandedSource: """
+                             aPublisher.emit(userInfo: ["bool": true], source: Source(), on: aSubject)
                              """,
                              macros: ["emit": EmitMacro.self])
     }

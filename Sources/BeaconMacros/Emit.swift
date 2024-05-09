@@ -19,6 +19,11 @@ public struct EmitMacro: ExpressionMacro {
             userInfo = "\(userInfoExpression.expression)"
         }
         
+        var subject: ExprSyntax = "Beacon"
+        if let subjectExpression = argumentList.first(where: { $0.label?.text == "on" }) {
+            subject = "\(subjectExpression.expression)"
+        }
+        
         var signal: ExprSyntax!
         if let value = argumentList.first(where: { $0.label == nil }) {
             signal = "Signal.representing(\(value.expression), userInfo: \(userInfo), source: Source())"
@@ -29,13 +34,11 @@ public struct EmitMacro: ExpressionMacro {
         else if let sig = argumentList.first(where: { $0.label?.text == "signal" }) {
             signal = "\(sig.expression)"
         }
+        else if let pub = argumentList.first(where: { $0.label?.text == "publisher" }) {
+            return "\(pub.expression).emit(userInfo: \(userInfo), source: Source(), on: \(subject))"
+        }
         else {
             signal = "Signal.representing(stack: Thread.callStackSymbols, userInfo: \(userInfo), source: Source())"
-        }
-        
-        var subject: ExprSyntax = "Beacon"
-        if let subjectExpression = argumentList.first(where: { $0.label?.text == "on" }) {
-            subject = "\(subjectExpression.expression)"
         }
         
         return "\(subject).send(\(signal))"
