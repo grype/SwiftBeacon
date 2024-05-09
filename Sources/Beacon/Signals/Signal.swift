@@ -56,10 +56,17 @@ open class Signal: Identifiable, Encodable, CustomStringConvertible, CustomDebug
     }
     
     public static func representing(_ aValue: Any, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
-        let signal = WrapperSignal(aValue)
+        var signal: Signal!
+        // try to derive a Signaling value, which could be coming down from a publisher as Any
+        if let signalingValue = aValue as? any Signaling {
+            signal = signalingValue.beaconSignal
+        }
+        else {
+            signal = WrapperSignal(aValue)
+        }
         signal.userInfo = userInfo
         signal.source = source
-        return signal
+        return signal!
     }
     
     public static func representing(stack aStack: [String] = Thread.callStackSymbols, userInfo: Any? = nil, source: Source = .init()) -> some Signal {
