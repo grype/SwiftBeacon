@@ -35,7 +35,7 @@ open class ConsoleLogger: SignalLogger {
     
     // MARK: - Init
     
-    init(name: String) {
+    public init(name: String) {
         self.name = name
     }
     

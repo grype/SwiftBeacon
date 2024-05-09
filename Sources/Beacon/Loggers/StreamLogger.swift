@@ -31,12 +31,12 @@ open class StreamLogger: SignalLogger {
     
     // MARK: - Init
     
-    public required init(name aName: String, stream aStream: OutputStream, encoder anEncoder: SignalEncoder) {
+    public init(name aName: String, stream aStream: OutputStream, encoder anEncoder: SignalEncoder) {
         name = aName
         writer = EncodedStreamSignalWriter(on: aStream, encoder: anEncoder)
     }
     
-    public required init(name aName: String, writer aWriter: EncodedStreamSignalWriter) {
+    public init(name aName: String, writer aWriter: EncodedStreamSignalWriter) {
         name = aName
         writer = aWriter
     }

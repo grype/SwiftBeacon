@@ -77,7 +77,7 @@ open class JRPCLogger: CollectingSignalLogger, ErroringLogger {
     
     // MARK: - Init
     
-    public required init(url anUrl: URL, method aMethod: String, name aName: String) {
+    public init(url anUrl: URL, method aMethod: String, name aName: String) {
         url = anUrl
         method = aMethod
         name = aName

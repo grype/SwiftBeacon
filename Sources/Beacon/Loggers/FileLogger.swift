@@ -66,7 +66,7 @@ open class FileLogger: SignalLogger {
     
     // MARK: - Init
     
-    public required init?(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoder) {
+    public init?(name aName: String, on anUrl: URL, encoder anEncoder: SignalEncoder) {
         name = aName
         url = anUrl
         guard let stream = OutputStream(url: anUrl, append: true) else {

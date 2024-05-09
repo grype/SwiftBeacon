@@ -33,7 +33,7 @@ open class MemoryLogger: SignalLogger {
     open private(set) var recordings = [Signal]()
     open var limit: Int = 1024
     
-    init(name: String) {
+    public init(name: String) {
         self.name = name
     }
     
