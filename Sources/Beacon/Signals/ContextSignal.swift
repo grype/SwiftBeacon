@@ -6,8 +6,9 @@
 //  Copyright © 2019 Pavel Skaldin. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
+import MachO
 
 // MARK: - ContextSignal
 
