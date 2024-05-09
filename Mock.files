@@ -5,7 +5,6 @@ Sources/Beacon/File/FileBackupWheel.swift
 Sources/Beacon/File/FileWheel.swift
 Sources/Beacon/Loggers/ConsoleLogger.swift
 Sources/Beacon/Loggers/FileLogger.swift
-Sources/Beacon/Loggers/IntervalLogger.swift
 Sources/Beacon/Loggers/JRPCLogger.swift
 Sources/Beacon/Loggers/MemoryLogger.swift
 Sources/Beacon/Loggers/StreamLogger.swift
