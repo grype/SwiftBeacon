@@ -9,7 +9,7 @@ import Foundation
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-// emit([Any|error:Error], userInfo: Any? = nil, on: Subject = Bundle.sharedBeacon)
+// emit([Any|error:Error|signal:Signal|publisher:Publisher], userInfo: Any? = nil, on: Subject = Bundle.sharedBeacon)
 public struct EmitMacro: ExpressionMacro {
     public static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> ExprSyntax {
         let argumentList = node.argumentList
