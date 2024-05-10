@@ -38,7 +38,7 @@ public extension Publisher
         Failure == S.Failure,
         Output == V
     {
-        map { Signal.representing($0, userInfo: userInfo, source: source) }.sink
+        return map { Signal.representing($0, userInfo: userInfo, source: source) }.sink
         { aCompletion in
             subject.send(completion: aCompletion)
         } receiveValue: { anOutput in
