@@ -11,6 +11,10 @@ import SwiftSyntaxMacros
 
 // emit([Any|error:Error|signal:Signal|publisher:Publisher], userInfo: Any? = nil, on: Subject = Bundle.sharedBeacon)
 public struct EmitMacro: ExpressionMacro {
+    public static var formatMode: FormatMode {
+        return .disabled
+    }
+    
     public static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> ExprSyntax {
         let argumentList = node.argumentList
         
@@ -35,7 +39,7 @@ public struct EmitMacro: ExpressionMacro {
             signal = "\(sig.expression)"
         }
         else if let pub = argumentList.first(where: { $0.label?.text == "publisher" }) {
-            return "\(pub.expression).emit(userInfo: \(userInfo), source: Source(), on: \(subject))"
+            return "\(pub.expression).map { Signal.representing($0, userInfo: \(userInfo), source: Source()) }.subscribe(\(subject))"
         }
         else {
             signal = "Signal.representing(stack: Thread.callStackSymbols, userInfo: \(userInfo), source: Source())"

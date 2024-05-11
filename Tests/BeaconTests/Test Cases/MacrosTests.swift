@@ -86,7 +86,7 @@ final class MacrosTests: XCTestCase {
                              #emit(publisher: aPublisher)
                              """,
                              expandedSource: """
-                             aPublisher.emit(userInfo: nil, source: Source(), on: Beacon)
+                             aPublisher.map { Signal.representing($0, userInfo: nil, source: Source()) }.subscribe(Beacon)
                              """,
                              macros: ["emit": EmitMacro.self])
     }
@@ -96,7 +96,7 @@ final class MacrosTests: XCTestCase {
                              #emit(publisher: aPublisher, on: aSubject)
                              """,
                              expandedSource: """
-                             aPublisher.emit(userInfo: nil, source: Source(), on: aSubject)
+                             aPublisher.map { Signal.representing($0, userInfo: nil, source: Source()) }.subscribe(aSubject)
                              """,
                              macros: ["emit": EmitMacro.self])
     }
@@ -106,7 +106,7 @@ final class MacrosTests: XCTestCase {
                              #emit(publisher: aPublisher, userInfo: ["bool": true])
                              """,
                              expandedSource: """
-                             aPublisher.emit(userInfo: ["bool": true], source: Source(), on: Beacon)
+                             aPublisher.map { Signal.representing($0, userInfo: ["bool": true], source: Source()) }.subscribe(Beacon)
                              """,
                              macros: ["emit": EmitMacro.self])
     }
@@ -116,7 +116,7 @@ final class MacrosTests: XCTestCase {
                              #emit(publisher: aPublisher, userInfo: ["bool": true], on: aSubject)
                              """,
                              expandedSource: """
-                             aPublisher.emit(userInfo: ["bool": true], source: Source(), on: aSubject)
+                             aPublisher.map { Signal.representing($0, userInfo: ["bool": true], source: Source()) }.subscribe(aSubject)
                              """,
                              macros: ["emit": EmitMacro.self])
     }

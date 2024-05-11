@@ -18,4 +18,4 @@ public macro emit<S:Subject>(error: Error, userInfo: Any? = nil, on: S = Beacon)
 public macro emit<V: Signal, S:Subject>(signal: V, userInfo: Any? = nil, on: S = Beacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")
 
 @freestanding(expression)
-public macro emit<V: Publisher, S:Subject>(publisher: V, userInfo: Any? = nil, on: S = Beacon) = #externalMacro(module: "BeaconMacros", type: "EmitMacro")
+public macro emit<V: Publisher, S:Subject>(publisher: V, userInfo: Any? = nil, on: S = Beacon) -> AnyCancellable = #externalMacro(module: "BeaconMacros", type: "EmitMacro")
