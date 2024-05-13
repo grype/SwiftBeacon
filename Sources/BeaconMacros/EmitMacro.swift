@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  EmitMacro.swift
 //
 //
 //  Created by Pavel Skaldin on 4/27/24.
