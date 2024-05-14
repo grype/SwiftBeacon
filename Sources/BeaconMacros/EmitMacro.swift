@@ -9,7 +9,7 @@ import Foundation
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-// emit([Any|error:Error|signal:Signal|publisher:Publisher], userInfo: Any? = nil, on: Subject = Bundle.sharedBeacon)
+// emit([Any|error:Error|signal:Signal|valuesPublishedBy:Publisher], userInfo: Any? = nil, on: Subject = Bundle.sharedBeacon)
 public struct EmitMacro: ExpressionMacro {
     public static var formatMode: FormatMode {
         return .disabled
@@ -38,7 +38,7 @@ public struct EmitMacro: ExpressionMacro {
         else if let sig = argumentList.first(where: { $0.label?.text == "signal" }) {
             signal = "\(sig.expression)"
         }
-        else if let pub = argumentList.first(where: { $0.label?.text == "publisher" }) {
+        else if let pub = argumentList.first(where: { $0.label?.text == "valuesPublishedBy" }) {
             return "\(pub.expression).map { Signal.representing($0, userInfo: \(userInfo), source: Source()) }.subscribe(\(subject))"
         }
         else {

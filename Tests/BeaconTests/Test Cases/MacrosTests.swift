@@ -83,7 +83,7 @@ final class MacrosTests: XCTestCase {
 
     func testEmitPublisherOverImplicitSubject() throws {
         assertMacroExpansion("""
-                             #emit(publisher: aPublisher)
+                             #emit(valuesPublishedBy: aPublisher)
                              """,
                              expandedSource: """
                              aPublisher.map { Signal.representing($0, userInfo: nil, source: Source()) }.subscribe(Beacon)
@@ -93,7 +93,7 @@ final class MacrosTests: XCTestCase {
 
     func testEmitPublisherOverExplicitSubject() throws {
         assertMacroExpansion("""
-                             #emit(publisher: aPublisher, on: aSubject)
+                             #emit(valuesPublishedBy: aPublisher, on: aSubject)
                              """,
                              expandedSource: """
                              aPublisher.map { Signal.representing($0, userInfo: nil, source: Source()) }.subscribe(aSubject)
@@ -103,7 +103,7 @@ final class MacrosTests: XCTestCase {
 
     func testEmitPublisherWithUserInfoOverImplicitSubject() throws {
         assertMacroExpansion("""
-                             #emit(publisher: aPublisher, userInfo: ["bool": true])
+                             #emit(valuesPublishedBy: aPublisher, userInfo: ["bool": true])
                              """,
                              expandedSource: """
                              aPublisher.map { Signal.representing($0, userInfo: ["bool": true], source: Source()) }.subscribe(Beacon)
@@ -113,7 +113,7 @@ final class MacrosTests: XCTestCase {
 
     func testEmitPublisherWithUserInfoOverExplicitSubject() throws {
         assertMacroExpansion("""
-                             #emit(publisher: aPublisher, userInfo: ["bool": true], on: aSubject)
+                             #emit(valuesPublishedBy: aPublisher, userInfo: ["bool": true], on: aSubject)
                              """,
                              expandedSource: """
                              aPublisher.map { Signal.representing($0, userInfo: ["bool": true], source: Source()) }.subscribe(aSubject)
