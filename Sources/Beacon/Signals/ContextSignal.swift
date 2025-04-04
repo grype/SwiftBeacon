@@ -18,7 +18,7 @@ import MachO
  any arguments...
  */
 
-open class ContextSignal: Signal {
+@objc open class ContextSignal: Signal {
     @objc open var stack: [String]
 
     @objc open var symbols: [String: [Int]]

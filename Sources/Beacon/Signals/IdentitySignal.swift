@@ -16,7 +16,7 @@ import Foundation
  By default I capture Beacon version. Feel free to extend me...
  */
 
-open class IdentitySignal: Signal {
+@objc open class IdentitySignal: Signal {
     // MARK: - Properties
     
     public var beaconVersion: String { Beacon.beaconVersion }

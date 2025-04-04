@@ -15,7 +15,7 @@ import Foundation
  One such mechanism is support for file rotation.
  */
 
-open class FileLogger: StreamLogger {
+@objc open class FileLogger: StreamLogger {
     // MARK: - Properties
     
     open private(set) var url: URL

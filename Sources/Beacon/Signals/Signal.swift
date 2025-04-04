@@ -22,7 +22,7 @@ import SwiftAnnouncements
  
  */
 
-open class Signal: NSObject, Encodable {
+@objc open class Signal: NSObject, Encodable {
     // MARK: - Structs
     
     /// Used to capture `emit()` invocation context

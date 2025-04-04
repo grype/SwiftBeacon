@@ -12,7 +12,7 @@ import Foundation
  I am a `Signal` that captures currently loaded Mach images
  */
 
-open class MachImageImportsSignal: Signal {
+@objc open class MachImageImportsSignal: Signal {
     var added: [MachImage]?
     
     var removed: [MachImage]?

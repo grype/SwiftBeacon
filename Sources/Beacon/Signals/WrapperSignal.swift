@@ -21,7 +21,7 @@ import Foundation
  - Important: Be mindful of what you're asking me to wrap. If the value is mutable, it may mutate by the time it is logged. Especially when using `IntervalLogger`s. If state is important, consider signaling either a copy of the object or encode it into `Data`. Otherwise, subclass either me or `Signal` and take care of preserving state there.
  */
 
-open class WrapperSignal: Signal {
+@objc open class WrapperSignal: Signal {
     /// Wrapped value
     @objc open var value: Any {
         if let encodable = encodableValue {

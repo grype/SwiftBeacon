@@ -18,7 +18,7 @@ import Foundation
  I am finished with the current one.
  */
 
-open class JRPCLogger: IntervalLogger {
+@objc open class JRPCLogger: IntervalLogger {
     // MARK: - Variables
     
     /// Base URL to the JSON RPC server

@@ -36,7 +36,7 @@ import SwiftAnnouncements
  
  - See Also: `ConsoleLogger`, `MemoryLogger`
  */
-open class SignalLogger: NSObject {
+@objc open class SignalLogger: NSObject {
     // MARK: - Type aliases
     
     /// Filtering function takes a signal as an argument and return a boolean value

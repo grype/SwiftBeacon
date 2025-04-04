@@ -23,7 +23,7 @@ import Foundation
  
  */
 
-open class IntervalLogger: SignalLogger {
+@objc open class IntervalLogger: SignalLogger {
     // MARK: - Variables
     
     @objc open var flushInterval: TimeInterval {

@@ -13,7 +13,7 @@ import Foundation
  
  I am used to announce arbitrary messages, ala traditional logging facilities.
  */
-open class StringSignal: Signal {
+@objc open class StringSignal: Signal {
     @objc open private(set) var message: String
     
     @objc public init(_ aMessage: String) {

@@ -17,7 +17,7 @@ import RWLock
  
  */
 
-open class MemoryLogger: SignalLogger {
+@objc open class MemoryLogger: SignalLogger {
     @objc public static var shared = MemoryLogger(name: "MemoryLogger")
     
     @objc @RWLocked open private(set) var recordings = [Signal]()

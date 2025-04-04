@@ -21,7 +21,7 @@ import Foundation
  logger.nextPut(StringSignal("Hello world"))
  */
 
-open class StreamLogger: SignalLogger {
+@objc open class StreamLogger: SignalLogger {
     // MARK: - Properties
     
     private(set) var writer: EncodedStreamSignalWriter
