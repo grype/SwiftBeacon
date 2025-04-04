@@ -17,6 +17,10 @@ import Foundation
  */
 
 open class ConsoleLogger: SignalLogger {
+    public typealias Input = <#type#>
+    
+    public typealias Failure = <#type#>
+    
     // MARK: - Instance Creation
 
     public static let shared = ConsoleLogger(name: "Shared Console Logger")
@@ -39,12 +43,7 @@ open class ConsoleLogger: SignalLogger {
         self.name = name
     }
     
-    // MARK: - Receiving
-    
-    public func receive(_ input: Signal) -> Subscribers.Demand {
-        nextPut(input)
-        return .unlimited
-    }
+    // MARK: - Subscription
     
     public func receive(completion: Subscribers.Completion<Never>) {
         // Nothing to do
@@ -56,11 +55,11 @@ open class ConsoleLogger: SignalLogger {
     
     // MARK: - Logging
     
-    open func nextPut(_ aSignal: Signal) {
+    public func nextPut(_ signal: [Signal]) throws {
         if markedInactvitiyPeriod > 0, let lastPrintDate = lastPrintDate, Date().timeIntervalSince(lastPrintDate) > markedInactvitiyPeriod {
             print(inactivityDelimiter)
         }
-        print("\(aSignal.debugDescription)")
+        print("\(signal.debugDescription)")
         lastPrintDate = Date()
     }
 }

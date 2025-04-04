@@ -19,7 +19,15 @@ import Foundation
  I am finished with the current one.
  */
 
-open class JRPCLogger: CollectingSignalLogger, ErroringLogger {
+open class JRPCLogger: SignalLogger {
+    public func nextPut(_ signal: [Signal]) throws {
+        <#code#>
+    }
+    
+    public typealias Input = <#type#>
+    
+    public typealias Failure = <#type#>
+    
     // MARK: - Types
     
     public enum Error: Swift.Error {

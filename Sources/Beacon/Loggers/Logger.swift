@@ -36,28 +36,44 @@ import Foundation
  - See Also: `ConsoleLogger`, `MemoryLogger`
  */
 
-public protocol Logger: Subscriber where Failure == Never {
+public protocol SignalLogger: Subscriber, Cancellable where Input: SignalCapture {
     // MARK: - Properties
     
     /// Logger name.
     /// Used to distinguish one logger from another.
     var name: String { get }
+    func cancel()
+    func nextPut(_ signal: [Signal]) throws
+    func nextError(_ error: Error) -> Subscribers.Demand
 }
 
-public protocol SignalLogger: Logger, Cancellable where Input: Signal {}
-
-public extension SignalLogger {
-    func cancel() {}
-}
-
-public protocol CollectingSignalLogger: Logger where Input == [Signal] {}
-
-public protocol ErroringLogger: Logger {
-    func handle(_ error: Error)
-}
-
-public extension ErroringLogger {
-    func handle(_ error: Error) {
-        print("Logger error: \(error)")
+extension SignalLogger {
+    public func receive(_ input: Input) -> Subscribers.Demand {
+        do {
+            try nextPut(input.signals)
+            return .unlimited
+        }
+        catch {
+            return nextError(error)
+        }
     }
+    
+    public func nextError(_ error: any Error) -> Subscribers.Demand {
+        print("Error: \(ErrorSignal(error: error).debugDescription)")
+        return .unlimited
+    }
+
+    public func cancel() {}
+}
+
+public protocol SignalCapture {
+    var signals: [Signal] { get }
+}
+
+extension Signal: SignalCapture {
+    public var signals: [Signal] { [self] }
+}
+
+extension Array: SignalCapture where Element: Signal {
+    public var signals: [Signal] { self }
 }
